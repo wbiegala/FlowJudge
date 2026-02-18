@@ -149,7 +149,26 @@ __FR-034__ - The system shall store metadata of each review: PR ID, timestamp, s
 __FR-035__ - The system shall log errors and retries.  
 
 ## 3.2. Non-functional requirements
-TODO
+### 3.2.1. Performance
+__NFR-001__ - Review initiation shall occur within 5 seconds of webhook receipt.  
+__NFR-002__ - For PRs under 1,000 changed lines, review completion should not exceed 60 seconds (under normal load).  
+### 3.2.2. Scalability
+__NFR-003__ - The system shall support horizontal scaling of review workers.  
+__NFR-004__ - Review processing shall be asynchronous via queue-based architecture.  
+### 3.2.3. Reliability
+__NFR-005__ - Webhook processing shall be idempotent.  
+__NFR-006__ - Transient API failures shall trigger automatic retry.  
+### 3.2.4. Security
+__NFR-007__ - The system shall isolate tenant data.  
+__NFR-008__ - The system shall not permanently store full code diffs.  
+__NFR-009__ - Secrets shall be masked before AI submission when detectable.  
+__NFR-010__ - All communication shall use HTTPS.  
+### 3.2.5. Maintainability
+__NFR-011__ - The AI prompt configuration shall be versioned.  
+__NFR-012__ - The review engine shall be modular to allow new review policies.  
+### 3.2.6. Observability
+__NFR-013__ - The system shall provide structured logs.  
+__NFR-014__ - The system shall expose review metrics: review duration, failure rate, average token usage.  
 
 # 4. Future scope (Post-MVP)
  - Multi-agent review (Security / Performance / Maintainability)
