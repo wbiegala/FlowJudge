@@ -136,3 +136,4 @@ Planned roadmap:
 # Documentation
 - ### [Software Requirements Specification (SRS)](docs/system-requirements-specification.md)
 - ### [Use cases](docs/use-cases.md)
+- ### [Architecture](docs/architecture.md)
