@@ -134,4 +134,4 @@ Planned roadmap:
 ---
 
 # Documentation
-//TODO
+- ### [Software Requirements Specification (SRS)](docs/system-requirements-specification.md)
