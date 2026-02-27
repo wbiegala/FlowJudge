@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/apps/">
+    <Project Path="backend/apps/FlowJudge.AI.Worker/FlowJudge.AI.Worker.csproj" Id="96ee716b-5660-4463-83f8-68c096a914dc" />
+    <Project Path="backend/apps/FlowJudge.API.Service/FlowJudge.API.Service.csproj" />
+    <Project Path="backend/apps/FlowJudge.Supervisor.Service/FlowJudge.Supervisor.Service.csproj" />
+    <Project Path="backend/apps/FlowJudge.VCS.Worker/FlowJudge.VCS.Worker.csproj" Id="5ae486d2-17e4-4686-94aa-a6667c46ca48" />
+  </Folder>
+  <Folder Name="/libs/" />
+  <Folder Name="/tests/" />
+  <Project Path="docker-compose.dcproj">
+    <Build />
+  </Project>
+</Solution>

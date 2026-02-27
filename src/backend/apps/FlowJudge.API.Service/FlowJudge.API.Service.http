@@ -1,0 +1,6 @@
+@FlowJudge.API.Service_HostAddress = http://localhost:5227
+
+GET {{FlowJudge.API.Service_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

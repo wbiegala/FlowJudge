@@ -1,0 +1,6 @@
+services:
+  flowjudge.api.service:
+    image: ${DOCKER_REGISTRY-}flowjudgeapiservice
+    build:
+      context: .
+      dockerfile: backend/apps/FlowJudge.API.Service/Dockerfile
