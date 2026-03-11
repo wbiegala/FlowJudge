@@ -1,0 +1,15 @@
+{
+  "profiles": {
+    "FlowJudge.AI.Worker": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7071"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker",
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
+      "containerRunArguments": "--init",
+      "httpPort": 30077,
+      "useSSL": false
+    }
+  }
+}
