@@ -134,7 +134,10 @@ Planned roadmap:
 ---
 
 # Documentation
-- ### [Software Requirements Specification (SRS)](docs/system-requirements-specification.md)
-- ### [Use cases](docs/use-cases.md)
-- ### [Architecture](docs/architecture.md)
-- ### [Tech stack](docs/techstack.md)
+## Analitics
+- ### [Software Requirements Specification (SRS)](docs/analitics/system-requirements-specification.md)
+- ### [Use cases](docs/analitics/use-cases.md)
+- ### [Architecture](docs/analitics/architecture.md)
+- ### [Tech stack](docs/analitics/techstack.md)
+## Runbooks
+- ### [Local docker-compose via Visual Studio](docs/runbooks//local-docker.md)
