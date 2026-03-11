@@ -1,6 +1,57 @@
+name: flow-judge
+
 services:
-  flowjudge.api.service:
-    image: ${DOCKER_REGISTRY-}flowjudgeapiservice
+ # INFRASTRUCTURE
+
+  flowjudge.db:
+    image: postgres:18
+    container_name: flowjudge.db
+
+  flowjudge.storage:
+    image: mcr.microsoft.com/azure-storage/azurite:latest
+    container_name: flowjudge.storage
+ 
+ # APPLICATIONS
+
+  flowjudge.api:
+    image: ${DOCKER_REGISTRY-}flowjudge-api
+    container_name: flowjudge.api
     build:
       context: .
       dockerfile: backend/apps/FlowJudge.API.Service/Dockerfile
+
+  flowjudge.supervisor:
+    image: ${DOCKER_REGISTRY-}flowjudge-supervisor
+    container_name: flowjudge.supervisor
+    build:
+      context: .
+      dockerfile: backend/apps/FlowJudge.Supervisor.Service/Dockerfile
+
+  flowjudge.ai.worker:
+    image: ${DOCKER_REGISTRY-}flowjudge-ai-worker
+    container_name: flowjudge.ai.worker
+    build:
+      context: .
+      dockerfile: backend/apps/FlowJudge.AI.Worker/Dockerfile
+
+  flowjudge.vcs.worker:
+    image: ${DOCKER_REGISTRY-}flowjudge-vcs-worker
+    container_name: flowjudge.vcs.worker
+    build:
+      context: .
+      dockerfile: backend/apps/FlowJudge.VCS.Worker/Dockerfile
+
+  flowjudge.webapp:
+    image: ${DOCKER_REGISTRY-}flowjudge-webapp
+    container_name: flowjudge.webapp
+    build:
+      context: frontend\FlowJudge-webapp
+      dockerfile: Dockerfile
+
+  flowjudge.auth:
+    image: quay.io/keycloak/keycloak:26.5
+    container_name: flowjudge.auth
+
+volumes:
+  cache:
+    driver: local

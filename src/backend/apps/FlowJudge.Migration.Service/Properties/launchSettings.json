@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "FlowJudge.Migration.Service": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}
