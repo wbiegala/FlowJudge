@@ -1,4 +1,4 @@
-[↩️](../README.md)
+[↩️](./../../README.md)
 
 # Software Requirements Specification (SRS)
  - Project name: __FlowJudge__
