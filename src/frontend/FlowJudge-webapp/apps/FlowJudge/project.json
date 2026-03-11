@@ -57,6 +57,12 @@
           "buildTarget": "FlowJudge:build:development"
         }
       },
+      "options": {
+        "proxyConfig": "apps/FlowJudge/proxy.conf.json",
+        "ssl": true,
+        "sslKey": "./key.pem",
+        "sslCert": "./cert.pem"
+      },
       "defaultConfiguration": "development"
     },
     "lint": {
