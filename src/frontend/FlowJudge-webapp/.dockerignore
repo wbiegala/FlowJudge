@@ -1,0 +1,27 @@
+# node & pnpm
+node_modules
+.pnpm-store
+.pnp.*
+.pnpm-debug.log
+
+# Nx / build artefacts
+.nx
+dist
+coverage
+
+# VCS & IDE
+.git
+.gitignore
+.github
+.vscode
+.idea
+
+# system junk
+.DS_Store
+Thumbs.db
+
+# tests & dev-only
+**/*.spec.ts
+**/*.test.ts
+**/*.snap
+**/tsconfig.spec.json

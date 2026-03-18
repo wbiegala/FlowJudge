@@ -20,7 +20,8 @@
           { "glob": "configuration.json",         "input": "configs", "output": "." },
           { "glob": "configuration.local.json",     "input": "configs", "output": "." },
           { "glob": "configuration.docker.json",  "input": "configs", "output": "." },
-          { "glob": "**/*.json",                  "input": "apps/FlowJudge/src/assets/i18n", "output": "assets/i18n" }
+          { "glob": "**/*.json",                  "input": "apps/FlowJudge/src/assets/i18n", "output": "assets/i18n" },
+          { "glob": "**/*.json",                  "input": "libs/auth/assets/i18n", "output": "assets/i18n/auth" }
         ],
         "styles": [
           "apps/FlowJudge/src/styles.scss",

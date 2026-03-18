@@ -2,6 +2,8 @@
 {
     public interface IAuthenticationService
     {
-        Task<string> GetRegistrationUrlAsync(CancellationToken cancellationToken = default);
+        Task<string> GetRegistrationUrlAsync(string clientOrigin, CancellationToken cancellationToken = default);
+
+        Task<string> GetRegistrationCallbackUrlAsync(string clientOrigin, CancellationToken cancellationToken = default);
     }
 }

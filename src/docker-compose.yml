@@ -10,6 +10,10 @@ services:
   flowjudge.storage:
     image: mcr.microsoft.com/azure-storage/azurite:latest
     container_name: flowjudge.storage
+
+  flowjudge.smtp:
+    image: axllent/mailpit
+    container_name: flowjudge.smtp
  
  # APPLICATIONS
 

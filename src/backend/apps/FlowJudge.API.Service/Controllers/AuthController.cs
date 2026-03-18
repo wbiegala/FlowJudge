@@ -17,11 +17,28 @@ namespace FlowJudge.API.Service.Controllers
 
         [HttpGet("register")]
         [AllowAnonymous]
-        public async Task<IActionResult> InitializeRegistrationAsync(CancellationToken cancellationToken = default)
+        public async Task<IActionResult> InitializeRegistrationAsync(
+            [FromQuery(Name = AuthQueryParams.UiContextUrlParamName)]string clientOrigin,
+            CancellationToken cancellationToken = default)
         {
-            var registrationUrl = await _authService.GetRegistrationUrlAsync(cancellationToken);
+            //TODO: validate client origin with a whitelist of allowed origins to prevent open redirect vulnerabilities
+
+            var registrationUrl = await _authService.GetRegistrationUrlAsync(clientOrigin, cancellationToken);
 
             return Redirect(registrationUrl);
+        }
+
+        [HttpGet("register-callback")]
+        public async Task<IActionResult> HandleRegistrationCallbackAsync(
+            [FromQuery(Name = AuthQueryParams.UiContextUrlParamName)] string clientOrigin,
+            CancellationToken cancellationToken = default)
+        {
+            //TODO: validate client origin with a whitelist of allowed origins to prevent open redirect vulnerabilities
+            //TODO: check what keycloak callback sends in this request, maybe something useful xD
+
+            var confirmationUrl = await _authService.GetRegistrationCallbackUrlAsync(clientOrigin, cancellationToken);
+
+            return Redirect(confirmationUrl);
         }
     }
 }

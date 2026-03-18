@@ -45,5 +45,6 @@ fetch(environment.configUrl, { cache: 'no-store' })
   export function translationHttpLoaderFactory(http: HttpBackend): TranslateLoader {
     return new MultiTranslateHttpLoader(http, [
       { prefix: '/assets/i18n/', suffix: '.json' },
+      { prefix: '/assets/i18n/auth/', suffix: '.json' },
     ]);
   }

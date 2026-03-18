@@ -4,9 +4,16 @@
         KeycloakAuthenticationConfiguration configuration)
         : IAuthenticationService
     {
-        public Task<string> GetRegistrationUrlAsync(CancellationToken cancellationToken = default)
+        public Task<string> GetRegistrationUrlAsync(string clientOrigin, CancellationToken cancellationToken = default)
         {
-            var url = $"{configuration.BaseUrl}/realms/{configuration.Realm}/protocol/openid-connect/registrations";
+            var url = KeycloakUrlHelper.CreateRegistrationUrl(configuration, clientOrigin);
+
+            return Task.FromResult(url);
+        }
+
+        public Task<string> GetRegistrationCallbackUrlAsync(string clientOrigin, CancellationToken cancellationToken = default)
+        {
+            var url = KeycloakUrlHelper.NormalizeRegistrationConfirmationUrl(configuration, clientOrigin);
 
             return Task.FromResult(url);
         }
