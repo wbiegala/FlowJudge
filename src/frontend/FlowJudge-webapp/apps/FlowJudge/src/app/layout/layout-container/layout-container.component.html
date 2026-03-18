@@ -1,0 +1,10 @@
+<app-header (menuClicked)="toggleMainMenu()"></app-header>
+<mat-drawer-container class="app-container">
+  <mat-drawer #drawer [opened]="isMainMenu()" class="menu-sidenav-content" mode="side">
+    <app-main-menu></app-main-menu>
+  </mat-drawer>
+
+  <div class="app-content">
+    <ng-content></ng-content>
+  </div>
+</mat-drawer-container>

@@ -1,1 +1,16 @@
-/* You can add global styles to this file, and also import other style files */
+html {
+  font-family: Roboto !important;
+  height: 100%;
+}
+
+.material-icons, mat-icon {
+  font-family: 'Material Icons' !important;
+  font-feature-settings: 'liga';
+  font-variant-ligatures: normal;
+}
+
+body {
+  margin: 0px;
+  height: 100%;
+  overflow: hidden;
+}

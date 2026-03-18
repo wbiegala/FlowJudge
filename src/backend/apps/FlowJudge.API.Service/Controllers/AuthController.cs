@@ -1,4 +1,5 @@
 ﻿using FlowJudge.API.Service.Auth;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FlowJudge.API.Service.Controllers
@@ -14,6 +15,8 @@ namespace FlowJudge.API.Service.Controllers
             _authService = authService ?? throw new ArgumentNullException(nameof(authService));
         }
 
+        [HttpGet("register")]
+        [AllowAnonymous]
         public async Task<IActionResult> InitializeRegistrationAsync(CancellationToken cancellationToken = default)
         {
             var registrationUrl = await _authService.GetRegistrationUrlAsync(cancellationToken);

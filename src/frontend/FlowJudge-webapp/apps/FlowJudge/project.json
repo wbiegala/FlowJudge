@@ -15,14 +15,19 @@
         "tsConfig": "apps/FlowJudge/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": [
-          {
-            "glob": "**/*",
-            "input": "apps/FlowJudge/public"
-          }
+          { "glob": "**/*", "input": "apps/FlowJudge/public" },
+          { "glob": "**/*", "input": "apps/FlowJudge/src/assets", "output": "assets/"},
+          { "glob": "configuration.json",         "input": "configs", "output": "." },
+          { "glob": "configuration.local.json",     "input": "configs", "output": "." },
+          { "glob": "configuration.docker.json",  "input": "configs", "output": "." },
+          { "glob": "**/*.json",                  "input": "apps/FlowJudge/src/assets/i18n", "output": "assets/i18n" }
         ],
-        "styles": ["apps/FlowJudge/src/styles.scss"]
+        "styles": [
+          "apps/FlowJudge/src/styles.scss",
+          "node_modules/@angular/material/prebuilt-themes/azure-blue.css"
+        ]
       },
-      "configurations": {
+            "configurations": {
         "production": {
           "budgets": [
             {
@@ -36,12 +41,45 @@
               "maximumError": "8kb"
             }
           ],
-          "outputHashing": "all"
+          "outputHashing": "all",
+          "fileReplacements": [
+            {
+              "replace": "apps/FlowJudge/src/environments/environment.ts",
+              "with": "apps/FlowJudge/src/environments/environment.ts"
+            }
+          ]
         },
         "development": {
           "optimization": false,
           "extractLicenses": false,
-          "sourceMap": true
+          "sourceMap": true,
+          "fileReplacements": [
+            {
+              "replace": "apps/FlowJudge/src/environments/environment.ts",
+              "with": "apps/FlowJudge/src/environments/environment.local.ts"
+            }
+          ]
+        },
+        "docker": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "4kb",
+              "maximumError": "8kb"
+            }
+          ],
+          "outputHashing": "all",
+          "fileReplacements": [
+            {
+              "replace": "apps/FlowJudge/src/environments/environment.ts",
+              "with": "apps/FlowJudge/src/environments/environment.docker.ts"
+            }
+          ]
         }
       },
       "defaultConfiguration": "production"

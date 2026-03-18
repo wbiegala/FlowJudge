@@ -1,0 +1,13 @@
+<app-header-progress-bar></app-header-progress-bar>
+<mat-toolbar>
+    <button matIconButton (click)="menuClicked.emit()" aria-label="main-menu-toggle-button">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span class="app-logo-container">
+      FlowJudge
+    </span>
+    <span class="spacer"></span>
+    <span class="app-options-container">
+      <app-header-user-panel></app-header-user-panel>
+  </span>
+</mat-toolbar>
