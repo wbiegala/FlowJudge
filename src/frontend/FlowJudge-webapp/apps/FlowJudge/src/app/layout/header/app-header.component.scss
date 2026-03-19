@@ -15,6 +15,15 @@ mat-icon {
   margin-left: 25px;
 }
 
+.logo-text {
+  font-family: Roboto;
+  font-size: larger;
+  color: var(--mat-sys-primary);
+  text-decoration: none;
+  font-weight: bold;
+  font-style: italic;
+}
+
 .app-logo-container-box {
   display: flex;
   flex-direction: row;
