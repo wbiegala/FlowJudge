@@ -7,6 +7,9 @@
     <Project Path="backend/apps/FlowJudge.VCS.Worker/FlowJudge.VCS.Worker.csproj" Id="5ae486d2-17e4-4686-94aa-a6667c46ca48" />
   </Folder>
   <Folder Name="/libs/" />
+  <Folder Name="/libs/common/">
+    <Project Path="backend/libs/FlowJudge.Common.Http/FlowJudge.Common.Http.csproj" Id="21a433fb-a9e7-456d-9e0d-0aa7b27ab7ea" />
+  </Folder>
   <Folder Name="/tests/" />
   <Project Path="docker-compose.dcproj">
     <Build />

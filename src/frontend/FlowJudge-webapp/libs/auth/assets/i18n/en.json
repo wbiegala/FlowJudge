@@ -1,0 +1,9 @@
+{
+  "AUTH": {
+    "REGISTRATION": {
+      "REGISTER_BUTTON": "Register",
+      "REGISTRATION_CONFIRMATION_HEADER": "Registration confirmation",
+      "REGISTRATION_CONFIRMATION_CONTENT": "Your accont has been created, thanks. You can sign in now."
+    }
+  }
+}

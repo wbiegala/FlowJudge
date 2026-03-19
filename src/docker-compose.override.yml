@@ -1,0 +1,176 @@
+services:
+
+# INFRASTRUCTURE
+
+  flowjudge.db:
+    platform: "linux/amd64"
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_DB=${POSTGRES_DB:-postgres}
+      - PGDATA=/var/lib/postgresql/18/docker
+    ports:
+      - "15432:5432"
+    volumes:
+      - flowjudgePgVolume:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h localhost -p 5432 -U $$POSTGRES_USER -d $$POSTGRES_DB || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+    networks:
+      - flowjudge
+
+  flowjudge.db_init:
+    image: postgres:18
+    container_name: flowjudge.db_init
+    depends_on:
+      flowjudge.db:
+        condition: service_healthy
+    environment:
+      POSTGRES_HOST: flowjudge.db
+      POSTGRES_PORT: 5432
+      FLOWJUDGE_DB_NAME: ${FLOWJUDGE_DB_NAME}
+      POSTGRES_SUPERUSER: ${POSTGRES_USER:-postgres}
+      POSTGRES_SUPERPASS: ${POSTGRES_PASSWORD}
+      AUTH_DB_NAME: ${AUTH_DB_NAME}
+      AUTH_DB_USER: ${AUTH_DB_USER}
+      AUTH_DB_PASSWORD: ${AUTH_DB_PASSWORD}
+      SUPERVISOR_DB_USER: ${SUPERVISOR_DB_USER}
+      SUPERVISOR_DB_PASSWORD: ${SUPERVISOR_DB_PASSWORD}
+    working_dir: /db-init
+    volumes:
+      - ./scripts/db-init/:/db-init
+    entrypoint: ["/bin/sh", "-c", "chmod +x ./init.sh && ./init.sh"]
+    restart: "no"
+    networks:
+      - flowjudge
+
+  flowjudge.storage:
+    ports:
+      - "10000:10000"
+      - "10001:10001"
+      - "10002:10002"
+    command: azurite -l /data --blobHost 0.0.0.0 --queueHost 0.0.0.0 --tableHost 0.0.0.0 --skipApiVersionCheck --disableProductStyleUrl
+    volumes:
+      - flowjudgeAzuriteVolume:/data
+    healthcheck:
+      test: nc 127.0.0.1 10000 -z
+      interval: 1s
+      retries: 30
+    networks:
+      - flowjudge
+
+  flowjudge.smtp:
+    restart: unless-stopped
+    ports:
+      - "18025:8025"
+    networks:
+      - flowjudge
+
+# APPLICATIONS
+
+  flowjudge.auth:
+    command: ["start-dev"]
+    depends_on:
+      flowjudge.db_init:
+        condition: service_completed_successfully
+    environment:
+      KC_HOSTNAME: flowjudge.auth
+      KC_HOSTNAME_PORT: 8080
+      KC_HOSTNAME_STRICT: "false"
+      KC_HOSTNAME_STRICT_HTTPS: "false"
+      KC_PROXY: edge
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://flowjudge.db:5432/${AUTH_DB_NAME}
+      KC_DB_USERNAME: ${AUTH_DB_USER}
+      KC_DB_PASSWORD: ${AUTH_DB_PASSWORD}
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN_LOGIN}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      KC_HEALTH_ENABLED: "true"
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8080/health/ready || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 40
+    networks:
+      - flowjudge
+
+  flowjudge.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+      - Auth__Keycloak__BaseUrl=${AUTH_BASE_URL}
+      - Auth__Keycloak__BaseUrlInternal=${AUTH_BASEURL_INTERNAL}
+      - Auth__Keycloak__Realm=${AUTH_REALM}
+      - Auth__Keycloak__ClientId=${AUTH_CLIENT_ID}
+      - Auth__Keycloak__ClientSecret=${AUTH_CLIENT_SECRET}
+      - Auth__Keycloak__RegistrationCallbackUri=${AUTH_REGISTRATION_CALLBACK_URI}
+    ports:
+      - "8080"
+      - "10443:8081"
+    volumes:
+      - ./https-dev-cert.pfx:/https/https-dev-cert.pfx:ro
+    networks:
+      - flowjudge
+
+  flowjudge.supervisor:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+    ports:
+      - "8080"
+      - "8081"
+    volumes:
+      - ./https-dev-cert.pfx:/https/https-dev-cert.pfx:ro
+    networks:
+      - flowjudge
+
+  flowjudge.ai.worker:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+      - AzureWebJobsStorage=${FLOWJUDGE_STORAGE_CONNECTION_STRING}
+    ports:
+      - "8080"
+      - "8081"
+    volumes:
+      - ./https-dev-cert.pfx:/https/https-dev-cert.pfx:ro
+    networks:
+      - flowjudge
+
+  flowjudge.vcs.worker:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+      - AzureWebJobsStorage=${FLOWJUDGE_STORAGE_CONNECTION_STRING}
+    ports:
+      - "8080"
+      - "8081"
+    volumes:
+      - ./https-dev-cert.pfx:/https/https-dev-cert.pfx:ro
+    networks:
+      - flowjudge
+ 
+  flowjudge.webapp:
+    ports:
+      - "443:443"
+    networks:
+      - flowjudge
+
+volumes:
+  flowjudgePgVolume:
+    external: false
+  flowjudgeAzuriteVolume:
+    external: false
+
+networks:
+  flowjudge:
+    name: flowjudge

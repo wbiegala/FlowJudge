@@ -1,0 +1,9 @@
+{
+  "AUTH": {
+    "REGISTRATION": {
+      "REGISTER_BUTTON": "Zarejestruj się",
+      "REGISTRATION_CONFIRMATION_HEADER": "Potwierdzenie rejestacji konta",
+      "REGISTRATION_CONFIRMATION_CONTENT": "Twoje konto zostało utworzone, dziękujemy. Teraz możesz się zalogować."
+    }
+  }
+}

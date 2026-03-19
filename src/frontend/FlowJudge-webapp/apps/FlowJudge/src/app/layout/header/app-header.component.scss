@@ -1,0 +1,44 @@
+mat-toolbar {
+  color: var(--mat-sys-primary);
+  background: var(--mat-sys-primary-container);
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+mat-icon {
+  color: var(--mat-sys-primary);
+}
+
+.app-logo-container {
+  margin-left: 25px;
+}
+
+.logo-text {
+  font-family: Roboto;
+  font-size: larger;
+  color: var(--mat-sys-primary);
+  text-decoration: none;
+  font-weight: bold;
+  font-style: italic;
+}
+
+.app-logo-container-box {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 100%;
+  column-gap: 10px;
+}
+
+.hidden-button {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.app-options-container {
+  display: flex;
+  align-items: baseline;
+  column-gap: 10px;
+}

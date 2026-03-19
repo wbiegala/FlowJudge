@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\..\libs\FlowJudge.Common.Http\FlowJudge.Common.Http.csproj" />
   </ItemGroup>
 
 </Project>
