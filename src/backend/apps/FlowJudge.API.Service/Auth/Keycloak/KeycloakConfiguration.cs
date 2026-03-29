@@ -8,6 +8,7 @@
         public const string ClientIdParameter = "ClientId";
         public const string ClientSecretParameter = "ClientSecret";
         public const string RegistrationCallbackUriParameter = "RegistrationCallbackUri";
+        public const string LoginCallbackUriParameter = "LoginCallbackUri";
 
         public required string BaseUrl { get; init; }
         public required string BaseUrlInternal { get; init; }
@@ -15,5 +16,6 @@
         public required string ClientId { get; init; }
         public required string ClientSecret { get; init; }
         public required string RegistrationCallbackUri { get; init; }
+        public required string LoginCallbackUri { get; init; }
     }
 }

@@ -11,12 +11,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.5" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.5" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.23.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\libs\FlowJudge.API.Contracts\FlowJudge.API.Contracts.csproj" />
+    <ProjectReference Include="..\..\libs\FlowJudge.Common.Cache\FlowJudge.Common.Cache.csproj" />
     <ProjectReference Include="..\..\libs\FlowJudge.Common.Http\FlowJudge.Common.Http.csproj" />
+    <ProjectReference Include="..\..\libs\FlowJudge.Common.Utils\FlowJudge.Common.Utils.csproj" />
   </ItemGroup>
 
 </Project>

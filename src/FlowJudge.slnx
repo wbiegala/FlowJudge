@@ -10,6 +10,11 @@
   <Folder Name="/libs/common/">
     <Project Path="backend/libs/FlowJudge.Common.Cache/FlowJudge.Common.Cache.csproj" Id="4bd9172a-34e5-4907-a6aa-98efb54453ce" />
     <Project Path="backend/libs/FlowJudge.Common.Http/FlowJudge.Common.Http.csproj" Id="21a433fb-a9e7-456d-9e0d-0aa7b27ab7ea" />
+    <Project Path="backend/libs/FlowJudge.Common.Sql/FlowJudge.Common.Sql.csproj" Id="419c32d9-ef5e-4bd5-97e0-e63ce23e43eb" />
+    <Project Path="backend/libs/FlowJudge.Common.Utils/FlowJudge.Common.Utils.csproj" Id="d4beb6cc-5400-443a-adfe-036fc4db5192" />
+  </Folder>
+  <Folder Name="/libs/contracts/">
+    <Project Path="backend/libs/FlowJudge.API.Contracts/FlowJudge.API.Contracts.csproj" Id="7940a57f-3855-41c6-b778-21b0337855c7" />
   </Folder>
   <Folder Name="/tests/" />
   <Project Path="docker-compose.dcproj">

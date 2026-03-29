@@ -31,7 +31,8 @@ namespace FlowJudge.Common.Cache
                 {
                     ConnectionString = cfg.SqlConnectionString,
                     SchemaName = cfg.SqlSchemaName,
-                    TableName = cfg.SqlTableName
+                    TableName = cfg.SqlTableName,
+                    CreateIfNotExists = true,
                 };
 
                 return new PostgresCache(options);

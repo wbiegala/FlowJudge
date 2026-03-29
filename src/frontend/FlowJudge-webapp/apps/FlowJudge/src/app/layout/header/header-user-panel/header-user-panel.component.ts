@@ -16,4 +16,8 @@ export class HeaderUserPanelComponent {
   onRegisterClick() {
     this.#authenticationService.registerAccount();
   }
+
+  onLoginClick() {
+    this.#authenticationService.login();
+  }
 }
