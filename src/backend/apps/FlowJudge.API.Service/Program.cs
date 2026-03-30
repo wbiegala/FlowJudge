@@ -1,12 +1,21 @@
 using FlowJudge.API.Service.Auth;
 using FlowJudge.API.Service.ErrorHandling;
 using FlowJudge.Common.Cache;
+using FlowJudge.Common.Messaging;
+using FlowJudge.Common.Sql;
+using FlowJudge.Common.Sql.Migrations;
 using FlowJudge.Common.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var dbConnectionString = builder.Configuration.GetConnectionString("Postgres");
 var redisConnectionString = builder.Configuration.GetConnectionString("Redis");
+
+builder.Services.AddPostgresDatabase(cfg =>
+{
+    cfg.WithConnectionString(dbConnectionString!);
+    cfg.WithDatabaseMigrationsFromAssembly(typeof(IMessage).Assembly);
+});
 
 builder.Services.AddCors(options =>
 {
@@ -55,6 +64,8 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    var migrationsExecutor = app.Services.GetRequiredService<IMigrationExecutor>();
+    await migrationsExecutor.ExecuteAsync();
 }
 
 app.UseHttpsRedirection();

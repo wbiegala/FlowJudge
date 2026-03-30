@@ -20,6 +20,8 @@
     <ProjectReference Include="..\..\libs\FlowJudge.API.Contracts\FlowJudge.API.Contracts.csproj" />
     <ProjectReference Include="..\..\libs\FlowJudge.Common.Cache\FlowJudge.Common.Cache.csproj" />
     <ProjectReference Include="..\..\libs\FlowJudge.Common.Http\FlowJudge.Common.Http.csproj" />
+    <ProjectReference Include="..\..\libs\FlowJudge.Common.Messaging\FlowJudge.Common.Messaging.csproj" />
+    <ProjectReference Include="..\..\libs\FlowJudge.Common.Sql\FlowJudge.Common.Sql.csproj" />
     <ProjectReference Include="..\..\libs\FlowJudge.Common.Utils\FlowJudge.Common.Utils.csproj" />
   </ItemGroup>
 

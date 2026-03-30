@@ -1,7 +1,9 @@
-﻿namespace FlowJudge.Common.Sql.Migrations
+﻿using System.Data;
+
+namespace FlowJudge.Common.Sql.Migrations
 {
     public interface IMigration
     {
-        Task ExecuteAsync();
+        Task ExecuteAsync(IMigrationContext migrationContext);
     }
 }

@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace FlowJudge.Common.Sql.Migrations
+﻿namespace FlowJudge.Common.Sql.Migrations
 {
     public interface IMigrationExecutor
     {
+        Task ExecuteAsync(CancellationToken ct = default);
     }
 }

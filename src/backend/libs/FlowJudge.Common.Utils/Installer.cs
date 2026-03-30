@@ -7,7 +7,7 @@ namespace FlowJudge.Common.Utils
     {
         public static IServiceCollection AddTimeService(this IServiceCollection services)
         {
-            services.AddScoped<ITimeService, TimeService>();
+            services.AddSingleton<ITimeService, TimeService>();
 
             return services;
         }

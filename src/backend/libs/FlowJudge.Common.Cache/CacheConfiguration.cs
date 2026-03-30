@@ -30,7 +30,7 @@
             RedisConnectionString = connectionString;
         }
 
-        public void UsePostgreSql(string connectionString, string schemaName = "dbo", string tableName = "ApplicationCache")
+        public void UsePostgreSql(string connectionString, string schemaName = "public", string tableName = "application_cache")
         {
             SqlConnectionString = connectionString;
             SqlSchemaName = schemaName;

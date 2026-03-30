@@ -1,9 +1,9 @@
-﻿using System.Data;
+﻿using System.Data.Common;
 
 namespace FlowJudge.Common.Sql.Connection
 {
     public interface IDbConnectionProvider
     {
-        IDbConnection GetDbConnection();
+        DbConnection GetDbConnection();
     }
 }

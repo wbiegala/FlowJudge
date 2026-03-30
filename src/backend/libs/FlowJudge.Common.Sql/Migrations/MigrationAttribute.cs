@@ -3,10 +3,10 @@
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
     public sealed class MigrationAttribute : Attribute
     {
-        public uint Number { get; }
+        public int Number { get; }
         public string Description { get; }
 
-        public MigrationAttribute(uint number, string description)
+        public MigrationAttribute(int number, string description)
         {
             Number = number;
             Description = description;

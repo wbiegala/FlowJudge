@@ -7,12 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Dapper" Version="2.1.72" />
-    <PackageReference Include="Npgsql" Version="10.0.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.5" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FlowJudge.Common.Utils\FlowJudge.Common.Utils.csproj" />
+    <ProjectReference Include="..\FlowJudge.Common.Sql\FlowJudge.Common.Sql.csproj" />
   </ItemGroup>
 
 </Project>

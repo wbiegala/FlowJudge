@@ -1,4 +1,4 @@
-﻿using System.Data;
+﻿using System.Data.Common;
 
 namespace FlowJudge.Common.Sql.Connection.Impl
 {
@@ -11,7 +11,7 @@ namespace FlowJudge.Common.Sql.Connection.Impl
             _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
         }
 
-        public IDbConnection GetDbConnection()
+        public DbConnection GetDbConnection()
         {
             return new Npgsql.NpgsqlConnection(_connectionString);
         }
