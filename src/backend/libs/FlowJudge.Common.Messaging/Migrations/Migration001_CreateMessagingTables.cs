@@ -1,5 +1,4 @@
 ﻿using FlowJudge.Common.Messaging.Outbox;
-using FlowJudge.Common.Messaging.Outbox.Model;
 using FlowJudge.Common.Sql.Migrations;
 
 namespace FlowJudge.Common.Messaging.Migrations
