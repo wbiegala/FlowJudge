@@ -1,11 +1,11 @@
 import { inject, Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext, StateToken } from '@ngxs/store';
 import { AuthenticationService } from '../authentication.service';
-import { Authenticate, SetTenantContext, StartLogin, TryRestoreTenantContext } from './tenant.actions';
+import { Authenticate, SetUserContext, StartLogin, TryRestoreUserContext } from './user.actions';
 import { produce } from 'immer';
-import { catchError, map, of, switchMap, tap } from 'rxjs';
+import { catchError, map, of, tap } from 'rxjs';
 
-export interface TenantStateModel {
+export interface UserStateModel {
   isAuthenticated: boolean | null;
   data: null | {
     id: string;
@@ -16,30 +16,30 @@ export interface TenantStateModel {
   identityToken: string | null;
 };
 
-export const defaultTenantState: TenantStateModel = {
+export const defaultUserState: UserStateModel = {
   isAuthenticated: null,
   data: null,
   accessToken: null,
   identityToken: null,
 };
 
-export const TENANT_STATE_TOKEN = new StateToken<TenantStateModel>('tenant');
+export const USER_STATE_TOKEN = new StateToken<UserStateModel>('user');
 
-@State<TenantStateModel>({
-  name: TENANT_STATE_TOKEN,
-  defaults: defaultTenantState
+@State<UserStateModel>({
+  name: USER_STATE_TOKEN,
+  defaults: defaultUserState
 })
 @Injectable()
-export class TenantState {
+export class UserState {
   #authenticationService = inject(AuthenticationService);
 
   @Selector()
-  static accessToken(state: TenantStateModel) {
+  static accessToken(state: UserStateModel) {
     return state.accessToken;
   }
 
   @Selector()
-  static isAuthenticated(state: TenantStateModel) {
+  static isAuthenticated(state: UserStateModel) {
     return state.isAuthenticated;
   }
 
@@ -49,17 +49,17 @@ export class TenantState {
   }
 
   @Action(Authenticate)
-  authenticateAction(ctx: StateContext<TenantStateModel>, action: Authenticate) {
+  authenticateAction(ctx: StateContext<UserStateModel>, action: Authenticate) {
     ctx.setState(produce((draft) => {
       draft.accessToken = action.accessToken;
       draft.identityToken = action.identityToken
     }));
-    ctx.dispatch(new SetTenantContext());
+    ctx.dispatch(new SetUserContext());
   }
 
-  @Action(SetTenantContext)
-  setTenantContextAction(ctx: StateContext<TenantStateModel>) {
-    return this.#authenticationService.getTenantData().pipe(
+  @Action(SetUserContext)
+  setUserContextAction(ctx: StateContext<UserStateModel>) {
+    return this.#authenticationService.getUserData().pipe(
       tap(response => ctx.setState(produce((draft) => {
         draft.isAuthenticated = true;
         draft.data = {
@@ -72,8 +72,8 @@ export class TenantState {
     );
   }
 
-  @Action(TryRestoreTenantContext)
-  tryRestoreUserContextAction(ctx: StateContext<TenantStateModel>) {
+  @Action(TryRestoreUserContext)
+  tryRestoreUserContextAction(ctx: StateContext<UserStateModel>) {
     return this.#authenticationService.refreshToken().pipe(
       tap(response => ctx.dispatch(new Authenticate(response.accessToken, response.identityToken))),
       catchError(() => {

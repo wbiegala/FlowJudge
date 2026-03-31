@@ -10,7 +10,7 @@ export * from './lib/components/no-access.component';
 export * from './lib/components/session-expired.component';
 export * from './lib/components/logout.component';
 
-export * from './lib/store/tenant.actions';
-export * from './lib/store/tenant.state';
+export * from './lib/store/user.actions';
+export * from './lib/store/user.state';
 
 export * from './lib/auth-routes';

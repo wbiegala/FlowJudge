@@ -3,7 +3,7 @@ export interface TokenPairResponse {
   identityToken: string;
 }
 
-export interface GetTenantDataResponse {
+export interface GetUserDataResponse {
   id: string;
   username: string;
   email: string;

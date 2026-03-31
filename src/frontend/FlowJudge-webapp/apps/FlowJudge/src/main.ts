@@ -13,7 +13,7 @@ import { apiPrefixInterceptor, provideApiBaseUrl } from '@flow-judge-webapp/comm
 import { App } from './app/app';
 import { appRoutes } from './app/app.routes';
 import { environment } from './environments/environment';
-import { accessTokenInterceptor, provideRestoreSessionFactory, TenantState } from '@flow-judge-webapp/auth';
+import { accessTokenInterceptor, provideRestoreSessionFactory, UserState } from '@flow-judge-webapp/auth';
 
 
 fetch(environment.configUrl, { cache: 'no-store' })
@@ -35,7 +35,7 @@ fetch(environment.configUrl, { cache: 'no-store' })
         provideBrowserGlobalErrorListeners(),
         provideZonelessChangeDetection(),
         provideStore([
-          TenantState
+          UserState
         ], withNgxsReduxDevtoolsPlugin(), withNgxsRouterPlugin(), withNgxsFormPlugin()),
         provideTranslateService({
           loader: { provide: TranslateLoader, useFactory: translationHttpLoaderFactory, deps: [HttpBackend] },

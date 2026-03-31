@@ -2,7 +2,7 @@ import { inject, Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { API_BASE_URL } from '@flow-judge-webapp/common';
 import { Observable } from "rxjs";
-import { GetTenantDataResponse, TokenPairResponse } from "./auth.model";
+import { GetUserDataResponse, TokenPairResponse } from "./auth.model";
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
@@ -37,9 +37,9 @@ export class AuthenticationService {
     return this.#httpClient.post<TokenPairResponse>(url, null, { withCredentials: true });
   }
 
-    getTenantData(): Observable<GetTenantDataResponse> {
+    getUserData(): Observable<GetUserDataResponse> {
     const url = `/${this.#authPathSegment}/me`;
 
-    return this.#httpClient.get<GetTenantDataResponse>(url);
+    return this.#httpClient.get<GetUserDataResponse>(url);
   }
 }

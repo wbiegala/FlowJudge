@@ -1,7 +1,7 @@
 import { ActivatedRouteSnapshot, CanActivateFn, RouterStateSnapshot } from '@angular/router';
 import { Store } from '@ngxs/store';
 import { inject } from '@angular/core';
-import { TenantState } from './store/tenant.state';
+import { UserState } from './store/user.state';
 import { Navigate } from '@ngxs/router-plugin';
 import { filter, map, take } from 'rxjs';
 
@@ -14,7 +14,7 @@ export const authenticatedGuard: CanActivateFn = (
 ) => {
   const store = inject(Store);
 
-  return store.select(TenantState.isAuthenticated).pipe(
+  return store.select(UserState.isAuthenticated).pipe(
     filter(isAuth => isAuth !== null),
     take(1),
     map(isAuth => {
