@@ -5,6 +5,7 @@ using FlowJudge.Common.Messaging;
 using FlowJudge.Common.Sql;
 using FlowJudge.Common.Sql.Migrations;
 using FlowJudge.Common.Utils;
+using FlowJudge.Users.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,9 @@ builder.Services.AddPostgresDatabase(cfg =>
 {
     cfg.WithConnectionString(dbConnectionString!);
     cfg.WithDatabaseMigrationsFromAssembly(typeof(IMessage).Assembly);
+
+    //TODO: delete this after development
+    cfg.WithDatabaseMigrationsFromAssembly(typeof(FlowJudge.Users.Infrastructure.Installer).Assembly);
 });
 
 builder.Services.AddCors(options =>
@@ -52,6 +56,8 @@ builder.Services.AddCache(cfg =>
 });
 
 builder.Services.AddTimeService();
+
+builder.Services.AddUsersModule();
 
 builder.Services.AddControllers();
 

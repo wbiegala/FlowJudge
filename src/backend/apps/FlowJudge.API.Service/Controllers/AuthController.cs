@@ -2,7 +2,9 @@
 using FlowJudge.API.Contracts.Auth;
 using FlowJudge.API.Service.Auth;
 using FlowJudge.API.Service.Auth.Exceptions;
+using FlowJudge.Common.Application.Mediator;
 using FlowJudge.Common.Http.Extensions;
+using FlowJudge.Users.Application.Commands;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
@@ -15,10 +17,12 @@ namespace FlowJudge.API.Service.Controllers
     {
         private const string RefreshTokenCookieName = "refresh_token";
         private readonly IAuthenticationService _authService;
+        private readonly IMediator _mediator;
 
-        public AuthController(IAuthenticationService authService)
+        public AuthController(IAuthenticationService authService, IMediator mediator)
         {
             _authService = authService ?? throw new ArgumentNullException(nameof(authService));
+            _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
 
         [HttpGet("register")]
@@ -156,10 +160,13 @@ namespace FlowJudge.API.Service.Controllers
 
         [HttpGet("me")]
         [Authorize]
-        public IActionResult GetUserData()
+        public async Task<IActionResult> GetUserData(CancellationToken cancellationToken)
         {
             if (this.HttpContext.User.TryGetUserContext(out var userContext))
             {
+                var command = new SynchronizeUserCommand { Email = userContext!.Email, UserId = userContext.Id.ToString(), Username = userContext.Username };
+                var commandResult = await _mediator.SendCommandAsync(command, cancellationToken);
+
                 var response = new GetUserDataResponse
                 {
                     Id = userContext!.Id,

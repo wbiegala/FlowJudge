@@ -15,7 +15,7 @@ namespace FlowJudge.Common.Sql.Migrations.Executors
             : IMigrationExecutor
     {
         private const string MigrationSchemaName = "public";
-        private const string MigrationTableName = "Migrations";
+        private const string MigrationTableName = "migrations";
 
         public async Task ExecuteAsync(CancellationToken ct = default)
         {
@@ -142,7 +142,7 @@ create table if not exists {MigrationSchemaName}.{MigrationTableName}
 );
 
 create unique index if not exists ux_migrations_number_assembly
-    on {MigrationSchemaName}.{MigrationTableName} ({nameof(MigrationNotification.Assembly)}, {nameof(MigrationNotification.Number)});";
+    on {MigrationSchemaName}.{MigrationTableName} (assembly, number);";
 
             await connection.ExecuteAsync(sql);
         }
