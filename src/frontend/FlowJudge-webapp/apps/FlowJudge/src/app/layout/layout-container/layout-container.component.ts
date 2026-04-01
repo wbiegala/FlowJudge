@@ -1,7 +1,9 @@
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { AppHeaderComponent } from "../header/app-header.component";
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MainMenuComponent } from '../main-menu/main-menu.component';
+import { Store } from '@ngxs/store';
+import { UserState } from '@flow-judge-webapp/auth';
 
 @Component({
   selector: 'app-layout-container',
@@ -12,8 +14,12 @@ import { MainMenuComponent } from '../main-menu/main-menu.component';
 })
 export class LayoutContainerComponent {
   #mainMenuOpenStatus = signal(true);
+  #store = inject(Store);
   #showMainMenu = computed(() => {
-    return true;
+    const isAuth = this.#store.selectSignal(UserState.isAuthenticated);
+    const isLegal = signal(true);
+
+    return isAuth() !== null && isAuth() === true && isLegal() !== null && isLegal() === true;
   });
   isMainMenu = computed(() => this.#showMainMenu() && this.#mainMenuOpenStatus());
 

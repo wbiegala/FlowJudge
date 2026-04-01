@@ -1,10 +1,12 @@
-import { ChangeDetectionStrategy, Component, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, output, signal } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { HeaderProgressBarComponent } from './header-progress-bar/header-progress-bar.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { HeaderUserPanelComponent } from './header-user-panel/header-user-panel.component';
 import { RouterLink } from "@angular/router";
+import { Store } from '@ngxs/store';
+import { UserState } from '@flow-judge-webapp/auth';
 
 @Component({
   selector: 'app-header',
@@ -14,5 +16,21 @@ import { RouterLink } from "@angular/router";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppHeaderComponent {
+  #store = inject(Store);
+  hideMenuButton = computed(() => {
+    const isAuth = this.#store.selectSignal(UserState.isAuthenticated);
+    const isLegal = signal(true);
+
+    if (isAuth() === null || isAuth() === false) {
+      return true;
+    }
+
+    if (isLegal() !== null && isLegal() === false) {
+      return true;
+    }
+
+    return false;
+  });
+
   menuClicked = output();
 }

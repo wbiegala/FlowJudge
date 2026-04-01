@@ -23,5 +23,7 @@
         Task<(string AccessToken, string RefreshToken, string IdToken)> GetTokensAsync(Guid authenticationStateId, CancellationToken cancellationToken = default);
 
         Task<(string AccessToken, string RefreshToken, string IdToken)> RefreshTokenAsync(string refreshToken, CancellationToken cancellationToken = default);
+
+        Task<string> LogoutAsync(string refreshToken, string identityToken, string uiContext, CancellationToken cancellationToken = default);
     }
 }

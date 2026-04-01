@@ -15,6 +15,10 @@ export class TryRestoreUserContext {
   static readonly type = '[User] Try restore user context';
 }
 
+export class StartLogout {
+  static readonly type = '[user] Start logout';
+}
+
 export class ClearUserContext {
   static readonly type = '[User] Clear user context';
 }

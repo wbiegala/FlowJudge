@@ -98,7 +98,16 @@ namespace FlowJudge.API.Service.Auth.Keycloak
             return new (tokens.AccessToken, tokens.RefreshToken, tokens.IdentityToken);
         }
 
+        public Task<string> LogoutAsync(string refreshToken, string identityToken, string uiContext, CancellationToken cancellationToken = default)
+        {
+            var url = KeycloakUrlHelper.CreateLogoutUrl(configuration, identityToken, uiContext);
+
+            return Task.FromResult(url);
+        }
+
         private static string GenerateCacheKey(Guid stateId) =>
             $":authentication-state:{stateId.ToString("N")}";
+
+
     }
 }

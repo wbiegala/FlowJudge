@@ -126,6 +126,7 @@ services:
       - Auth__Keycloak__ClientSecret=${AUTH_CLIENT_SECRET}
       - Auth__Keycloak__RegistrationCallbackUri=${AUTH_REGISTRATION_CALLBACK_URI}
       - Auth__Keycloak__LoginCallbackUri=${AUTH_LOGIN_CALLBACK_URI}
+      - Auth__Keycloak__LogoutCallbackUri=${AUTH_LOGOUT_CALLBACK_URI}
       - Auth__JWT__RequireHttpsMetadata=false
       - Auth__JWT__MetadataAddress=${JWT_METADATA_URL}
       - Auth__JWT__Issuer=${JWT_ISSUER}

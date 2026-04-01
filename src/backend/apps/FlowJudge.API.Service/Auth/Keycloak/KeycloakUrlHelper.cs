@@ -69,6 +69,22 @@ namespace FlowJudge.API.Service.Auth.Keycloak
                 uiRedirectUri);
         }
 
+        public static string CreateLogoutUrl(KeycloakAuthenticationConfiguration configuration,
+            string identityToken,
+            string uiContext)
+        {
+            var baseUri = $"{configuration.BaseUrl}/realms/{configuration.Realm}/protocol/openid-connect/logout";
+            var redirectUri = CreateCallbackWithRedirectUrl(configuration.LogoutCallbackUri, uiContext);
+            var parameters = new LogoutUrlParameters(
+                id_token_hint: identityToken,
+                post_logout_redirect_uri: redirectUri);
+
+            var uriBuilder = new UriBuilder(baseUri);
+            uriBuilder.AddQueryParams(parameters);
+
+            return uriBuilder.ToString();
+        }
+
 
         private sealed record RegistrationUrlParameters(
             string client_id,
@@ -83,5 +99,10 @@ namespace FlowJudge.API.Service.Auth.Keycloak
             string response_type,
             string scope,
             string state);
+
+        private sealed record LogoutUrlParameters(
+            string id_token_hint,
+            string post_logout_redirect_uri,
+            string? state = null);
     }
 }

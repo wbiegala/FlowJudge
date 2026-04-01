@@ -173,6 +173,44 @@ namespace FlowJudge.API.Service.Controllers
             return Unauthorized();
         }
 
+        [HttpPost("logout")]
+        [Authorize]
+        public async Task<IActionResult> LogoutAsync(
+            [FromBody] LogoutRequest request,
+            CancellationToken cancellationToken)
+        {
+            var refreshToken = this.HttpContext.Request.Cookies[RefreshTokenCookieName];
+            if (string.IsNullOrWhiteSpace(refreshToken))
+                return StatusCode(StatusCodes.Status410Gone,
+                    ProblemDetailsFactory.CreateProblemDetails(
+                        this.HttpContext,
+                        statusCode: StatusCodes.Status410Gone,
+                        title: ErrorCodes.MissingRefreshTokenErrorCode,
+                        detail: "Refresh token cookie is missing"));
+
+            var result = await _authService.LogoutAsync(refreshToken, request.IdentityToken, request.UiContext, cancellationToken);
+
+            var response = new LogoutResponse
+            {
+                LogoutRedirectUrl = result
+            };
+
+            return Ok(response);
+        }
+
+        [HttpGet("logout-callback")]
+        public IActionResult LogoutCallback(
+            [FromQuery(Name = AuthQueryParams.UiContextUrlParamName)] string uiContext,
+            CancellationToken cancellationToken)
+        {
+            var uri = new Uri(uiContext);
+            var redirectOrigin = uri.GetLeftPart(UriPartial.Authority);
+            var reditectUrl = $"{redirectOrigin}/logout";
+
+            RemoveRefreshTokenCookie();
+
+            return Redirect(reditectUrl);
+        }
 
         private void AppendRefreshTokenCookie(string refreshToken)
         {

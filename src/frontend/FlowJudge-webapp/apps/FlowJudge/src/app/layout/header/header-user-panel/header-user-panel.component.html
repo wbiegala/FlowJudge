@@ -1,6 +1,42 @@
-<button (click)="onRegisterClick()" matButton aria-label="main-menu-toggle-button">
-  {{ 'AUTH.REGISTRATION.REGISTER_BUTTON' | translate }}
-</button>
-<button matButton (click)="onLoginClick()">
-  Zaloguj
-</button>
+@if (isViewportNarrow()) {
+  @if (isAuthenticated()) {
+    <button mat-mini-fab [matMenuTriggerFor]="menu" [matTooltip]="userData()?.name">
+      <mat-icon>person</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="onLogoutClick()" >
+        <mat-icon>logout</mat-icon>
+        <span>{{ 'AUTH.LOGOUT.LOGOUT_BUTTON' | translate }}</span>
+      </button>
+    </mat-menu>
+  } @else {
+    <button mat-mini-fab id="register-button" (click)="onRegisterClick()" [matTooltip]="'AUTH.REGISTRATION.REGISTER_BUTTON' | translate">
+      <mat-icon>person_add</mat-icon>
+    </button>
+    <button mat-mini-fab (click)="onLoginClick()" [matTooltip]="'AUTH.LOGIN.LOGIN_BUTTON' | translate">
+      <mat-icon>login</mat-icon>
+    </button>
+  }
+} @else {
+  @if (isAuthenticated()) {
+    <button mat-button color="primary" extended [matMenuTriggerFor]="menu">
+      <mat-icon>person</mat-icon>
+      {{ userData()?.name }}
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="onLogoutClick()">
+        <mat-icon>logout</mat-icon>
+        <span>{{ 'AUTH.LOGOUT.LOGOUT_BUTTON' | translate }}</span>
+      </button>
+    </mat-menu>
+  } @else {
+    <button mat-button color="primary" extended id="register-button" (click)="onRegisterClick()">
+      <mat-icon>person_add</mat-icon>
+      {{ 'AUTH.REGISTRATION.REGISTER_BUTTON' | translate}}
+    </button>
+    <button mat-button color="primary" extended (click)="onLoginClick()">
+      <mat-icon>login</mat-icon>
+      {{ 'AUTH.LOGIN.LOGIN_BUTTON' | translate }}
+    </button>
+  }
+}

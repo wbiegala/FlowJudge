@@ -40,7 +40,8 @@ builder.Services.AddKeycloakAuthentication(options =>
         clientId: builder.Configuration["Auth:Keycloak:ClientId"] ?? string.Empty,
         clientSecret: builder.Configuration["Auth:Keycloak:ClientSecret"] ?? string.Empty,
         registrationCallbackUri: builder.Configuration["Auth:Keycloak:RegistrationCallbackUri"] ?? string.Empty,
-        loginCallbackUri: builder.Configuration["Auth:Keycloak:LoginCallbackUri"] ?? string.Empty);      
+        loginCallbackUri: builder.Configuration["Auth:Keycloak:LoginCallbackUri"] ?? string.Empty,
+        logoutCallbackUri: builder.Configuration["Auth:Keycloak:LogoutCallbackUri"] ?? string.Empty);      
 });
 builder.Services.AddJwtAuthorization(() => builder.Configuration.GetSection("Auth:JWT").Get<JwtConfiguration>()!);
 
