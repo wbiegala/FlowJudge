@@ -44,6 +44,18 @@ importers:
       '@ngx-translate/http-loader':
         specifier: ^17.0.0
         version: 17.0.0(@angular/common@21.1.6(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2))
+      '@ngxs/devtools-plugin':
+        specifier: ^21.0.0
+        version: 21.0.0(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2))(@ngxs/store@21.0.0(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2))(rxjs@7.8.2))(rxjs@7.8.2)
+      '@ngxs/form-plugin':
+        specifier: ^21.0.0
+        version: 21.0.0(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2))(@angular/forms@21.1.6(@angular/common@21.1.6(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2))(@angular/platform-browser@21.1.6(@angular/animations@21.2.4(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2)))(@angular/common@21.1.6(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2)))(rxjs@7.8.2))(@ngxs/store@21.0.0(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2))(rxjs@7.8.2))(rxjs@7.8.2)
+      '@ngxs/router-plugin':
+        specifier: ^21.0.0
+        version: 21.0.0(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2))(@angular/router@21.1.6(@angular/common@21.1.6(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2))(@angular/platform-browser@21.1.6(@angular/animations@21.2.4(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2)))(@angular/common@21.1.6(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2)))(rxjs@7.8.2))(@ngxs/store@21.0.0(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2))(rxjs@7.8.2))(rxjs@7.8.2)
+      immer:
+        specifier: ^11.1.4
+        version: 11.1.4
       ngx-translate-multi-http-loader:
         specifier: ^20.0.0
         version: 20.0.0(@angular/common@21.1.6(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2))(@ngx-translate/core@17.0.0(@angular/common@21.1.6(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2)))(rxjs@7.8.2)
@@ -72,6 +84,9 @@ importers:
       '@eslint/js':
         specifier: ^9.8.0
         version: 9.39.4
+      '@ngxs/store':
+        specifier: ^21.0.0
+        version: 21.0.0(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2))(rxjs@7.8.2)
       '@nx/angular':
         specifier: 22.5.4
         version: 22.5.4(3rqwm3r4auoox7u3aorlhuhx2i)
@@ -2274,6 +2289,35 @@ packages:
     peerDependencies:
       '@angular/common': '>=16'
       '@angular/core': '>=16'
+
+  '@ngxs/devtools-plugin@21.0.0':
+    resolution: {integrity: sha512-d/EfNBM0t+1QTKkdGErisimJuumZJ2RlhwMVD6hOS2ffAdUPQmj5rDmLt9IPt1ciCxcIp+6jWPdlxwBjeefVAw==}
+    peerDependencies:
+      '@angular/core': '>=21.0.0 <22.0.0'
+      '@ngxs/store': ^21.0.0 || ^21.0.0-dev
+      rxjs: '>=7.0.0'
+
+  '@ngxs/form-plugin@21.0.0':
+    resolution: {integrity: sha512-cnJVvha1Xft4U1rqDjM/d1BrCgKb863bHC7trUKPvfNkoAngPnzRFc8uCT8u03TDbdHv5fKbLTGv7pdb0IXn6Q==}
+    peerDependencies:
+      '@angular/core': '>=21.0.0 <22.0.0'
+      '@angular/forms': '>=21.0.0 <22.0.0'
+      '@ngxs/store': ^21.0.0 || ^21.0.0-dev
+      rxjs: '>=7.0.0'
+
+  '@ngxs/router-plugin@21.0.0':
+    resolution: {integrity: sha512-LxpXX+qSWbxmfK71MCkTJp9v2452baR724IMfdP6I1OIgFvr3LwKyRLD+FafiPZO9Cc3syQOCFf2UGKM40srNw==}
+    peerDependencies:
+      '@angular/core': '>=21.0.0 <22.0.0'
+      '@angular/router': '>=21.0.0 <22.0.0'
+      '@ngxs/store': ^21.0.0 || ^21.0.0-dev
+      rxjs: '>=7.0.0'
+
+  '@ngxs/store@21.0.0':
+    resolution: {integrity: sha512-zp8BgLNhdj8yDiBQpjjLhHaCv7vGdyCYzG2myj6j/A5XcUv71ikuJZfY7Z9rAibBah2mQCaerdQ3fOA9qG70HA==}
+    peerDependencies:
+      '@angular/core': '>=21.0.0 <22.0.0'
+      rxjs: '>=7.0.0'
 
   '@noble/hashes@1.4.0':
     resolution: {integrity: sha512-V1JJ1WTRUqHHrOSh597hURcMqVKVGL/ea3kv0gSnEdsEZ0/+VyPghM1lMNGc00z7CIQorSvbKpuJkxvuHbvdbg==}
@@ -5001,6 +5045,9 @@ packages:
     resolution: {integrity: sha512-6TDAlDPZxUFCv+fuOkIoXT/V/f3Qbq8e37p+YOiYrUv3v9cc3/6x78VdfPgFVaB9dZYeLUfKgHRebpkm/oP2VQ==}
     engines: {node: '>=0.10.0'}
     hasBin: true
+
+  immer@11.1.4:
+    resolution: {integrity: sha512-XREFCPo6ksxVzP4E0ekD5aMdf8WMwmdNaz6vuvxgI40UaEiu6q3p8X52aU6GdyvLY3XXX/8R7JOTXStz/nBbRw==}
 
   immutable@5.1.5:
     resolution: {integrity: sha512-t7xcm2siw+hlUM68I+UEOK+z84RzmN59as9DZ7P1l0994DKUWV7UXBMQZVxaoMSRQ+PBZbHCOoBt7a2wxOMt+A==}
@@ -10172,6 +10219,35 @@ snapshots:
       '@angular/core': 21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2)
       tslib: 2.8.1
 
+  '@ngxs/devtools-plugin@21.0.0(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2))(@ngxs/store@21.0.0(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2))(rxjs@7.8.2))(rxjs@7.8.2)':
+    dependencies:
+      '@angular/core': 21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2)
+      '@ngxs/store': 21.0.0(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2))(rxjs@7.8.2)
+      rxjs: 7.8.2
+      tslib: 2.8.1
+
+  '@ngxs/form-plugin@21.0.0(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2))(@angular/forms@21.1.6(@angular/common@21.1.6(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2))(@angular/platform-browser@21.1.6(@angular/animations@21.2.4(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2)))(@angular/common@21.1.6(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2)))(rxjs@7.8.2))(@ngxs/store@21.0.0(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2))(rxjs@7.8.2))(rxjs@7.8.2)':
+    dependencies:
+      '@angular/core': 21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2)
+      '@angular/forms': 21.1.6(@angular/common@21.1.6(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2))(@angular/platform-browser@21.1.6(@angular/animations@21.2.4(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2)))(@angular/common@21.1.6(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2)))(rxjs@7.8.2)
+      '@ngxs/store': 21.0.0(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2))(rxjs@7.8.2)
+      rxjs: 7.8.2
+      tslib: 2.8.1
+
+  '@ngxs/router-plugin@21.0.0(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2))(@angular/router@21.1.6(@angular/common@21.1.6(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2))(@angular/platform-browser@21.1.6(@angular/animations@21.2.4(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2)))(@angular/common@21.1.6(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2)))(rxjs@7.8.2))(@ngxs/store@21.0.0(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2))(rxjs@7.8.2))(rxjs@7.8.2)':
+    dependencies:
+      '@angular/core': 21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2)
+      '@angular/router': 21.1.6(@angular/common@21.1.6(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2))(@angular/platform-browser@21.1.6(@angular/animations@21.2.4(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2)))(@angular/common@21.1.6(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2)))(rxjs@7.8.2)
+      '@ngxs/store': 21.0.0(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2))(rxjs@7.8.2)
+      rxjs: 7.8.2
+      tslib: 2.8.1
+
+  '@ngxs/store@21.0.0(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2))(rxjs@7.8.2)':
+    dependencies:
+      '@angular/core': 21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2)
+      rxjs: 7.8.2
+      tslib: 2.8.1
+
   '@noble/hashes@1.4.0': {}
 
   '@nodelib/fs.scandir@2.1.5':
@@ -13379,6 +13455,8 @@ snapshots:
 
   image-size@0.5.5:
     optional: true
+
+  immer@11.1.4: {}
 
   immutable@5.1.5: {}
 

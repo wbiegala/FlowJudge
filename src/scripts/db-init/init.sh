@@ -38,6 +38,6 @@ SQL
 }
 
 create_db_and_user "$AUTH_DB_NAME"     	"$AUTH_DB_USER"     	"$AUTH_DB_PASSWORD"
-create_db_and_user "$FLOWJUDGE_DB_NAME" "$SUPERVISOR_DB_USER"  	"$SUPERVISOR_DB_PASSWORD"
+create_db_and_user "$FLOWJUDGE_DB_NAME" "$FLOWJUDGE_DB_USER"  	"$FLOWJUDGE_DB_PASSWORD"
 
 echo ">> Done."

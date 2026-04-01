@@ -16,7 +16,8 @@
     "baseUrl": ".",
     "paths": {
       "@flow-judge-webapp/common": ["libs/common/src/index.ts"],
-      "@flow-judge-webapp/auth": ["libs/auth/src/index.ts"]
+      "@flow-judge-webapp/auth": ["libs/auth/src/index.ts"],
+      "@flow-judge-webapp/ui": ["libs/ui/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

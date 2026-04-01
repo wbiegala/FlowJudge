@@ -1,9 +1,25 @@
 {
   "AUTH": {
     "REGISTRATION": {
-      "REGISTER_BUTTON": "Register",
+      "REGISTER_BUTTON": "Sign up",
       "REGISTRATION_CONFIRMATION_HEADER": "Registration confirmation",
       "REGISTRATION_CONFIRMATION_CONTENT": "Your accont has been created, thanks. You can sign in now."
+    },
+    "LOGIN": {
+      "LOGIN_BUTTON": "Sign in"
+    },
+    "LOGOUT": {
+      "LOGOUT_BUTTON": "Log out",
+      "LOGOUT_CONFIRMATION_HEADER": "Logged out successfully",
+      "LOGOUT_CONFIRMATION_CONTENT": "You have been logged out."
+    },
+    "NO_ACCESS": {
+      "NO_ACCESS_HEADER": "No access",
+      "NO_ACCESS_CONTENT": "Looks you are not authorized for this action."
+    },
+    "SESSION_EXPIRED": {
+      "SESSION_EXPIRED_HEADER": "Session expired",
+      "SESSION_EXPIRED_CONTENT": "Your user session has expired and you have been logged out."
     }
   }
 }

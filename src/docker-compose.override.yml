@@ -31,7 +31,6 @@ services:
     environment:
       POSTGRES_HOST: flowjudge.db
       POSTGRES_PORT: 5432
-      FLOWJUDGE_DB_NAME: ${FLOWJUDGE_DB_NAME}
       POSTGRES_SUPERUSER: ${POSTGRES_USER:-postgres}
       POSTGRES_SUPERPASS: ${POSTGRES_PASSWORD}
       AUTH_DB_NAME: ${AUTH_DB_NAME}
@@ -39,6 +38,9 @@ services:
       AUTH_DB_PASSWORD: ${AUTH_DB_PASSWORD}
       SUPERVISOR_DB_USER: ${SUPERVISOR_DB_USER}
       SUPERVISOR_DB_PASSWORD: ${SUPERVISOR_DB_PASSWORD}
+      FLOWJUDGE_DB_NAME: ${FLOWJUDGE_DB_NAME}
+      FLOWJUDGE_DB_USER: ${FLOWJUDGE_DB_USER}
+      FLOWJUDGE_DB_PASSWORD: ${FLOWJUDGE_DB_PASSWORD}
     working_dir: /db-init
     volumes:
       - ./scripts/db-init/:/db-init
@@ -47,6 +49,16 @@ services:
     networks:
       - flowjudge
 
+  flowjudge.cache:
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning --requirepass P@ssw0rd
+    volumes: 
+      - ./redis:/data
+    networks:
+      - flowjudge
+      
   flowjudge.storage:
     ports:
       - "10000:10000"
@@ -104,12 +116,22 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
       - ASPNETCORE_HTTPS_PORTS=8081
+      - ConnectionStrings__Postgres=Host=flowjudge.db;Port=5432;Database=${FLOWJUDGE_DB_NAME};Username=${FLOWJUDGE_DB_USER};Password=${FLOWJUDGE_DB_PASSWORD};SSL Mode=Disable;
+      - ConnectionStrings__Redis=${FLOWJUDGE_REDIS_CONNECTION_STRING}
+      - CorsAllowedOrigins=${ALLOWED_ORIGINS}
       - Auth__Keycloak__BaseUrl=${AUTH_BASE_URL}
       - Auth__Keycloak__BaseUrlInternal=${AUTH_BASEURL_INTERNAL}
       - Auth__Keycloak__Realm=${AUTH_REALM}
       - Auth__Keycloak__ClientId=${AUTH_CLIENT_ID}
       - Auth__Keycloak__ClientSecret=${AUTH_CLIENT_SECRET}
       - Auth__Keycloak__RegistrationCallbackUri=${AUTH_REGISTRATION_CALLBACK_URI}
+      - Auth__Keycloak__LoginCallbackUri=${AUTH_LOGIN_CALLBACK_URI}
+      - Auth__Keycloak__LogoutCallbackUri=${AUTH_LOGOUT_CALLBACK_URI}
+      - Auth__JWT__RequireHttpsMetadata=false
+      - Auth__JWT__MetadataAddress=${JWT_METADATA_URL}
+      - Auth__JWT__Issuer=${JWT_ISSUER}
+      - Auth__JWT__Audience=${JWT_AUDIENCE}
+      - Auth__JWT__PublicKey=${JWT_PUBLIC_KEY}
     ports:
       - "8080"
       - "10443:8081"
@@ -170,6 +192,8 @@ volumes:
     external: false
   flowjudgeAzuriteVolume:
     external: false
+  cache:
+    driver: local
 
 networks:
   flowjudge:

@@ -5,7 +5,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   selector: 'lib-registration-confirmation',
   imports: [TranslatePipe],
   template: `
-    <p>{{ 'AUTH.REGISTRATION.REGISTRATION_CONFIRMATION_HEADER' | translate }}</p>
+    <h1>{{ 'AUTH.REGISTRATION.REGISTRATION_CONFIRMATION_HEADER' | translate }}</h1>
     <p>{{ 'AUTH.REGISTRATION.REGISTRATION_CONFIRMATION_CONTENT' | translate }}</p>`,
   styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush,

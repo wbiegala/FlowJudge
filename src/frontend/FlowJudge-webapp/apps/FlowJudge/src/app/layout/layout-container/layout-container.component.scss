@@ -5,7 +5,6 @@
   min-height: 0;
 }
 
-
 .app-container {
   flex: 1 1 auto;
   min-height: 0;
@@ -18,12 +17,12 @@
   border-radius: 0px;
 }
 
-
 .app-content {
   flex: 1 1 auto;
   min-height: 0;
   overflow: auto;
   display: block;
+  padding: 10px;
 }
 
 :host ::ng-deep .mat-drawer-content {

@@ -4,6 +4,22 @@
       "REGISTER_BUTTON": "Zarejestruj się",
       "REGISTRATION_CONFIRMATION_HEADER": "Potwierdzenie rejestacji konta",
       "REGISTRATION_CONFIRMATION_CONTENT": "Twoje konto zostało utworzone, dziękujemy. Teraz możesz się zalogować."
+    },
+    "LOGIN": {
+      "LOGIN_BUTTON": "Zaloguj się"
+    },
+    "LOGOUT": {
+      "LOGOUT_BUTTON": "Wyloguj się",
+      "LOGOUT_CONFIRMATION_HEADER": "Pomyślnie wylogowano",
+      "LOGOUT_CONFIRMATION_CONTENT": "Zostałeś wylogowany pomyślnie."
+    },
+    "NO_ACCESS": {
+      "NO_ACCESS_HEADER": "Brak dostępu",
+      "NO_ACCESS_CONTENT": "Wygląda na to, że nie jesteś uprawiony do wykonania tej akcji."
+    },
+    "SESSION_EXPIRED": {
+      "SESSION_EXPIRED_HEADER": "Sesja wygasła",
+      "SESSION_EXPIRED_CONTENT": "Twoja sesja wygasła i zostałeś wylogowany"
     }
   }
 }

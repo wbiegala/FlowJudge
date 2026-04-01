@@ -1,14 +1,20 @@
-import { apiPrefixInterceptor, provideApiBaseUrl } from '@flow-judge-webapp/common';
 import { HttpBackend, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { bootstrapApplication } from '@angular/platform-browser';
-import { MultiTranslateHttpLoader } from 'ngx-translate-multi-http-loader';
-import { TranslateLoader, provideTranslateService } from '@ngx-translate/core';
 import { InjectionToken, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { appRoutes } from './app/app.routes';
+import { TranslateLoader, provideTranslateService } from '@ngx-translate/core';
+import { MultiTranslateHttpLoader } from 'ngx-translate-multi-http-loader';
+import { provideStore } from '@ngxs/store';
+import { withNgxsReduxDevtoolsPlugin } from '@ngxs/devtools-plugin';
+import { withNgxsRouterPlugin } from '@ngxs/router-plugin';
+import { withNgxsFormPlugin } from '@ngxs/form-plugin';
 import { provideAnimations } from '@angular/platform-browser/animations';
+import { apiPrefixInterceptor, provideApiBaseUrl } from '@flow-judge-webapp/common';
 import { App } from './app/app';
+import { appRoutes } from './app/app.routes';
 import { environment } from './environments/environment';
+import { accessTokenInterceptor, provideRestoreSessionFactory, UserState } from '@flow-judge-webapp/auth';
+
 
 fetch(environment.configUrl, { cache: 'no-store' })
   .then(r => {
@@ -19,14 +25,18 @@ fetch(environment.configUrl, { cache: 'no-store' })
     bootstrapApplication(App, {
       providers: [
         provideRouter(appRoutes),
+        provideRestoreSessionFactory,
         provideHttpClient(
-          withInterceptors([apiPrefixInterceptor]),
+          withInterceptors([apiPrefixInterceptor, accessTokenInterceptor]),
         ),
         provideApiBaseUrl(cfg.apiUrl),
         { provide: APP_CONFIG, useValue: cfg },
         provideAnimations(),
         provideBrowserGlobalErrorListeners(),
         provideZonelessChangeDetection(),
+        provideStore([
+          UserState
+        ], withNgxsReduxDevtoolsPlugin(), withNgxsRouterPlugin(), withNgxsFormPlugin()),
         provideTranslateService({
           loader: { provide: TranslateLoader, useFactory: translationHttpLoaderFactory, deps: [HttpBackend] },
           lang: 'pl',

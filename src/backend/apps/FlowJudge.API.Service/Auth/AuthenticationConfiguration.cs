@@ -12,7 +12,9 @@ namespace FlowJudge.API.Service.Auth
             string realm,
             string clientId,
             string clientSecret,
-            string registrationCallbackUri)
+            string registrationCallbackUri,
+            string loginCallbackUri,
+            string logoutCallbackUri)
         {
             if (string.IsNullOrWhiteSpace(baseUrl))
                 throw new ArgumentException("BaseUrl must be provided.", nameof(baseUrl));
@@ -26,6 +28,10 @@ namespace FlowJudge.API.Service.Auth
                 throw new ArgumentException("ClientSecret must be provided.", nameof(clientSecret));
             if (string.IsNullOrWhiteSpace(registrationCallbackUri))
                 throw new ArgumentException("RegistrationCallbackUri must be provided.", nameof(registrationCallbackUri));
+            if (string.IsNullOrWhiteSpace(loginCallbackUri))
+                throw new ArgumentException("RegistrationCallbackUri must be provided.", nameof(loginCallbackUri));
+            if (string.IsNullOrWhiteSpace(logoutCallbackUri))
+                throw new ArgumentException("LogoutCallbackUri must be provided.", nameof(logoutCallbackUri));
 
             _configurationParameters["AuthProvider"] = "Keycloak";
             _configurationParameters[KeycloakAuthenticationConfiguration.BaseUrlParameter] = baseUrl;
@@ -34,6 +40,8 @@ namespace FlowJudge.API.Service.Auth
             _configurationParameters[KeycloakAuthenticationConfiguration.ClientIdParameter] = clientId;
             _configurationParameters[KeycloakAuthenticationConfiguration.ClientSecretParameter] = clientSecret;
             _configurationParameters[KeycloakAuthenticationConfiguration.RegistrationCallbackUriParameter] = registrationCallbackUri;
+            _configurationParameters[KeycloakAuthenticationConfiguration.LoginCallbackUriParameter] = loginCallbackUri;
+            _configurationParameters[KeycloakAuthenticationConfiguration.LogoutCallbackUriParameter] = logoutCallbackUri;
         }
 
         internal KeycloakAuthenticationConfiguration BuildKeycloakConfiguration()
@@ -45,7 +53,9 @@ namespace FlowJudge.API.Service.Auth
                 Realm = _configurationParameters[KeycloakAuthenticationConfiguration.RealmParameter],
                 ClientId = _configurationParameters[KeycloakAuthenticationConfiguration.ClientIdParameter],
                 ClientSecret = _configurationParameters[KeycloakAuthenticationConfiguration.ClientSecretParameter],
-                RegistrationCallbackUri = _configurationParameters[KeycloakAuthenticationConfiguration.RegistrationCallbackUriParameter]
+                RegistrationCallbackUri = _configurationParameters[KeycloakAuthenticationConfiguration.RegistrationCallbackUriParameter],
+                LoginCallbackUri = _configurationParameters[KeycloakAuthenticationConfiguration.LoginCallbackUriParameter],
+                LogoutCallbackUri = _configurationParameters[KeycloakAuthenticationConfiguration.LogoutCallbackUriParameter]
             };
         }
     }

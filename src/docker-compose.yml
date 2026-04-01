@@ -7,6 +7,10 @@ services:
     image: postgres:18
     container_name: flowjudge.db
 
+  flowjudge.cache:
+    image: redis:latest
+    container_name: flowjudge.cache
+
   flowjudge.storage:
     image: mcr.microsoft.com/azure-storage/azurite:latest
     container_name: flowjudge.storage
