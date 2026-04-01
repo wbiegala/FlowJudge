@@ -47,6 +47,7 @@ namespace FlowJudge.Common.Application
                         i.IsGenericType &&
                         (
                             i.GetGenericTypeDefinition() == typeof(ICommandHandler<>) ||
+                            i.GetGenericTypeDefinition() == typeof(ICommandHandler<,>) ||
                             i.GetGenericTypeDefinition() == typeof(IQueryHandler<,>)
                         ))
                     .ToArray();
