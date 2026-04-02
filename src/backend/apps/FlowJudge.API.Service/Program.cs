@@ -12,6 +12,9 @@ var builder = WebApplication.CreateBuilder(args);
 var dbConnectionString = builder.Configuration.GetConnectionString("Postgres");
 var redisConnectionString = builder.Configuration.GetConnectionString("Redis");
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 builder.Services.AddPostgresDatabase(cfg =>
 {
     cfg.WithConnectionString(dbConnectionString!);
@@ -71,6 +74,8 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
     var migrationsExecutor = app.Services.GetRequiredService<IMigrationExecutor>();
     await migrationsExecutor.ExecuteAsync();
 }
