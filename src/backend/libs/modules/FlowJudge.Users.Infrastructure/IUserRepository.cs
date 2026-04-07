@@ -6,5 +6,6 @@ namespace FlowJudge.Users.Infrastructure
     {
         Task<User?> GetUserByIdentityIdAsync(Guid identityId, CancellationToken cancellationToken = default);
         Task AddUserAsync(User user, CancellationToken cancellationToken = default);
+        Task UpdateUserAsync(User user, CancellationToken cancellationToken = default);
     }
 }
