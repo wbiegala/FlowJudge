@@ -1,11 +1,11 @@
 import { inject, Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext, StateToken } from '@ngxs/store';
 import { AuthenticationService } from '../authentication.service';
-import { Authenticate, ClearUserContext, SetUserContext, StartLogin, StartLogout, TryRestoreUserContext } from './user.actions';
 import { produce } from 'immer';
 import { catchError, map, of, tap } from 'rxjs';
+import { Authenticate, ClearAuthenticatedUserContext, SetAuthenticatedUserContext, StartLogin, StartLogout, TryRestoreAuthenticatedUserContext } from './authentication.actions';
 
-export interface UserStateModel {
+export interface AuthenticationStateModel {
   isAuthenticated: boolean | null;
   data: null | {
     id: string;
@@ -16,71 +16,71 @@ export interface UserStateModel {
   identityToken: string | null;
 };
 
-export const defaultUserState: UserStateModel = {
+export const defaultAuthenticationState: AuthenticationStateModel = {
   isAuthenticated: null,
   data: null,
   accessToken: null,
   identityToken: null,
 };
 
-export const USER_STATE_TOKEN = new StateToken<UserStateModel>('user');
+export const AUTHENTICATION_STATE_TOKEN = new StateToken<AuthenticationStateModel>('authentication');
 
-@State<UserStateModel>({
-  name: USER_STATE_TOKEN,
-  defaults: defaultUserState
+@State<AuthenticationStateModel>({
+  name: AUTHENTICATION_STATE_TOKEN,
+  defaults: defaultAuthenticationState
 })
 @Injectable()
-export class UserState {
+export class AuthenticationState {
   #authenticationService = inject(AuthenticationService);
 
   @Selector()
-  static accessToken(state: UserStateModel) {
+  static accessToken(state: AuthenticationStateModel) {
     return state.accessToken;
   }
 
   @Selector()
-  static isAuthenticated(state: UserStateModel) {
+  static isAuthenticated(state: AuthenticationStateModel) {
     return state.isAuthenticated;
   }
 
   @Selector()
-  static userData(state: UserStateModel) {
+  static userData(state: AuthenticationStateModel) {
     return state.data === null
       ? null
       : { id: state.data.id, name: state.data.name, email: state.data.email };
   }
 
   @Action(StartLogin)
-  loginUserAction() {
+  loginAction() {
     return this.#authenticationService.login();
   }
 
   @Action(Authenticate)
-  authenticateAction(ctx: StateContext<UserStateModel>, action: Authenticate) {
+  authenticateAction(ctx: StateContext<AuthenticationStateModel>, action: Authenticate) {
     ctx.setState(produce((draft) => {
       draft.accessToken = action.accessToken;
-      draft.identityToken = action.identityToken
+      draft.identityToken = action.identityToken;
     }));
-    ctx.dispatch(new SetUserContext());
+    ctx.dispatch(new SetAuthenticatedUserContext());
   }
 
-  @Action(SetUserContext)
-  setUserContextAction(ctx: StateContext<UserStateModel>) {
+  @Action(SetAuthenticatedUserContext)
+  setAuthenticatedUserContextAction(ctx: StateContext<AuthenticationStateModel>) {
     return this.#authenticationService.getUserData().pipe(
       tap(response => ctx.setState(produce((draft) => {
-        draft.isAuthenticated = true;
         draft.data = {
           id: response.id,
           name: response.username,
           email: response.email,
         };
+        draft.isAuthenticated = true;
       }))),
       map(response => response.id),
     );
   }
 
-  @Action(TryRestoreUserContext)
-  tryRestoreUserContextAction(ctx: StateContext<UserStateModel>) {
+  @Action(TryRestoreAuthenticatedUserContext)
+  tryRestoreAuthenticatedUserContextAction(ctx: StateContext<AuthenticationStateModel>) {
     return this.#authenticationService.refreshToken().pipe(
       tap(response => ctx.dispatch(new Authenticate(response.accessToken, response.identityToken))),
       catchError(() => {
@@ -92,7 +92,7 @@ export class UserState {
   }
 
   @Action(StartLogout)
-  startLogoutAction(ctx: StateContext<UserStateModel>) {
+  startLogoutAction(ctx: StateContext<AuthenticationStateModel>) {
     const state = ctx.getState();
 
     if (!state.isAuthenticated || state.identityToken === null) {
@@ -102,8 +102,8 @@ export class UserState {
     return this.#authenticationService.logout(state.identityToken);
   }
 
-  @Action(ClearUserContext)
-  clearUserContextAction(ctx: StateContext<UserStateModel>) {
+  @Action(ClearAuthenticatedUserContext)
+  clearAuthenticatedUserContextAction(ctx: StateContext<AuthenticationStateModel>) {
     ctx.setState(produce((draft) => {
       draft.isAuthenticated = false;
       draft.accessToken = null;

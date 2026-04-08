@@ -32,9 +32,10 @@ namespace FlowJudge.Users.Domain.Model
         {
             var potentialAcceptance = PrivacyPolicyAcceptance.Create(versionNumber, acceptanceTimestamp);
 
-            if (PrivacyPolicyAcceptance is null || this.PrivacyPolicyAcceptance.VersionNumber < potentialAcceptance.VersionNumber)
+            if (PrivacyPolicyAcceptance is null || this.PrivacyPolicyAcceptance?.VersionNumber < potentialAcceptance.VersionNumber)
             {
                 PrivacyPolicyAcceptance = potentialAcceptance;
+                return;
             }
 
             throw new DocumentVersionNumberException(ErrorCodes.InvalidPrivacyPolicyVersion);
@@ -47,6 +48,7 @@ namespace FlowJudge.Users.Domain.Model
             if (TermsAndConditionsAcceptance is null || this.TermsAndConditionsAcceptance.VersionNumber < potentialAcceptance.VersionNumber)
             {
                 TermsAndConditionsAcceptance = potentialAcceptance;
+                return;
             }
 
             throw new DocumentVersionNumberException(ErrorCodes.InvalidTermsAndConditionsVersion);

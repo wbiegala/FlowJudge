@@ -3,7 +3,7 @@
     public enum UserLegalRequirements
     {
         EmailConfirmed,
-        TemrsAndConditionsActualVersionAccepted,
+        TermsAndConditionsActualVersionAccepted,
         PrivacyPolicyActualVersionAccepted
     }
 }

@@ -3,7 +3,7 @@ import { CanActivateFn, Router, ActivatedRouteSnapshot, RouterStateSnapshot } fr
 import { catchError, of, switchMap } from 'rxjs';
 import { AuthenticationService } from './authentication.service';
 import { Store } from '@ngxs/store';
-import { Authenticate } from './store/user.actions';
+import { Authenticate } from './store/authentication.actions';
 
 export const tokenExchangeGuard: CanActivateFn = (
   route: ActivatedRouteSnapshot,

@@ -46,7 +46,7 @@ namespace FlowJudge.Users.Application.Commands
                     ErrorCodes.TermsAndConditionsVersionNotAcceptable);
             }
 
-            user.AcceptPrivacyPolicy(termsAndConditionsVersion.Number, _timeService.UtcNow);
+            user.AcceptTermsAndConditions(termsAndConditionsVersion.Number, _timeService.UtcNow);
 
             await _userRepository.UpdateUserAsync(user, cancellationToken);
 

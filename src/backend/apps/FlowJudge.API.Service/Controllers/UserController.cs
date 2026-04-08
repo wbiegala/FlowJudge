@@ -31,7 +31,7 @@ namespace FlowJudge.API.Service.Controllers
 
             if (!result.IsSuccess)
             {
-                BadRequest(result.Error!.ToProblemDetails());
+                return BadRequest(result.Error!.ToProblemDetails());
             }
 
             return Ok();
@@ -49,7 +49,7 @@ namespace FlowJudge.API.Service.Controllers
 
             if (!result.IsSuccess)
             {
-                BadRequest(result.Error!.ToProblemDetails());
+                return BadRequest(result.Error!.ToProblemDetails());
             }
 
             return Ok();
@@ -65,7 +65,7 @@ namespace FlowJudge.API.Service.Controllers
 
             if (!result.IsSuccess)
             {
-                BadRequest(result.Error!.ToProblemDetails());
+                return BadRequest(result.Error!.ToProblemDetails());
             }
 
             return Ok(new GetUserLegalStateResponse { IsLegal = result.Data!.IsValid, Missings = result.Data?.Missings?.Select(m => m.ToString()) });

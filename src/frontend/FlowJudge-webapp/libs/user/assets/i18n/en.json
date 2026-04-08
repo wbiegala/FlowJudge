@@ -1,0 +1,16 @@
+{
+  "USER": {
+    "LEGAL": {
+      "TERMS": {
+        "HEADER": "Terms and conditions",
+        "ACCEPTANCE_SLIDE": "I have read the 'Terms and conditions' and I accept it",
+        "ACCEPTANCE_BUTTON": "Accept"
+      },
+      "PRIVACY": {
+        "HEADER": "Privacy policy (GDPR)",
+        "ACCEPTANCE_SLIDE": "I have read the 'Privacy Policy' and I accept it",
+        "ACCEPTANCE_BUTTON": "Accept"
+      }
+    }
+  }
+}

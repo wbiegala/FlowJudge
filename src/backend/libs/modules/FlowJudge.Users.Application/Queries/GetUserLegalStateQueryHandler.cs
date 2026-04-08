@@ -42,7 +42,7 @@ namespace FlowJudge.Users.Application.Queries
 
             var missings = new List<UserLegalRequirements>();
             if (legalState.TermsAndConditionsState != UserTermsAndConditionsState.TermsAccepted)
-                missings.Add(UserLegalRequirements.TemrsAndConditionsActualVersionAccepted);
+                missings.Add(UserLegalRequirements.TermsAndConditionsActualVersionAccepted);
             if (legalState.PrivacyPolicyState != UserPrivacyPolicyState.PrivacyPolicyAccepted)
                 missings.Add(UserLegalRequirements.PrivacyPolicyActualVersionAccepted);
 

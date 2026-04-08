@@ -1,4 +1,4 @@
-import { AuthenticationService, StartLogin, StartLogout, UserState } from '@flow-judge-webapp/auth';
+import { AuthenticationService, StartLogin, StartLogout, AuthenticationState } from '@flow-judge-webapp/auth';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -19,8 +19,8 @@ export class HeaderUserPanelComponent {
   #authService = inject(AuthenticationService);
   #store = inject(Store);
   isViewportNarrow = inject(ViewportService).isNarrow;
-  isAuthenticated = this.#store.selectSignal(UserState.isAuthenticated);
-  userData = this.#store.selectSignal(UserState.userData);
+  isAuthenticated = this.#store.selectSignal(AuthenticationState.isAuthenticated);
+  userData = this.#store.selectSignal(AuthenticationState.userData);
 
   onRegisterClick() {
     this.#authService.registerAccount();

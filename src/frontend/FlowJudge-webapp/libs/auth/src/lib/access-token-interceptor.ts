@@ -4,9 +4,9 @@ import { catchError, finalize, map, Observable, shareReplay, switchMap, tap, thr
 import { Store } from '@ngxs/store';
 import { Navigate } from '@ngxs/router-plugin';
 import { AuthenticationService } from './authentication.service';
-import { UserState } from './store/user.state';
+import { AuthenticationState } from './store/authentication.state';
 
-import { Authenticate, ClearUserContext } from './store/user.actions';
+import { Authenticate, ClearAuthenticatedUserContext } from './store/authentication.actions';
 
 // one shared "in-flight" refresh
 // when non-null - all subscribers joins and waiting for result
@@ -26,7 +26,7 @@ export const accessTokenInterceptor: HttpInterceptorFn = (req, next) => {
     !req.url.startsWith('/assets') &&
     !isRefreshEndpoint(req.url);
 
-  const currentToken = store.selectSnapshot(UserState.accessToken);
+  const currentToken = store.selectSnapshot(AuthenticationState.accessToken);
 
   const withAuth = (r: HttpRequest<unknown>, token: string | null) =>
     token ? r.clone({ setHeaders: { Authorization: `Bearer ${token}` } }) : r;
@@ -44,7 +44,7 @@ export const accessTokenInterceptor: HttpInterceptorFn = (req, next) => {
               store.dispatch(new Authenticate(response.accessToken, response.identityToken))
             ),
             // after state update - get new token
-            map(() => store.selectSnapshot(UserState.accessToken) ?? ''),
+            map(() => store.selectSnapshot(AuthenticationState.accessToken) ?? ''),
             // share result to rest of subscribers
             shareReplay(1),
             // clear "in-flight" after success/fail
@@ -63,7 +63,7 @@ export const accessTokenInterceptor: HttpInterceptorFn = (req, next) => {
           // if refresh fails - clear user context and redirect to /session-expired
           catchError(e => {
             store.dispatch([
-              new ClearUserContext(),
+              new ClearAuthenticatedUserContext(),
               new Navigate(['/session-expired'])
             ]);
             return throwError(() => e);

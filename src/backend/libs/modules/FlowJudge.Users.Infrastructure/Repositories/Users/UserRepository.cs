@@ -67,13 +67,13 @@ WHERE {nameof(UserDbModel.identity_id)}=@IdentityId;";
         private const string UpdateUserCommand = $@"
 UPDATE {UsersContextConfiguration.SchemaName}.{UsersContextConfiguration.UsersTableName} u
 SET
-     u.{nameof(UserDbModel.identity_id)} = @{nameof(UserDbModel.identity_id)}
-    ,u.{nameof(UserDbModel.username)} = @{nameof(UserDbModel.username)}
-    ,u.{nameof(UserDbModel.email)} = @{nameof(UserDbModel.email)}
-    ,u.{nameof(UserDbModel.terms_accepted_version)} = @{nameof(UserDbModel.terms_accepted_version)}
-    ,u.{nameof(UserDbModel.terms_accepted_at)} = @{nameof(UserDbModel.terms_accepted_at)}
-    ,u.{nameof(UserDbModel.privacy_policy_accepted_version)} = @{nameof(UserDbModel.privacy_policy_accepted_version)}
-    ,u.{nameof(UserDbModel.privacy_policy_accepted_at)} = @{nameof(UserDbModel.privacy_policy_accepted_at)}
+     {nameof(UserDbModel.identity_id)} = @{nameof(UserDbModel.identity_id)}
+    ,{nameof(UserDbModel.username)} = @{nameof(UserDbModel.username)}
+    ,{nameof(UserDbModel.email)} = @{nameof(UserDbModel.email)}
+    ,{nameof(UserDbModel.terms_accepted_version)} = @{nameof(UserDbModel.terms_accepted_version)}
+    ,{nameof(UserDbModel.terms_accepted_at)} = @{nameof(UserDbModel.terms_accepted_at)}
+    ,{nameof(UserDbModel.privacy_policy_accepted_version)} = @{nameof(UserDbModel.privacy_policy_accepted_version)}
+    ,{nameof(UserDbModel.privacy_policy_accepted_at)} = @{nameof(UserDbModel.privacy_policy_accepted_at)}
 WHERE {nameof(UserDbModel.id)}=@{nameof(UserDbModel.id)}";
     }
 }

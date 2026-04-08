@@ -1,0 +1,16 @@
+{
+  "USER": {
+    "LEGAL": {
+      "TERMS": {
+        "HEADER": "Regulamin świadczenia usług",
+        "ACCEPTANCE_SLIDE": "Zapoznałem/am się z regulaminem i go akceptuję",
+        "ACCEPTANCE_BUTTON": "Akceptuję"
+      },
+      "PRIVACY": {
+        "HEADER": "Polityka prywatności (RODO)",
+        "ACCEPTANCE_SLIDE": "Zapoznałem/am się z polityką prywatności i ją akceptuję",
+        "ACCEPTANCE_BUTTON": "Akceptuję"
+      }
+    }
+  }
+}
