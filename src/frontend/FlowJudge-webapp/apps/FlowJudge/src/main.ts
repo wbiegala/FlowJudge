@@ -1,7 +1,7 @@
 import { HttpBackend, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { InjectionToken, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withRouterConfig } from '@angular/router';
 import { TranslateLoader, provideTranslateService } from '@ngx-translate/core';
 import { MultiTranslateHttpLoader } from 'ngx-translate-multi-http-loader';
 import { provideStore } from '@ngxs/store';
@@ -13,7 +13,7 @@ import { apiPrefixInterceptor, provideApiBaseUrl } from '@flow-judge-webapp/comm
 import { App } from './app/app';
 import { appRoutes } from './app/app.routes';
 import { environment } from './environments/environment';
-import { accessTokenInterceptor, provideRestoreSessionFactory, UserState } from '@flow-judge-webapp/auth';
+import { accessTokenInterceptor, provideRestoreSessionFactory, AuthenticationState } from '@flow-judge-webapp/auth';
 
 
 fetch(environment.configUrl, { cache: 'no-store' })
@@ -24,7 +24,9 @@ fetch(environment.configUrl, { cache: 'no-store' })
   .then((cfg: AppConfig) =>
     bootstrapApplication(App, {
       providers: [
-        provideRouter(appRoutes),
+        provideRouter(appRoutes, withRouterConfig({
+          onSameUrlNavigation: 'reload',
+        })),
         provideRestoreSessionFactory,
         provideHttpClient(
           withInterceptors([apiPrefixInterceptor, accessTokenInterceptor]),
@@ -35,7 +37,7 @@ fetch(environment.configUrl, { cache: 'no-store' })
         provideBrowserGlobalErrorListeners(),
         provideZonelessChangeDetection(),
         provideStore([
-          UserState
+          AuthenticationState
         ], withNgxsReduxDevtoolsPlugin(), withNgxsRouterPlugin(), withNgxsFormPlugin()),
         provideTranslateService({
           loader: { provide: TranslateLoader, useFactory: translationHttpLoaderFactory, deps: [HttpBackend] },
@@ -56,5 +58,6 @@ fetch(environment.configUrl, { cache: 'no-store' })
     return new MultiTranslateHttpLoader(http, [
       { prefix: '/assets/i18n/', suffix: '.json' },
       { prefix: '/assets/i18n/auth/', suffix: '.json' },
+      { prefix: '/assets/i18n/user/', suffix: '.json'}
     ]);
   }

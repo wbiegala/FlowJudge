@@ -6,7 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { HeaderUserPanelComponent } from './header-user-panel/header-user-panel.component';
 import { RouterLink } from "@angular/router";
 import { Store } from '@ngxs/store';
-import { UserState } from '@flow-judge-webapp/auth';
+import { AuthenticationState } from '@flow-judge-webapp/auth';
 
 @Component({
   selector: 'app-header',
@@ -18,7 +18,7 @@ import { UserState } from '@flow-judge-webapp/auth';
 export class AppHeaderComponent {
   #store = inject(Store);
   hideMenuButton = computed(() => {
-    const isAuth = this.#store.selectSignal(UserState.isAuthenticated);
+    const isAuth = this.#store.selectSignal(AuthenticationState.isAuthenticated);
     const isLegal = signal(true);
 
     if (isAuth() === null || isAuth() === false) {

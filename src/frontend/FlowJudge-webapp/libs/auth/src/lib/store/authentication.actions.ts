@@ -7,11 +7,11 @@ export class Authenticate {
   constructor(public accessToken: string, public identityToken: string){}
 }
 
-export class SetUserContext {
+export class SetAuthenticatedUserContext {
   static readonly type = '[User] Set user context';
 }
 
-export class TryRestoreUserContext {
+export class TryRestoreAuthenticatedUserContext {
   static readonly type = '[User] Try restore user context';
 }
 
@@ -19,6 +19,6 @@ export class StartLogout {
   static readonly type = '[user] Start logout';
 }
 
-export class ClearUserContext {
+export class ClearAuthenticatedUserContext {
   static readonly type = '[User] Clear user context';
 }

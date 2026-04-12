@@ -3,7 +3,7 @@ import { AppHeaderComponent } from "../header/app-header.component";
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MainMenuComponent } from '../main-menu/main-menu.component';
 import { Store } from '@ngxs/store';
-import { UserState } from '@flow-judge-webapp/auth';
+import { AuthenticationState } from '@flow-judge-webapp/auth';
 
 @Component({
   selector: 'app-layout-container',
@@ -16,7 +16,7 @@ export class LayoutContainerComponent {
   #mainMenuOpenStatus = signal(true);
   #store = inject(Store);
   #showMainMenu = computed(() => {
-    const isAuth = this.#store.selectSignal(UserState.isAuthenticated);
+    const isAuth = this.#store.selectSignal(AuthenticationState.isAuthenticated);
     const isLegal = signal(true);
 
     return isAuth() !== null && isAuth() === true && isLegal() !== null && isLegal() === true;

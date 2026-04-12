@@ -3,7 +3,7 @@ import { Store } from '@ngxs/store';
 import { inject } from '@angular/core';
 import { Navigate } from '@ngxs/router-plugin';
 import { filter, map, take } from 'rxjs';
-import { UserState } from './store/user.state';
+import { AuthenticationState } from './store/authentication.state';
 
 /**
  * Pass only non-authenticated user
@@ -14,7 +14,7 @@ export const unauthenticatedGuard: CanActivateFn = (
 ) => {
   const store = inject(Store);
 
-return store.select(UserState.isAuthenticated).pipe(
+return store.select(AuthenticationState.isAuthenticated).pipe(
     filter(isAuth => isAuth !== null),
     take(1),
     map(isAuth => {

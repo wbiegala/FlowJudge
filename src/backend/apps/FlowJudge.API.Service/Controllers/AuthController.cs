@@ -2,6 +2,8 @@
 using FlowJudge.API.Contracts.Auth;
 using FlowJudge.API.Service.Auth;
 using FlowJudge.API.Service.Auth.Exceptions;
+using FlowJudge.API.Service.Auth.Legal;
+using FlowJudge.API.Service.ErrorHandling;
 using FlowJudge.Common.Application.Mediator;
 using FlowJudge.Common.Http.Extensions;
 using FlowJudge.Users.Application.Commands;
@@ -88,13 +90,13 @@ namespace FlowJudge.API.Service.Controllers
             }
             catch (AuthenticationStateException ex)
             {
-                return StatusCode(StatusCodes.Status410Gone, ex.ToProblemDetails(
-                    StatusCodes.Status410Gone, ErrorCodes.AuthenticationStateExceptionErrorCode));
+                return ex.ToProblemDetails(StatusCodes.Status410Gone, ErrorCodes.AuthenticationStateExceptionErrorCode)
+                    .ToResponse();
             }
             catch (TokenReceiveException ex)
             {
-                return StatusCode(StatusCodes.Status401Unauthorized, ex.ToProblemDetails(
-                    StatusCodes.Status401Unauthorized, ErrorCodes.TokenReceiveExceptionErrorCode));
+                return ex.ToProblemDetails(StatusCodes.Status401Unauthorized, ErrorCodes.TokenReceiveExceptionErrorCode)
+                    .ToResponse();
             }
         }
 
@@ -120,22 +122,23 @@ namespace FlowJudge.API.Service.Controllers
             }
             catch (AuthenticationStateException ex)
             {
-                return StatusCode(StatusCodes.Status410Gone, ex.ToProblemDetails(StatusCodes.Status410Gone, ErrorCodes.AuthenticationStateExceptionErrorCode));
+                return ex.ToProblemDetails(StatusCodes.Status410Gone, ErrorCodes.AuthenticationStateExceptionErrorCode)
+                    .ToResponse();
             }
         }
 
         [HttpPost("refresh-token")]
+        [AllowAnonymous]
         public async Task<IActionResult> RefreshTokenAsync(
             CancellationToken cancellationToken)
         {
             var refreshToken = this.HttpContext.Request.Cookies[RefreshTokenCookieName];
             if (string.IsNullOrWhiteSpace(refreshToken))
-                return StatusCode(StatusCodes.Status410Gone,
-                    ProblemDetailsFactory.CreateProblemDetails(
-                        this.HttpContext,
-                        statusCode: StatusCodes.Status410Gone,
-                        title: ErrorCodes.MissingRefreshTokenErrorCode,
-                        detail: "Refresh token cookie is missing"));
+                return ProblemDetailsFactory.CreateProblemDetails(
+                    this.HttpContext,
+                    statusCode: StatusCodes.Status410Gone,
+                    title: ErrorCodes.MissingRefreshTokenErrorCode,
+                    detail: "Refresh token cookie is missing").ToResponse();
 
             try
             {
@@ -153,13 +156,14 @@ namespace FlowJudge.API.Service.Controllers
             catch (TokenReceiveException ex)
             {
                 RemoveRefreshTokenCookie();
-                return StatusCode(StatusCodes.Status401Unauthorized, ex.ToProblemDetails(
-                    StatusCodes.Status401Unauthorized, ErrorCodes.TokenReceiveExceptionErrorCode));
+                return ex.ToProblemDetails(StatusCodes.Status401Unauthorized, ErrorCodes.TokenReceiveExceptionErrorCode)
+                    .ToResponse();
             }
         }
 
         [HttpGet("me")]
         [Authorize]
+        [BypassLegalCheck]
         public async Task<IActionResult> GetUserData(CancellationToken cancellationToken)
         {
             if (this.HttpContext.User.TryGetUserContext(out var userContext))
@@ -182,18 +186,18 @@ namespace FlowJudge.API.Service.Controllers
 
         [HttpPost("logout")]
         [Authorize]
+        [BypassLegalCheck]
         public async Task<IActionResult> LogoutAsync(
             [FromBody] LogoutRequest request,
             CancellationToken cancellationToken)
         {
             var refreshToken = this.HttpContext.Request.Cookies[RefreshTokenCookieName];
             if (string.IsNullOrWhiteSpace(refreshToken))
-                return StatusCode(StatusCodes.Status410Gone,
-                    ProblemDetailsFactory.CreateProblemDetails(
-                        this.HttpContext,
-                        statusCode: StatusCodes.Status410Gone,
-                        title: ErrorCodes.MissingRefreshTokenErrorCode,
-                        detail: "Refresh token cookie is missing"));
+                return ProblemDetailsFactory.CreateProblemDetails(
+                    this.HttpContext,
+                    statusCode: StatusCodes.Status410Gone,
+                    title: ErrorCodes.MissingRefreshTokenErrorCode,
+                    detail: "Refresh token cookie is missing").ToResponse();
 
             var result = await _authService.LogoutAsync(refreshToken, request.IdentityToken, request.UiContext, cancellationToken);
 
@@ -206,6 +210,7 @@ namespace FlowJudge.API.Service.Controllers
         }
 
         [HttpGet("logout-callback")]
+        [AllowAnonymous]
         public IActionResult LogoutCallback(
             [FromQuery(Name = AuthQueryParams.UiContextUrlParamName)] string uiContext,
             CancellationToken cancellationToken)

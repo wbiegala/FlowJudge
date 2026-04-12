@@ -12,6 +12,9 @@ var builder = WebApplication.CreateBuilder(args);
 var dbConnectionString = builder.Configuration.GetConnectionString("Postgres");
 var redisConnectionString = builder.Configuration.GetConnectionString("Redis");
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 builder.Services.AddPostgresDatabase(cfg =>
 {
     cfg.WithConnectionString(dbConnectionString!);
@@ -47,7 +50,7 @@ builder.Services.AddKeycloakAuthentication(options =>
         loginCallbackUri: builder.Configuration["Auth:Keycloak:LoginCallbackUri"] ?? string.Empty,
         logoutCallbackUri: builder.Configuration["Auth:Keycloak:LogoutCallbackUri"] ?? string.Empty);      
 });
-builder.Services.AddJwtAuthorization(() => builder.Configuration.GetSection("Auth:JWT").Get<JwtConfiguration>()!);
+builder.Services.AddFlowJudgeAuthorization(() => builder.Configuration.GetSection("Auth:JWT").Get<JwtConfiguration>()!);
 
 builder.Services.AddCache(cfg =>
 {
@@ -63,6 +66,7 @@ builder.Services.AddControllers();
 
 builder.Services.AddOpenApi();
 
+builder.Services.AddProblemDetails();
 builder.Services.AddScoped<ErrorHandlerMiddleware>();
 
 var app = builder.Build();
@@ -71,6 +75,8 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
     var migrationsExecutor = app.Services.GetRequiredService<IMigrationExecutor>();
     await migrationsExecutor.ExecuteAsync();
 }

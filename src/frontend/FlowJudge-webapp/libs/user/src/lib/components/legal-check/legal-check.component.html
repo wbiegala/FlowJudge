@@ -1,0 +1,7 @@
+@if(currentMissing() === 'TermsAndConditionsActualVersionAccepted') {
+  <lib-terms-and-conditions [isAcceptable]="true" (termsAccepted)="onTermsAccept($event)"></lib-terms-and-conditions>
+}
+@else if (currentMissing() === 'PrivacyPolicyActualVersionAccepted')
+{
+  <lib-privacy-policy [isAcceptable]="true" (privacyPolicyAccepted)="onPrivacyPolicyAccept($event)"></lib-privacy-policy>
+}

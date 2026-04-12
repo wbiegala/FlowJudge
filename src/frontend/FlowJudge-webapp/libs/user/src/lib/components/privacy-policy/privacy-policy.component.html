@@ -1,0 +1,16 @@
+<div class="wrapper">
+  @if (data(); as doc) {
+    <div class="html-content" [innerHTML]="doc.content"></div>
+    @if(isAcceptable()) {
+      <div class="accept-buttons">
+        <mat-slide-toggle [checked]="isAcceptance()" (change)="onAcceptanceChanged($event.checked)">
+          {{ 'USER.LEGAL.PRIVACY.ACCEPTANCE_SLIDE' | translate }}
+        </mat-slide-toggle>
+        <button matButton="filled" [disabled]="!isAcceptance()" (click)="onAcceptClick()">{{ 'USER.LEGAL.PRIVACY.ACCEPTANCE_BUTTON' | translate }}</button>
+      </div>
+    }
+  }
+  @else {
+
+  }
+</div>

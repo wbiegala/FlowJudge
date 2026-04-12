@@ -1,9 +1,9 @@
 import { Store } from '@ngxs/store';
-import { TryRestoreUserContext } from './store/user.actions';
+import { TryRestoreAuthenticatedUserContext } from './store/authentication.actions';
 import { APP_INITIALIZER } from '@angular/core';
 
 export function restoreSessionFactory(store: Store) {
-  return () => store.dispatch(new TryRestoreUserContext());
+  return () => store.dispatch(new TryRestoreAuthenticatedUserContext());
 }
 
 export const provideRestoreSessionFactory = {
