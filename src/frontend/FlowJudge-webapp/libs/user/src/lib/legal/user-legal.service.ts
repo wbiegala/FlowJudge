@@ -14,7 +14,7 @@ export class UserLegalService {
   missings = signal<Array<UserLegalMissings>>([]);
   isLegal = computed(() => {
     if (this.#isDefined()) {
-      return this.missings().length === 0;
+      return (this.missings()?.length ?? 0) === 0;
     } else {
       return null;
     }
@@ -45,5 +45,11 @@ export class UserLegalService {
         this.missings.set(response.missings);
       })
     );
+  }
+
+  getUserAss() {
+    const url = `${this.#baseUrl}/${this.#userPathSegment}/ass`;
+
+    return this.#httpClient.get<unknown>(url);
   }
 }

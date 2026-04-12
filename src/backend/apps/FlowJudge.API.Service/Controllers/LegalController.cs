@@ -4,6 +4,7 @@ using FlowJudge.Common.Application.Mediator;
 using FlowJudge.Users.Application.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace FlowJudge.API.Service.Controllers
 {
@@ -31,7 +32,7 @@ namespace FlowJudge.API.Service.Controllers
             var result = await GetActualDocumentVersionAsync(Users.Application.Models.DocumentKind.TermsAndConditions, cancellationToken);
 
             if (!result.IsSuccess)
-                return BadRequest(result.Error!.ToProblemDetails());
+                return result.Error!.ToResponse(HttpStatusCode.BadRequest);
 
             return Ok(result.Data!.ToResponse());
         }
@@ -49,7 +50,7 @@ namespace FlowJudge.API.Service.Controllers
             var result = await GetActualDocumentVersionAsync(Users.Application.Models.DocumentKind.PrivacyPolicy, cancellationToken);
 
             if (!result.IsSuccess)
-                return BadRequest(result.Error!.ToProblemDetails());
+                return result.Error!.ToResponse(HttpStatusCode.BadRequest);
 
             return Ok(result.Data!.ToResponse());
         }

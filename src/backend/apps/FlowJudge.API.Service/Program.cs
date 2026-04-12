@@ -50,7 +50,7 @@ builder.Services.AddKeycloakAuthentication(options =>
         loginCallbackUri: builder.Configuration["Auth:Keycloak:LoginCallbackUri"] ?? string.Empty,
         logoutCallbackUri: builder.Configuration["Auth:Keycloak:LogoutCallbackUri"] ?? string.Empty);      
 });
-builder.Services.AddJwtAuthorization(() => builder.Configuration.GetSection("Auth:JWT").Get<JwtConfiguration>()!);
+builder.Services.AddFlowJudgeAuthorization(() => builder.Configuration.GetSection("Auth:JWT").Get<JwtConfiguration>()!);
 
 builder.Services.AddCache(cfg =>
 {
@@ -66,6 +66,7 @@ builder.Services.AddControllers();
 
 builder.Services.AddOpenApi();
 
+builder.Services.AddProblemDetails();
 builder.Services.AddScoped<ErrorHandlerMiddleware>();
 
 var app = builder.Build();
