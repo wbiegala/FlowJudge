@@ -1,1 +1,8 @@
-<p>HomePageComponent works!</p>
+Notifications damo
+<div class="notification-demo">
+  <button matButton matSnackBarAction (click)="notificationService.showSuccess('UI.NOTIFICATION.SUCCESS')">success</button>
+  <button matButton matSnackBarAction (click)="notificationService.showInfo('UI.NOTIFICATION.INFO')">info</button>
+  <button matButton matSnackBarAction (click)="notificationService.showWarning('UI.NOTIFICATION.WARNING')">warning</button>
+  <button matButton matSnackBarAction (click)="notificationService.showError('UI.NOTIFICATION.ERROR')">error</button>
+</div>
+

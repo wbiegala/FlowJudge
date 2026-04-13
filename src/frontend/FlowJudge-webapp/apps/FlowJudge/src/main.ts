@@ -9,7 +9,7 @@ import { withNgxsReduxDevtoolsPlugin } from '@ngxs/devtools-plugin';
 import { withNgxsRouterPlugin } from '@ngxs/router-plugin';
 import { withNgxsFormPlugin } from '@ngxs/form-plugin';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { apiPrefixInterceptor, provideApiBaseUrl } from '@flow-judge-webapp/common';
+import { apiPrefixInterceptor, provideApiBaseUrl, provideAppErrorHandler } from '@flow-judge-webapp/common';
 import { App } from './app/app';
 import { appRoutes } from './app/app.routes';
 import { environment } from './environments/environment';
@@ -58,6 +58,7 @@ fetch(environment.configUrl, { cache: 'no-store' })
     return new MultiTranslateHttpLoader(http, [
       { prefix: '/assets/i18n/', suffix: '.json' },
       { prefix: '/assets/i18n/auth/', suffix: '.json' },
-      { prefix: '/assets/i18n/user/', suffix: '.json'}
+      { prefix: '/assets/i18n/user/', suffix: '.json'},
+      { prefix: '/assets/i18n/ui/', suffix: '.json'}
     ]);
   }

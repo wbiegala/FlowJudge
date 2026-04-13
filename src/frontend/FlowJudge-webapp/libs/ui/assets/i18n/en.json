@@ -1,0 +1,10 @@
+{
+  "UI": {
+    "NOTIFICATION": {
+      "SUCCESS": "Success",
+      "INFO": "Information",
+      "WARNING": "Warning",
+      "ERROR": "Error"
+    }
+  }
+}
