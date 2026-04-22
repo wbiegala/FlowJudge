@@ -4,7 +4,7 @@ namespace FlowJudge.Workspaces.Domain.Workspace.Model
 {
     public sealed class WorkspaceMember : Entity
     {
-        public WorkspaceId WorkspaceId { get; private set; }
+        public Guid WorkspaceId { get; private set; }
         public Guid MemberId { get; private set; }
         public WorkspaceRole Role { get; private set; }
         public DateTimeOffset AssignedAt { get; private set; }
@@ -12,7 +12,7 @@ namespace FlowJudge.Workspaces.Domain.Workspace.Model
 
 
         internal static WorkspaceMember CreateOwnership(
-            WorkspaceId workspaceId,
+            Guid workspaceId,
             Guid ownerId,
             DateTimeOffset timestamp) =>
             new WorkspaceMember
@@ -25,7 +25,7 @@ namespace FlowJudge.Workspaces.Domain.Workspace.Model
             };
 
         internal static WorkspaceMember Create(
-            WorkspaceId workspaceId,
+            Guid workspaceId,
             Guid memberId,
             WorkspaceRole role,
             DateTimeOffset timestamp,
@@ -49,7 +49,7 @@ namespace FlowJudge.Workspaces.Domain.Workspace.Model
             new WorkspaceMember
             {
                 Id = id,
-                WorkspaceId = WorkspaceId.Create(workspaceId),
+                WorkspaceId = workspaceId,
                 MemberId = memberId,
                 Role = role,
                 AssignedAt = assignedAt,

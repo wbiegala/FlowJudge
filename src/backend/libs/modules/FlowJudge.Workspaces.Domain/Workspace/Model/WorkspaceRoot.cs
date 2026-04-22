@@ -5,7 +5,7 @@ namespace FlowJudge.Workspaces.Domain.Workspace.Model
 {
     public sealed class WorkspaceRoot : AggregateRoot
     {
-        private readonly HashSet<WorkspaceMember> _members = new();
+        private readonly List<WorkspaceMember> _members = new();
 
         /// <summary>
         /// Id aggregate, for use in all external references to this aggregate.
@@ -66,7 +66,7 @@ namespace FlowJudge.Workspaces.Domain.Workspace.Model
                 _members.Remove(existingMember);
             }
 
-            var member = WorkspaceMember.Create(WorkspaceId, userId, role, timestamp, issuedBy);
+            var member = WorkspaceMember.Create(Id, userId, role, timestamp, issuedBy);
             _members.Add(member);
         }
 
@@ -114,7 +114,7 @@ namespace FlowJudge.Workspaces.Domain.Workspace.Model
                 CreatedBy = creatorId
             };
 
-            var ownership = WorkspaceMember.CreateOwnership(workspaceId, creatorId, timestamp);
+            var ownership = WorkspaceMember.CreateOwnership(workspace.Id, creatorId, timestamp);
             workspace._members.Add(ownership);
 
             return workspace;
