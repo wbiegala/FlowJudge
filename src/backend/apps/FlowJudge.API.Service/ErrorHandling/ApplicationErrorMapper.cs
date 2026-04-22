@@ -14,7 +14,7 @@ namespace FlowJudge.API.Service.ErrorHandling
                 Type = $"https://httpstatuses.com/{(int)httpCode}",
                 Status = (int)httpCode,
                 Detail = error.Message,
-                Extensions = error.Properties ?? new Dictionary<string, object>()
+                Extensions = error.Properties
             };
 
             return problemDetails;

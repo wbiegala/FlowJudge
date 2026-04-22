@@ -1,0 +1,16 @@
+{
+  "UI": {
+    "NOTIFICATION": {
+      "SUCCESS": "Sukces",
+      "INFO": "Informacja",
+      "WARNING": "Ostrzeżenie",
+      "ERROR": "Błąd"
+    },
+    "DIALOG": {
+      "ERROR": {
+        "HEADER": "Błąd",
+        "DETAILS": "Szczegóły błędu"
+      }
+    }
+  }
+}

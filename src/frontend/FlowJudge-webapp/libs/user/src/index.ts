@@ -2,6 +2,8 @@ export * from './lib/components/terms-and-conditions/terms-and-conditions.compon
 export * from './lib/components/privacy-policy/privacy-policy.component';
 export * from './lib/components/legal-check/legal-check.component';
 
+export * from './lib/error-handling/legal-error-handler';
+
 export * from './lib/legal/legal.service';
 export * from './lib/legal/user-legal.service';
 export * from './lib/legal/user-legal.guard';

@@ -9,11 +9,13 @@ import { withNgxsReduxDevtoolsPlugin } from '@ngxs/devtools-plugin';
 import { withNgxsRouterPlugin } from '@ngxs/router-plugin';
 import { withNgxsFormPlugin } from '@ngxs/form-plugin';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { apiPrefixInterceptor, provideApiBaseUrl } from '@flow-judge-webapp/common';
+import { apiPrefixInterceptor, appErrorInterceptor, provideApiBaseUrl, provideAppErrorHandler } from '@flow-judge-webapp/common';
 import { App } from './app/app';
 import { appRoutes } from './app/app.routes';
 import { environment } from './environments/environment';
-import { accessTokenInterceptor, provideRestoreSessionFactory, AuthenticationState } from '@flow-judge-webapp/auth';
+import { accessTokenInterceptor, provideRestoreSessionFactory, AuthenticationState, InsufficientPermissionsErrorHandler, UnauthorizedErrorHandler } from '@flow-judge-webapp/auth';
+import { DefaultHttpErrorHandler } from './app/utils/default-http-error-handler';
+import { LegalErrorHandler } from '@flow-judge-webapp/user';
 
 
 fetch(environment.configUrl, { cache: 'no-store' })
@@ -29,10 +31,11 @@ fetch(environment.configUrl, { cache: 'no-store' })
         })),
         provideRestoreSessionFactory,
         provideHttpClient(
-          withInterceptors([apiPrefixInterceptor, accessTokenInterceptor]),
+          withInterceptors([apiPrefixInterceptor, accessTokenInterceptor, appErrorInterceptor]),
         ),
         provideApiBaseUrl(cfg.apiUrl),
         { provide: APP_CONFIG, useValue: cfg },
+        ...provideAppErrorHandling(),
         provideAnimations(),
         provideBrowserGlobalErrorListeners(),
         provideZonelessChangeDetection(),
@@ -58,6 +61,16 @@ fetch(environment.configUrl, { cache: 'no-store' })
     return new MultiTranslateHttpLoader(http, [
       { prefix: '/assets/i18n/', suffix: '.json' },
       { prefix: '/assets/i18n/auth/', suffix: '.json' },
-      { prefix: '/assets/i18n/user/', suffix: '.json'}
+      { prefix: '/assets/i18n/user/', suffix: '.json'},
+      { prefix: '/assets/i18n/ui/', suffix: '.json'}
     ]);
+  }
+
+  export function provideAppErrorHandling(): any[] {
+    return [
+      provideAppErrorHandler(DefaultHttpErrorHandler),
+      provideAppErrorHandler(InsufficientPermissionsErrorHandler),
+      provideAppErrorHandler(LegalErrorHandler),
+      provideAppErrorHandler(UnauthorizedErrorHandler)
+    ];
   }

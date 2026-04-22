@@ -20,6 +20,13 @@
     "SESSION_EXPIRED": {
       "SESSION_EXPIRED_HEADER": "Sesja wygasła",
       "SESSION_EXPIRED_CONTENT": "Twoja sesja wygasła i zostałeś wylogowany"
+    },
+    "ERRORS": {
+      "AUTH.MISSING_REFRESH_TOKEN": {
+        "HEADER": "Sesja logowania wygasła",
+        "MESSAGE": "Nie udało się poprawnie uwierzytelnić użytkownika.",
+        "DETAILS": "Gdyby problem się powtarzał, skontaktuj się z administratorem."
+      }
     }
   }
 }
