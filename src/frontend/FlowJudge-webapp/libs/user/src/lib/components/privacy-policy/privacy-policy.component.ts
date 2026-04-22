@@ -5,10 +5,11 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { LegalService } from '../../legal/legal.service';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { switchMap } from 'rxjs';
+import { LoadingComponent } from '@flow-judge-webapp/ui';
 
 @Component({
   selector: 'lib-privacy-policy',
-  imports: [MatSlideToggleModule, MatButtonModule, TranslatePipe],
+  imports: [MatSlideToggleModule, MatButtonModule, TranslatePipe, LoadingComponent],
   templateUrl: './privacy-policy.component.html',
   styleUrl: './privacy-policy.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

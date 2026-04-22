@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { MatProgressBarModule, ProgressBarMode } from '@angular/material/progress-bar';
+import { ProgressService } from '@flow-judge-webapp/ui';
 
 @Component({
   selector: 'app-header-progress-bar',
@@ -11,6 +12,9 @@ import { MatProgressBarModule, ProgressBarMode } from '@angular/material/progres
 export class HeaderProgressBarComponent {
   barMode = computed<ProgressBarMode>(() => this.#isActive() ? 'indeterminate' : 'determinate');
   barValue = computed<number | null>(() => this.#isActive() ? null : 0);
+  #progressService = inject(ProgressService);
 
-  #isActive = signal(false);
+  #isActive = computed(() => {
+    return this.#progressService.isProgress();
+  });
 }

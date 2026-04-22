@@ -31,7 +31,7 @@ import { DialogData } from '../dialog-data.model';
         <div class="header-text">
           <h2 class="title">{{ 'UI.DIALOG.ERROR.HEADER' | translate }}: {{ data.header | translate}}</h2>
           <p class="message">
-            {{ (data.message ?? data.header) | translate }}
+            {{ (data.message) | translate }}
           </p>
         </div>
       </div>
