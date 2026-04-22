@@ -20,6 +20,13 @@
     "SESSION_EXPIRED": {
       "SESSION_EXPIRED_HEADER": "Session expired",
       "SESSION_EXPIRED_CONTENT": "Your user session has expired and you have been logged out."
+    },
+    "ERRORS": {
+      "AUTH.MISSING_REFRESH_TOKEN": {
+        "HEADER": "Session expired",
+        "MESSAGE": "Can't authenticate you in system.",
+        "DETAILS": "If occure in the future, contact support please."
+      }
     }
   }
 }

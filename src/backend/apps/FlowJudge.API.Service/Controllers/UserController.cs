@@ -93,7 +93,14 @@ namespace FlowJudge.API.Service.Controllers
         [Authorize]
         public async Task<IActionResult> GetUserAssAsync(CancellationToken cancellationToken = default)
         {
-            return Ok();
+            try
+            {
+                throw new NotImplementedException();
+            }
+            catch (Exception ex)
+            {
+                return ex.ToProblemDetails(500, string.Empty).ToResponse();
+            }
         }
     }
 }
