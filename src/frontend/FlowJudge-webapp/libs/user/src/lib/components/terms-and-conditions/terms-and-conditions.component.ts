@@ -5,10 +5,11 @@ import { ChangeDetectionStrategy, Component, inject, input, output, signal } fro
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { LegalService } from '../../legal/legal.service';
 import { switchMap } from 'rxjs';
+import { LoadingComponent } from '@flow-judge-webapp/ui';
 
 @Component({
   selector: 'lib-terms-and-conditions',
-  imports: [MatSlideToggleModule, MatButtonModule, TranslatePipe],
+  imports: [MatSlideToggleModule, MatButtonModule, TranslatePipe, LoadingComponent],
   templateUrl: './terms-and-conditions.component.html',
   styleUrl: './terms-and-conditions.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

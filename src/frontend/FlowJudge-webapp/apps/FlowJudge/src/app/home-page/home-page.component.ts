@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { DialogService, NotificationService } from '@flow-judge-webapp/ui';
+import { DialogService, NotificationService, ProgressService } from '@flow-judge-webapp/ui';
 import { UserLegalService } from '@flow-judge-webapp/user';
 
 @Component({
@@ -14,9 +14,10 @@ export class HomePageComponent {
   notificationService = inject(NotificationService);
   dialogService = inject(DialogService);
   userLegalService = inject(UserLegalService);
+  #progressService = inject(ProgressService);
 
   onGetAss() {
-    this.userLegalService.getUserAss().subscribe();
+    this.#progressService.runInProgressBar(() => this.userLegalService.getUserAss()).subscribe();
   }
 
   onErrorDialogClick() {

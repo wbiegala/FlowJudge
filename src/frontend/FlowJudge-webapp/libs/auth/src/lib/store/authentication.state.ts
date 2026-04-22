@@ -4,6 +4,7 @@ import { AuthenticationService } from '../authentication.service';
 import { produce } from 'immer';
 import { catchError, map, of, tap } from 'rxjs';
 import { Authenticate, ClearAuthenticatedUserContext, SetAuthenticatedUserContext, StartLogin, StartLogout, TryRestoreAuthenticatedUserContext } from './authentication.actions';
+import { ProgressService } from '@flow-judge-webapp/ui';
 
 export interface AuthenticationStateModel {
   isAuthenticated: boolean | null;
@@ -32,6 +33,7 @@ export const AUTHENTICATION_STATE_TOKEN = new StateToken<AuthenticationStateMode
 @Injectable()
 export class AuthenticationState {
   #authenticationService = inject(AuthenticationService);
+  #progressService = inject(ProgressService);
 
   @Selector()
   static accessToken(state: AuthenticationStateModel) {
@@ -52,6 +54,7 @@ export class AuthenticationState {
 
   @Action(StartLogin)
   loginAction() {
+    this.#progressService.start();
     return this.#authenticationService.login();
   }
 
@@ -66,7 +69,7 @@ export class AuthenticationState {
 
   @Action(SetAuthenticatedUserContext)
   setAuthenticatedUserContextAction(ctx: StateContext<AuthenticationStateModel>) {
-    return this.#authenticationService.getUserData().pipe(
+    return this.#progressService.runInProgressBar(() => this.#authenticationService.getUserData().pipe(
       tap(response => ctx.setState(produce((draft) => {
         draft.data = {
           id: response.id,
@@ -76,23 +79,24 @@ export class AuthenticationState {
         draft.isAuthenticated = true;
       }))),
       map(response => response.id),
-    );
+    ));
   }
 
   @Action(TryRestoreAuthenticatedUserContext)
   tryRestoreAuthenticatedUserContextAction(ctx: StateContext<AuthenticationStateModel>) {
-    return this.#authenticationService.refreshToken().pipe(
+    return this.#progressService.runInProgressBar(() => this.#authenticationService.refreshToken().pipe(
       tap(response => ctx.dispatch(new Authenticate(response.accessToken, response.identityToken))),
       catchError(() => {
         ctx.setState(produce(draft => {
           draft.isAuthenticated = false;
         }));
         return of();
-      }));
+      })));
   }
 
   @Action(StartLogout)
   startLogoutAction(ctx: StateContext<AuthenticationStateModel>) {
+    this.#progressService.start();
     const state = ctx.getState();
 
     if (!state.isAuthenticated || state.identityToken === null) {
