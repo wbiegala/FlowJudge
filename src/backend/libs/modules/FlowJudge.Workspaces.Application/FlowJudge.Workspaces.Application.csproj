@@ -7,7 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\FlowJudge.Shared.Domain\FlowJudge.Shared.Domain.csproj" />
+    <ProjectReference Include="..\FlowJudge.Workspaces.Domain\FlowJudge.Workspaces.Domain.csproj" />
+    <ProjectReference Include="..\FlowJudge.Workspaces.Infrastructure\FlowJudge.Workspaces.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

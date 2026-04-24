@@ -27,6 +27,7 @@
     <ProjectReference Include="..\..\libs\FlowJudge.Common.Sql\FlowJudge.Common.Sql.csproj" />
     <ProjectReference Include="..\..\libs\FlowJudge.Common.Utils\FlowJudge.Common.Utils.csproj" />
     <ProjectReference Include="..\..\libs\modules\FlowJudge.Users.Application\FlowJudge.Users.Application.csproj" />
+    <ProjectReference Include="..\..\libs\modules\FlowJudge.Workspaces.Application\FlowJudge.Workspaces.Application.csproj" />
   </ItemGroup>
 
 </Project>

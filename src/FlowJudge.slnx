@@ -23,6 +23,9 @@
     <Project Path="backend/libs/modules/FlowJudge.Users.Application/FlowJudge.Users.Application.csproj" Id="6314cded-df82-4af9-a4fc-0b0683a6d6a5" />
     <Project Path="backend/libs/modules/FlowJudge.Users.Domain/FlowJudge.Users.Domain.csproj" Id="d9a44606-8f4a-44e8-ab71-79f2f303b096" />
     <Project Path="backend/libs/modules/FlowJudge.Users.Infrastructure/FlowJudge.Users.Infrastructure.csproj" Id="98980643-93c5-420f-bd3b-633ac1328e6e" />
+    <Project Path="backend/libs/modules/FlowJudge.Workspaces.Application/FlowJudge.Workspaces.Application.csproj" Id="ed7bc8b3-1461-427b-8a6f-f0f3fa85662d" />
+    <Project Path="backend/libs/modules/FlowJudge.Workspaces.Domain/FlowJudge.Workspaces.Domain.csproj" Id="c8128e78-4955-4a8b-ba76-a13badd3e908" />
+    <Project Path="backend/libs/modules/FlowJudge.Workspaces.Infrastructure/FlowJudge.Workspaces.Infrastructure.csproj" Id="b1926d55-3acb-4fda-98a6-6d910d6c1ae0" />
   </Folder>
   <Folder Name="/libs/shared/">
     <Project Path="backend/libs/FlowJudge.Shared.Domain/FlowJudge.Shared.Domain.csproj" Id="781f87f7-3020-440f-9dea-285fe47ebb60" />
@@ -31,6 +34,7 @@
   <Folder Name="/tests/common/" />
   <Folder Name="/tests/modules/">
     <Project Path="../test/modules/FlowJudge.Users.UnitTests/FlowJudge.Users.UnitTests.csproj" Id="2afe52a5-6116-4e2a-a506-33a8002c66c4" />
+    <Project Path="../test/modules/FlowJudge.Workspaces.UnitTests/FlowJudge.Workspaces.UnitTests.csproj" Id="7511cb59-d84e-4c69-8722-8dbc73433793" />
   </Folder>
   <Project Path="docker-compose.dcproj">
     <Build />
