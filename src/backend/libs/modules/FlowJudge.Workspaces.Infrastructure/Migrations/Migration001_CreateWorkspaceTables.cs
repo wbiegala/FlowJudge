@@ -19,15 +19,15 @@ namespace FlowJudge.Workspaces.Infrastructure.Migrations
         private const string CreateWorkspacesTableSql = @$"
 CREATE TABLE {Cfg.SchemaName}.{Cfg.WorkspacesTableName} (
     {nameof(WorkspaceDbModel.id)} UUID PRIMARY KEY,
-    {nameof(WorkspaceDbModel.workspace_id)} UUID NOT NULL,
+    {nameof(WorkspaceDbModel.aggregate_id)} UUID NOT NULL,
     {nameof(WorkspaceDbModel.name)} TEXT NOT NULL,
     {nameof(WorkspaceDbModel.status)} TEXT NOT NULL,
     {nameof(WorkspaceDbModel.created_at)} TIMESTAMPTZ NOT NULL,
     {nameof(WorkspaceDbModel.created_by)} UUID NOT NULL
 );
 
-create unique index if not exists ux_{Cfg.WorkspacesTableName}_{nameof(WorkspaceDbModel.workspace_id)}
-    on {Cfg.SchemaName}.{Cfg.WorkspacesTableName} ({nameof(WorkspaceDbModel.workspace_id)});";
+create unique index if not exists ux_{Cfg.WorkspacesTableName}_{nameof(WorkspaceDbModel.aggregate_id)}
+    on {Cfg.SchemaName}.{Cfg.WorkspacesTableName} ({nameof(WorkspaceDbModel.aggregate_id)});";
 
         private const string CreateWorkspaceMembersTableSql = @$"
 CREATE TABLE {Cfg.SchemaName}.{Cfg.WorkspaceMembersTableName} (

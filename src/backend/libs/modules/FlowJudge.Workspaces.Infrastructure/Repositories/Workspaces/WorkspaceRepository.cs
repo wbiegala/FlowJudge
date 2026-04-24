@@ -1,8 +1,10 @@
 ﻿using Dapper;
 using FlowJudge.Common.Sql.UnitOfWork;
+using FlowJudge.Common.Utils.Serialization;
 using FlowJudge.Workspaces.Domain.Workspace.Model;
 using FlowJudge.Workspaces.Infrastructure.Repositories.Workspaces.DbModel;
 using FlowJudge.Workspaces.Infrastructure.Repositories.Workspaces.Mappers;
+using Cfg = FlowJudge.Workspaces.Infrastructure.WorkspacesContextConfiguration;
 
 namespace FlowJudge.Workspaces.Infrastructure.Repositories.Workspaces
 {
@@ -15,41 +17,55 @@ namespace FlowJudge.Workspaces.Infrastructure.Repositories.Workspaces
         public async Task<WorkspaceRoot?> GetWorkspaceByAggregateIdAsync(WorkspaceId workspaceId, CancellationToken ct = default)
         {
             await EnsureConnectionOpenAsync(ct);
-            var getAggregateCommand = Command(GetWorkspaceByAggregateIdSql, new { WorkspaceId = workspaceId.Value }, ct);
+            var getAggregateCommand = Command(GetWorkspaceByAggregateIdSql, new { AggregateId = workspaceId.Value }, ct);
             var workspaceDbModel = await Connection.QuerySingleOrDefaultAsync<WorkspaceDbModel>(getAggregateCommand);
 
             if (workspaceDbModel is null)
                 return null;
 
-            var getMembersCommand = Command(GetWorkspaceMembersByAggregateIdSql, new { WorkspaceId = workspaceDbModel.id }, ct);
+            var getMembersCommand = Command(GetWorkspaceMembersByWorkspaceIdSql, new { Id = workspaceDbModel.id }, ct);
             var workspaceMemberDbModels = await Connection.QueryAsync<WorkspaceMemberDbModel>(getMembersCommand);
 
             return workspaceDbModel.ToDomainModel(workspaceMemberDbModels);
         }
 
-        public Task AddWorkspaceAsync(WorkspaceRoot workspace, CancellationToken ct = default)
+        public async Task AddWorkspaceAsync(WorkspaceRoot workspace, CancellationToken ct = default)
         {
-            throw new NotImplementedException();
+            await EnsureConnectionOpenAsync(ct);
+            var dbModel = workspace.ToDbModel();
+
+            var insertWorkspaceCmd = Command(AddWorkspaceSql, dbModel.workspace, ct);
+            await Connection.ExecuteAsync(insertWorkspaceCmd);
+
+            var insertMembersCmd = Command(AddWorkspaceMemberSql, dbModel.members, ct);
+            await Connection.ExecuteAsync(insertMembersCmd);
         }
 
-        public Task UpdateWorkspaceAsync(WorkspaceRoot workspace, CancellationToken ct = default)
+        public async Task UpdateWorkspaceAsync(WorkspaceRoot workspace, CancellationToken ct = default)
         {
-            throw new NotImplementedException();
+            await EnsureConnectionOpenAsync(ct);
+            var dbModel = workspace.ToDbModel();
+
+            var updateWorkspaceCmd = Command(UpdateWorkspaceSql, dbModel.workspace, ct);
+            await Connection.ExecuteAsync(updateWorkspaceCmd);
+
+            var updateMembersCmd = Command(UpdateWorkspaceMemberSql, new { Members = dbModel.members.ToJson(), WorkspaceId = dbModel.workspace.id }, ct);
+            await Connection.ExecuteAsync(updateMembersCmd);
         }
 
 
         private const string GetWorkspaceByAggregateIdSql = @$"
 SELECT 
      {nameof(WorkspaceDbModel.id)}
-    ,{nameof(WorkspaceDbModel.workspace_id)}
+    ,{nameof(WorkspaceDbModel.aggregate_id)}
     ,{nameof(WorkspaceDbModel.name)}
     ,{nameof(WorkspaceDbModel.status)}
     ,{nameof(WorkspaceDbModel.created_at)}
     ,{nameof(WorkspaceDbModel.created_by)}
-FROM {WorkspacesContextConfiguration.SchemaName}.{WorkspacesContextConfiguration.WorkspacesTableName} workspace
-WHERE {nameof(WorkspaceDbModel.workspace_id)} = @WorkspaceId;";
+FROM {Cfg.SchemaName}.{Cfg.WorkspacesTableName} workspace
+WHERE {nameof(WorkspaceDbModel.aggregate_id)} = @AggregateId;";
 
-        private const string GetWorkspaceMembersByAggregateIdSql = $@"
+        private const string GetWorkspaceMembersByWorkspaceIdSql = $@"
 SELECT
      {nameof(WorkspaceMemberDbModel.id)}
     ,{nameof(WorkspaceMemberDbModel.workspace_id)}
@@ -57,7 +73,103 @@ SELECT
     ,{nameof(WorkspaceMemberDbModel.role)}
     ,{nameof(WorkspaceMemberDbModel.assigned_at)}
     ,{nameof(WorkspaceMemberDbModel.assigned_by)}
-FROM {WorkspacesContextConfiguration.SchemaName}.{WorkspacesContextConfiguration.WorkspaceMembersTableName} members
-WHERE {nameof(WorkspaceMemberDbModel.workspace_id)} = @WorkspaceId";
+FROM {Cfg.SchemaName}.{Cfg.WorkspaceMembersTableName} members
+WHERE {nameof(WorkspaceMemberDbModel.workspace_id)} = @Id";
+
+        private const string AddWorkspaceSql = $@"
+INSERT INTO {Cfg.SchemaName}.{Cfg.WorkspacesTableName} (
+     {nameof(WorkspaceDbModel.id)}
+    ,{nameof(WorkspaceDbModel.aggregate_id)}
+    ,{nameof(WorkspaceDbModel.name)}
+    ,{nameof(WorkspaceDbModel.status)}
+    ,{nameof(WorkspaceDbModel.created_at)}
+    ,{nameof(WorkspaceDbModel.created_by)}
+)
+VALUES (
+     @{nameof(WorkspaceDbModel.id)}
+    ,@{nameof(WorkspaceDbModel.aggregate_id)}
+    ,@{nameof(WorkspaceDbModel.name)}
+    ,@{nameof(WorkspaceDbModel.status)}
+    ,@{nameof(WorkspaceDbModel.created_at)}
+    ,@{nameof(WorkspaceDbModel.created_by)}
+);";
+
+        private const string AddWorkspaceMemberSql = $@"
+INSERT INTO {Cfg.SchemaName}.{Cfg.WorkspaceMembersTableName} (
+     {nameof(WorkspaceMemberDbModel.id)}
+    ,{nameof(WorkspaceMemberDbModel.workspace_id)}
+    ,{nameof(WorkspaceMemberDbModel.member_id)}
+    ,{nameof(WorkspaceMemberDbModel.role)}
+    ,{nameof(WorkspaceMemberDbModel.assigned_at)}
+    ,{nameof(WorkspaceMemberDbModel.assigned_by)}
+) 
+VALUES (
+     @{nameof(WorkspaceMemberDbModel.id)}
+    ,@{nameof(WorkspaceMemberDbModel.workspace_id)}
+    ,@{nameof(WorkspaceMemberDbModel.member_id)}
+    ,@{nameof(WorkspaceMemberDbModel.role)}
+    ,@{nameof(WorkspaceMemberDbModel.assigned_at)}
+    ,@{nameof(WorkspaceMemberDbModel.assigned_by)}
+);";
+
+        private const string UpdateWorkspaceSql = $@"
+UPDATE {Cfg.SchemaName}.{Cfg.WorkspacesTableName}
+SET
+     {nameof(WorkspaceDbModel.name)} = @{nameof(WorkspaceDbModel.name)}
+    ,{nameof(WorkspaceDbModel.status)} = @{nameof(WorkspaceDbModel.status)}
+WHERE {nameof(WorkspaceDbModel.aggregate_id)} = @{nameof(WorkspaceDbModel.aggregate_id)}
+";
+
+        private const string UpdateWorkspaceMemberSql = $@"
+WITH source AS (
+    SELECT
+        x.{nameof(WorkspaceMemberDbModel.id)},
+        x.{nameof(WorkspaceMemberDbModel.workspace_id)},
+        x.{nameof(WorkspaceMemberDbModel.member_id)},
+        x.{nameof(WorkspaceMemberDbModel.role)},
+        x.{nameof(WorkspaceMemberDbModel.assigned_at)},
+        x.{nameof(WorkspaceMemberDbModel.assigned_by)}
+    FROM jsonb_to_recordset(CAST(@Members AS jsonb)) AS x(
+        {nameof(WorkspaceMemberDbModel.id)} uuid,
+        {nameof(WorkspaceMemberDbModel.workspace_id)} uuid,
+        {nameof(WorkspaceMemberDbModel.member_id)} uuid,
+        {nameof(WorkspaceMemberDbModel.role)} text,
+        {nameof(WorkspaceMemberDbModel.assigned_at)} timestamptz,
+        {nameof(WorkspaceMemberDbModel.assigned_by)} uuid
+    )
+),
+upserted AS (
+    INSERT INTO {Cfg.SchemaName}.{Cfg.WorkspaceMembersTableName} (
+        {nameof(WorkspaceMemberDbModel.id)},
+        {nameof(WorkspaceMemberDbModel.workspace_id)},
+        {nameof(WorkspaceMemberDbModel.member_id)},
+        {nameof(WorkspaceMemberDbModel.role)},
+        {nameof(WorkspaceMemberDbModel.assigned_at)},
+        {nameof(WorkspaceMemberDbModel.assigned_by)}
+    )
+    SELECT
+        s.{nameof(WorkspaceMemberDbModel.id)},
+        s.{nameof(WorkspaceMemberDbModel.workspace_id)},
+        s.{nameof(WorkspaceMemberDbModel.member_id)},
+        s.{nameof(WorkspaceMemberDbModel.role)},
+        s.{nameof(WorkspaceMemberDbModel.assigned_at)},
+        s.{nameof(WorkspaceMemberDbModel.assigned_by)}
+    FROM source s
+    ON CONFLICT ({nameof(WorkspaceMemberDbModel.id)}) DO UPDATE
+    SET
+        {nameof(WorkspaceMemberDbModel.workspace_id)} = EXCLUDED.{nameof(WorkspaceMemberDbModel.workspace_id)},
+        {nameof(WorkspaceMemberDbModel.member_id)} = EXCLUDED.{nameof(WorkspaceMemberDbModel.member_id)},
+        {nameof(WorkspaceMemberDbModel.role)} = EXCLUDED.{nameof(WorkspaceMemberDbModel.role)},
+        {nameof(WorkspaceMemberDbModel.assigned_at)} = EXCLUDED.{nameof(WorkspaceMemberDbModel.assigned_at)},
+        {nameof(WorkspaceMemberDbModel.assigned_by)} = EXCLUDED.{nameof(WorkspaceMemberDbModel.assigned_by)}
+    RETURNING {nameof(WorkspaceMemberDbModel.id)}
+)
+DELETE FROM {Cfg.SchemaName}.{Cfg.WorkspaceMembersTableName} target
+WHERE target.{nameof(WorkspaceMemberDbModel.workspace_id)} = @WorkspaceId
+  AND NOT EXISTS (
+      SELECT 1
+      FROM source s
+      WHERE s.id = target.{nameof(WorkspaceMemberDbModel.id)}
+  );";
     }
 }

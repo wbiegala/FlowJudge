@@ -22,12 +22,37 @@ namespace FlowJudge.Workspaces.Infrastructure.Repositories.Workspaces.Mappers
 
             return WorkspaceRoot.Load(
                 id: dbModel.id,
-                workspaceId: dbModel.workspace_id,
+                workspaceId: dbModel.aggregate_id,
                 name: dbModel.name,
                 status: Enum.Parse<WorkspaceStatus>(dbModel.status),
                 createdAt: dbModel.created_at,
                 createdBy: dbModel.created_by,
                 members: members);
+        }
+
+        public static (WorkspaceDbModel workspace, IEnumerable<WorkspaceMemberDbModel> members) ToDbModel(this WorkspaceRoot domainModel)
+        {
+            var members = domainModel.Members.Select(member => new WorkspaceMemberDbModel
+            {
+                id = member.Id,
+                workspace_id = domainModel.Id,
+                member_id = member.MemberId,
+                role = member.Role.ToString(),
+                assigned_at = member.AssignedAt,
+                assigned_by = member.AssignedBy
+            }).ToList();
+
+            var workspace = new WorkspaceDbModel
+            {
+                id = domainModel.Id,
+                aggregate_id = domainModel.AggregateId,
+                name = domainModel.Name,
+                status = domainModel.Status.ToString(),
+                created_at = domainModel.CreatedAt,
+                created_by = domainModel.CreatedBy
+            };
+
+            return (workspace, members);
         }
     }
 }

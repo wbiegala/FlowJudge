@@ -10,7 +10,7 @@ namespace FlowJudge.Workspaces.Domain.Workspace.Model
         /// <summary>
         /// Id aggregate, for use in all external references to this aggregate.
         /// </summary>
-        public WorkspaceId WorkspaceId { get; private set; }
+        public WorkspaceId AggregateId { get; private set; }
 
         /// <summary>
         /// Workspace name
@@ -103,11 +103,9 @@ namespace FlowJudge.Workspaces.Domain.Workspace.Model
 
         public static WorkspaceRoot Create(string name, Guid creatorId, DateTimeOffset timestamp)
         {
-            var workspaceId = WorkspaceId.Create(Guid.NewGuid());
-
             var workspace = new WorkspaceRoot
             {
-                WorkspaceId = workspaceId,
+                AggregateId = WorkspaceId.Create(Guid.NewGuid()),
                 Name = WorkspaceName.Create(name),
                 Status = WorkspaceStatus.Active,
                 CreatedAt = timestamp,
@@ -132,7 +130,7 @@ namespace FlowJudge.Workspaces.Domain.Workspace.Model
             var workspace = new WorkspaceRoot
             {
                 Id = id,
-                WorkspaceId = WorkspaceId.Create(workspaceId),
+                AggregateId = WorkspaceId.Create(workspaceId),
                 Name = WorkspaceName.Create(name),
                 Status = status,
                 CreatedAt = createdAt,
