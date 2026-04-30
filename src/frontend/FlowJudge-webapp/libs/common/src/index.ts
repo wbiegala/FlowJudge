@@ -8,3 +8,6 @@ export * from './lib/http/error/http-error-context';
 export * from './lib/http/error/application-error-handler';
 export * from './lib/http/error/http-error-injection-token';
 export * from './lib/http/error/app-error-dispatcher';
+
+export * from './lib/http/models/pagination.model';
+export * from './lib/http/models/generic.model';
