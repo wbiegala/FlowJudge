@@ -8,7 +8,7 @@
   </Folder>
   <Folder Name="/libs/" />
   <Folder Name="/libs/common/">
-    <Project Path="backend/libs/FlowJudge.Common.Application/FlowJudge.Common.Application.csproj" Id="3d4d7728-2981-4732-9006-99f0e4924755" />
+    <Project Path="backend/libs/FlowJudge.Common.Application/FlowJudge.Common.Application.csproj" />
     <Project Path="backend/libs/FlowJudge.Common.Cache/FlowJudge.Common.Cache.csproj" Id="4bd9172a-34e5-4907-a6aa-98efb54453ce" />
     <Project Path="backend/libs/FlowJudge.Common.Domain/FlowJudge.Common.Domain.csproj" Id="0687ecef-67ae-4926-b80d-7c303a63af27" />
     <Project Path="backend/libs/FlowJudge.Common.Http/FlowJudge.Common.Http.csproj" Id="21a433fb-a9e7-456d-9e0d-0aa7b27ab7ea" />
