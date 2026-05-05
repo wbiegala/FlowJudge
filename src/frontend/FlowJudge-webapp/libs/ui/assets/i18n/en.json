@@ -11,6 +11,11 @@
         "HEADER": "Error",
         "DETAILS": "Error details"
       }
+    },
+    "GRID": {
+      "COLUMNS": {
+        "ACTIONS": "Actions"
+      }
     }
   }
 }

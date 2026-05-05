@@ -1,8 +1,9 @@
 import { Route } from '@angular/router';
 import { RoutingLayoutComponent } from './layout/routing-layout.component';
 import { HomePageComponent } from './home-page/home-page.component';
-import { authRoutes, tokenExchangeGuard } from '@flow-judge-webapp/auth';
+import { authenticatedGuard, authRoutes, tokenExchangeGuard } from '@flow-judge-webapp/auth';
 import { userLegalGuard, userRoutes } from '@flow-judge-webapp/user';
+import { workspacesRoutes } from '@flow-judge-webapp/workspaces';
 
 export const appRoutes: Route[] = [
   {
@@ -14,6 +15,12 @@ export const appRoutes: Route[] = [
       {
         path: '',
         component: HomePageComponent
+      },
+      {
+        path: 'workspaces',
+        canActivate: [authenticatedGuard],
+        canActivateChild: [authenticatedGuard],
+        children: workspacesRoutes,
       },
       ...authRoutes,
       ...userRoutes

@@ -11,6 +11,11 @@
         "HEADER": "Błąd",
         "DETAILS": "Szczegóły błędu"
       }
+    },
+    "GRID": {
+      "COLUMNS": {
+        "ACTIONS": "Akcje"
+      }
     }
   }
 }

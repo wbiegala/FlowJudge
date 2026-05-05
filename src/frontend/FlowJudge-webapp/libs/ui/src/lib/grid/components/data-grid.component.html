@@ -1,0 +1,66 @@
+@if (isLoading()) {
+  <lib-loading></lib-loading>
+}
+@else {
+  @let executableGridActions = (gridActions() ?? []).filter(a => a.canExecute());
+  @if (executableGridActions.length > 0) {
+    <div class="data-grid-actions">
+      @for (action of executableGridActions; track $index) {
+        <button matFab extended (click)="onGridActionClick(action.name)">
+          <mat-icon>{{ action.icon }}</mat-icon>
+          {{ action.nameTranslationKey | translate }}
+        </button>
+      }
+    </div>
+  }
+
+  <table mat-table [dataSource]="rows()" class="data-grid-table" matSort matSortDisableClear>
+
+    @for (column of gridColumns(); track $index) {
+      <ng-container [matColumnDef]="column.id">
+        <th mat-header-cell *matHeaderCellDef>{{ column.headerTranslationKey | translate }}</th>
+        <td mat-cell *matCellDef="let row">{{ column.cell(row) }}</td>
+      </ng-container>
+    }
+
+    @let singleRowActions = rowActions() ?? [];
+    @if (singleRowActions.length > 0) {
+      <ng-container matColumnDef="row-actions">
+        <th mat-header-cell *matHeaderCellDef>{{ 'UI.GRID.COLUMNS.ACTIONS' | translate }}</th>
+        <td mat-cell *matCellDef="let row">
+          @let thisRowActions = singleRowActions.filter(ra => ra.canExecute(row));
+          <button matIconButton [matMenuTriggerFor]="menu" [disabled]="thisRowActions.length === 0" [aria-label]="`data-grid.row-actions.${row.id}`">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            @for (action of thisRowActions; track $index) {
+              <button mat-menu-item (click)="onRowActionClick(action.name, row.id)" [aria-label]="`data-grid.row-actions.${row.id}.${action.name}`">
+                <mat-icon>{{ action.icon }}</mat-icon>
+                <span>{{ action.nameTranslationKey | translate }}</span>
+              </button>
+            }
+          </mat-menu>
+        </td>
+      </ng-container>
+    }
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns()"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns();"></tr>
+
+    @let onEmptyGrid = emptyGridBehavior() ?? null;
+    @if (onEmptyGrid !== null) {
+      @let emptyGridAction = actionOnEmpty();
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="4">
+          <div>{{ onEmptyGrid.messageTranslationKey | translate }}</div>
+          @if (emptyGridAction !== null) {
+            <button matFab aria-label="data-grid.empty-grid-action" [matTooltip]="emptyGridAction.nameTranslationKey | translate">
+              <mat-icon>{{ emptyGridAction.icon }}</mat-icon>
+            </button>
+          }
+        </td>
+      </tr>
+    }
+
+  </table>
+}

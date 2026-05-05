@@ -1,3 +1,4 @@
+import { WorkspacesGridState } from '@flow-judge-webapp/workspaces';
 import { HttpBackend, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { InjectionToken, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
@@ -40,7 +41,8 @@ fetch(environment.configUrl, { cache: 'no-store' })
         provideBrowserGlobalErrorListeners(),
         provideZonelessChangeDetection(),
         provideStore([
-          AuthenticationState
+          AuthenticationState,
+          WorkspacesGridState,
         ], withNgxsReduxDevtoolsPlugin(), withNgxsRouterPlugin(), withNgxsFormPlugin()),
         provideTranslateService({
           loader: { provide: TranslateLoader, useFactory: translationHttpLoaderFactory, deps: [HttpBackend] },

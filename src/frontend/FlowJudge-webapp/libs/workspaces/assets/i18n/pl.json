@@ -1,5 +1,24 @@
 {
   "WORKSPACES": {
-
+    "GRID": {
+      "ON_EMPTY": "Brak przestrzeni roboczych...",
+      "COLUMNS": {
+        "NAME": {
+          "HEADER": "Nazwa"
+        },
+        "OWNER": {
+          "HEADER": "Właściciel"
+        },
+        "ROLE": {
+          "HEADER": "Rola"
+        },
+        "CREATED_AT": {
+          "HEADER": "Utworzono"
+        }
+      },
+      "ACTIONS": {
+        "ADD": "Swórz nową przestrzeń roboczą"
+      }
+    }
   }
 }

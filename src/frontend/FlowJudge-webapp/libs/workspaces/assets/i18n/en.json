@@ -1,5 +1,24 @@
 {
   "WORKSPACES": {
-
+    "GRID": {
+      "ON_EMPTY": "No workspaces...",
+      "COLUMNS": {
+        "NAME": {
+          "HEADER": "Name"
+        },
+        "OWNER": {
+          "HEADER": "Owner"
+        },
+        "ROLE": {
+          "HEADER": "Role"
+        },
+        "CREATED_AT": {
+          "HEADER": "Creation time"
+        }
+      },
+      "ACTIONS": {
+        "ADD": "Add new workspace"
+      }
+    }
   }
 }

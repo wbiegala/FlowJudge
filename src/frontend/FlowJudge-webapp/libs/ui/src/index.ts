@@ -6,3 +6,6 @@ export * from './lib/dialog/components/error-dialog.component';
 
 export * from './lib/progress/progress.service';
 export * from './lib/progress/components/loading.component';
+
+export * from './lib/grid/data-grid.model';
+export * from './lib/grid/components/data-grid.component';
