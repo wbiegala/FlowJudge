@@ -17,6 +17,9 @@ import { environment } from './environments/environment';
 import { accessTokenInterceptor, provideRestoreSessionFactory, AuthenticationState, InsufficientPermissionsErrorHandler, UnauthorizedErrorHandler } from '@flow-judge-webapp/auth';
 import { DefaultHttpErrorHandler } from './app/utils/default-http-error-handler';
 import { LegalErrorHandler } from '@flow-judge-webapp/user';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
+import { WorkspaceState } from '@flow-judge-webapp/workspaces';
+import { provideValidationErrors } from '@flow-judge-webapp/ui';
 
 
 fetch(environment.configUrl, { cache: 'no-store' })
@@ -37,18 +40,27 @@ fetch(environment.configUrl, { cache: 'no-store' })
         provideApiBaseUrl(cfg.apiUrl),
         { provide: APP_CONFIG, useValue: cfg },
         ...provideAppErrorHandling(),
+        ...provideFormValidationErrorMappers(),
         provideAnimations(),
         provideBrowserGlobalErrorListeners(),
         provideZonelessChangeDetection(),
         provideStore([
           AuthenticationState,
           WorkspacesGridState,
+          WorkspaceState,
         ], withNgxsReduxDevtoolsPlugin(), withNgxsRouterPlugin(), withNgxsFormPlugin()),
         provideTranslateService({
           loader: { provide: TranslateLoader, useFactory: translationHttpLoaderFactory, deps: [HttpBackend] },
           lang: 'pl',
           fallbackLang: 'en'
-        })
+        }),
+        {
+          provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
+          useValue: {
+            appearance: 'outline',
+            subscriptSizing: 'dynamic',
+          },
+        }
       ],
     })
   )
@@ -75,5 +87,11 @@ fetch(environment.configUrl, { cache: 'no-store' })
       provideAppErrorHandler(InsufficientPermissionsErrorHandler),
       provideAppErrorHandler(LegalErrorHandler),
       provideAppErrorHandler(UnauthorizedErrorHandler)
+    ];
+  }
+
+  export function provideFormValidationErrorMappers(): any[] {
+    return [
+      provideValidationErrors()
     ];
   }

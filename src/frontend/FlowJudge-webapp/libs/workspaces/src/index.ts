@@ -4,5 +4,6 @@ export * from './lib/components/workspace-grid/workspace-grid.component';
 export * from './lib/workspaces.service';
 
 export * from './lib/store/workspaces-grid/workspaces-grid.state';
+export * from './lib/store/workspace/workspace.state';
 
 export * from './lib/workspaces-routes';

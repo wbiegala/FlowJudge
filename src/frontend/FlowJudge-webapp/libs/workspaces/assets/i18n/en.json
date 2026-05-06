@@ -1,6 +1,7 @@
 {
   "WORKSPACES": {
     "GRID": {
+      "TITLE": "Workspaces",
       "ON_EMPTY": "No workspaces...",
       "COLUMNS": {
         "NAME": {
@@ -18,6 +19,21 @@
       },
       "ACTIONS": {
         "ADD": "Add new workspace"
+      }
+    },
+    "DETAILS": {
+      "TITLE": "Workspace",
+      "ACTIONS": {
+        "SAVE": "Save",
+        "EXIT": "Exit"
+      },
+      "FORMS": {
+        "BASIC": {
+          "SECTION_NAME": "Basic data",
+          "FIELDS": {
+            "NAME": "Name"
+          }
+        }
       }
     }
   }

@@ -1,18 +1,21 @@
-import { DataGridAction, DataGridColumn, DataGridComponent, EmptyGridBehavior, PaginationComponent } from '@flow-judge-webapp/ui';
+import { Navigate } from '@ngxs/router-plugin';
+import { DataGridAction, DataGridActionEvent, DataGridColumn, DataGridComponent, EmptyGridBehavior, PaginationComponent, PaginationEvent, ViewHeaderComponent } from '@flow-judge-webapp/ui';
 import { ChangeDetectionStrategy, Component, computed, effect, inject } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { WorkspacesGridState } from '../../store/workspaces-grid/workspaces-grid.state';
 import { LoadWorkspacesGridItems } from '../../store/workspaces-grid/workspaces-grid.actions';
 import { WorkspaceGridItem } from '../../models/workspace-grid-item.model';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'lib-workspace-grid',
-  imports: [ DataGridComponent, PaginationComponent ],
+  imports: [ DataGridComponent, PaginationComponent, ViewHeaderComponent, TranslatePipe ],
   templateUrl: './workspace-grid.component.html',
   styleUrl: './workspace-grid.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WorkspaceGridComponent {
+  readonly titleKey = 'WORKSPACES.GRID.TITLE';
   #store = inject(Store);
   pageNumber = this.#store.selectSignal(WorkspacesGridState.pageNumber);
   pageSize = this.#store.selectSignal(WorkspacesGridState.pageSize);
@@ -73,4 +76,21 @@ export class WorkspaceGridComponent {
     messageTranslationKey: 'WORKSPACES.GRID.ON_EMPTY',
     actionName: 'add',
   };
+
+  handlePaginationEvent(event: PaginationEvent) {
+    console.log(event);
+  }
+
+  handleGridEvent(event: DataGridActionEvent) {
+    switch (event.name) {
+      case 'add': this.#addNewWorkspace()
+        break;
+      default:
+        break;
+    }
+  }
+
+  #addNewWorkspace() {
+    this.#store.dispatch(new Navigate(['workspaces', 'new']));
+  }
 }

@@ -5,6 +5,12 @@
   min-height: 0;
 }
 
+.app-toolbar{
+  position: relative;
+  z-index: 10;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.16);
+}
+
 .app-container {
   flex: 1 1 auto;
   min-height: 0;
@@ -22,7 +28,6 @@
   min-height: 0;
   overflow: auto;
   display: block;
-  padding: 10px;
 }
 
 :host ::ng-deep .mat-drawer-content {

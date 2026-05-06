@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { DialogService, NotificationService, ProgressService } from '@flow-judge-webapp/ui';
+import { DialogService, NotificationService, ProgressService, ViewHeaderComponent } from '@flow-judge-webapp/ui';
 import { UserLegalService } from '@flow-judge-webapp/user';
 
 @Component({
   selector: 'app-home-page',
-  imports: [MatButtonModule],
+  imports: [ MatButtonModule, ViewHeaderComponent ],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -16,6 +16,23 @@
       "COLUMNS": {
         "ACTIONS": "Actions"
       }
+    },
+    "VIEW_MODE": {
+      "NEW": "New",
+      "PREVIEW": "Preview",
+      "EDIT": "Edit"
+    },
+    "VALIDATION": {
+      "ERRORS": {
+        "required": "This field is required",
+        "requiredTrue": "This field must be checked",
+        "email": "Invalid e-mail",
+        "maxlength": "Max {{ requiredLength }} characters",
+        "minlength": "Min {{ requiredLength }} characters",
+        "min": "Min length is {{ min }}",
+        "max": "Max length is  {{ max }}",
+        "pattern": "Invalid format"
+      }
     }
   }
 }

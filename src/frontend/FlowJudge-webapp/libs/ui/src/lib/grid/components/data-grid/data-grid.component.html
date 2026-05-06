@@ -60,8 +60,8 @@
         <td class="mat-cell" colspan="4">
           <div class="data-grid-empty">
             <div class="data-grid-empty-message">{{ onEmptyGrid.messageTranslationKey | translate }}</div>
-            @if (emptyGridAction !== null) {
-              <button matFab aria-label="data-grid.empty-grid-action" [matTooltip]="emptyGridAction.nameTranslationKey | translate">
+            @if (emptyGridAction !== null && emptyGridAction.canExecute()) {
+              <button matFab aria-label="data-grid.empty-grid-action" (click)="onGridActionClick(emptyGridAction.name)" [matTooltip]="emptyGridAction.nameTranslationKey | translate">
                 <mat-icon>{{ emptyGridAction.icon }}</mat-icon>
               </button>
             }

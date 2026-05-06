@@ -1,0 +1,23 @@
+.view-header-container {
+  background-color: var(--mat-sys-primary-container);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-content: center;
+  align-items: baseline;
+  padding: 25px 15px 25px 15px;
+}
+
+.view-header-container-title {
+  font-size: larger;
+  color: var(--mat-sys-primary);
+}
+
+.view-header-container-actions {
+  display: flex;
+  column-gap: 10px;
+}
+
+.view-header-container-content {
+  margin: 10px;
+}
