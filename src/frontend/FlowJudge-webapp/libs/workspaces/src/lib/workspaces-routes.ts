@@ -1,21 +1,28 @@
-import { WorkspaceDetailsComponent } from './components/workspace-details/workspace-details.component';
 import { editWorkspaceResolver, newWorkspaceResolver } from './components/workspace-details/workspace-details.resolvers';
-import { WorkspaceGridComponent } from './components/workspace-grid/workspace-grid.component';
 import { Route } from '@angular/router';
+import { provideStates } from '@ngxs/store';
+import { WorkspacesGridState } from './store/workspaces-grid/workspaces-grid.state';
+import { WorkspaceState } from './store/workspace/workspace.state';
 
 export const workspacesRoutes: Route[] = [
   {
     path: '',
-    component: WorkspaceGridComponent
+    providers: [provideStates([WorkspacesGridState, WorkspaceState])],
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./components/workspace-grid/workspace-grid.component').then(m => m.WorkspaceGridComponent)
+      },
+      {
+        path: 'new',
+        loadComponent: () => import('./components/workspace-details/workspace-details.component').then(m => m.WorkspaceDetailsComponent),
+        resolve: { _: newWorkspaceResolver }
+      },
+      {
+        path: ':id',
+        loadComponent: () => import('./components/workspace-details/workspace-details.component').then(m => m.WorkspaceDetailsComponent),
+        resolve: { _: editWorkspaceResolver }
+      }
+    ]
   },
-  {
-    path: 'new',
-    component: WorkspaceDetailsComponent,
-    resolve: { _: newWorkspaceResolver }
-  },
-  {
-    path: ':id',
-    component: WorkspaceDetailsComponent,
-    resolve: { _: editWorkspaceResolver }
-  }
 ];

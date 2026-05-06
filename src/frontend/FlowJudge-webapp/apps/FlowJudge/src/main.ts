@@ -1,4 +1,3 @@
-import { WorkspacesGridState } from '@flow-judge-webapp/workspaces';
 import { HttpBackend, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { InjectionToken, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
@@ -16,10 +15,9 @@ import { appRoutes } from './app/app.routes';
 import { environment } from './environments/environment';
 import { accessTokenInterceptor, provideRestoreSessionFactory, AuthenticationState, InsufficientPermissionsErrorHandler, UnauthorizedErrorHandler } from '@flow-judge-webapp/auth';
 import { DefaultHttpErrorHandler } from './app/utils/default-http-error-handler';
-import { LegalErrorHandler } from '@flow-judge-webapp/user';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
-import { WorkspaceState } from '@flow-judge-webapp/workspaces';
 import { provideValidationErrors } from '@flow-judge-webapp/ui';
+import { LegalErrorHandler } from './app/utils/legal-error-handler';
 
 
 fetch(environment.configUrl, { cache: 'no-store' })
@@ -46,9 +44,11 @@ fetch(environment.configUrl, { cache: 'no-store' })
         provideZonelessChangeDetection(),
         provideStore([
           AuthenticationState,
-          WorkspacesGridState,
-          WorkspaceState,
-        ], withNgxsReduxDevtoolsPlugin(), withNgxsRouterPlugin(), withNgxsFormPlugin()),
+        ],
+          ...(!environment.production ? [withNgxsReduxDevtoolsPlugin()] : []),
+          withNgxsRouterPlugin(),
+          withNgxsFormPlugin(),
+        ),
         provideTranslateService({
           loader: { provide: TranslateLoader, useFactory: translationHttpLoaderFactory, deps: [HttpBackend] },
           lang: 'pl',

@@ -1,27 +1,23 @@
 import { Route } from '@angular/router';
 import { unauthenticatedGuard } from './unauthenticated.guard';
-import { LogoutComponent } from './components/logout.component';
-import { SessionExpiredComponent } from './components/session-expired.component';
-import { NoAccessComponent } from './components/no-access.component';
-import { RegistrationConfirmationComponent } from './components/registration-confirmation.component';
 
 export const authRoutes: Route[] = [
   {
     path: 'confirm-registration',
-    component: RegistrationConfirmationComponent
+    loadComponent: () => import('./components/registration-confirmation.component').then(m => m.RegistrationConfirmationComponent)
   },
   {
     path: 'logout',
     canActivate: [ unauthenticatedGuard ],
-    component: LogoutComponent
+    loadComponent: () => import('./components/logout.component').then(m => m.LogoutComponent)
   },
   {
     path: 'session-expired',
     canActivate: [ unauthenticatedGuard ],
-    component: SessionExpiredComponent
+    loadComponent: () => import('./components/session-expired.component').then(m => m.SessionExpiredComponent)
   },
   {
     path: 'no-access',
-    component: NoAccessComponent
+    loadComponent: () => import('./components/no-access.component').then(m => m.NoAccessComponent)
   }
 ];
