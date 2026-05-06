@@ -5,8 +5,10 @@
     [gridColumns]="gridColumns"
     [rows]="items()"
     [gridActions]="gridActions"
+    [rowActions]="rowActions"
     [emptyGridBehavior]="emptyGridBehavior"
-    (gridActionEvent)="handleGridEvent($event)">
+    (gridActionEvent)="handleGridEvent($event)"
+    (gridRowActionEvent)="handleRowAction($event)">
   </lib-data-grid>
 
   <lib-pagination

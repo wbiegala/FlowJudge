@@ -1,5 +1,5 @@
 import { Navigate } from '@ngxs/router-plugin';
-import { DataGridAction, DataGridActionEvent, DataGridColumn, DataGridComponent, EmptyGridBehavior, PaginationComponent, PaginationEvent, ViewHeaderComponent } from '@flow-judge-webapp/ui';
+import { DataGridAction, DataGridActionEvent, DataGridColumn, DataGridComponent, DataGridRowAction, DataGridRowActionEvent, EmptyGridBehavior, PaginationComponent, PaginationEvent, ViewHeaderComponent } from '@flow-judge-webapp/ui';
 import { ChangeDetectionStrategy, Component, computed, effect, inject } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { WorkspacesGridState } from '../../store/workspaces-grid/workspaces-grid.state';
@@ -20,7 +20,6 @@ export class WorkspaceGridComponent {
   pageNumber = this.#store.selectSignal(WorkspacesGridState.pageNumber);
   pageSize = this.#store.selectSignal(WorkspacesGridState.pageSize);
   totalCount = this.#store.selectSignal(WorkspacesGridState.totalCount);
-  totalPages = computed(() => this.totalCount() / this.pageSize());
   items = this.#store.selectSignal(WorkspacesGridState.items);
   isLoading = this.#store.selectSignal(WorkspacesGridState.isLoading);
 
@@ -72,6 +71,21 @@ export class WorkspaceGridComponent {
     }
   ];
 
+  readonly rowActions: Array<DataGridRowAction<WorkspaceGridItem>> = [
+    {
+      name: 'preview',
+      nameTranslationKey: 'UI.VIEW_MODE.PREVIEW',
+      icon: 'preview',
+      canExecute: item => true
+    },
+    {
+      name: 'edit',
+      nameTranslationKey: 'UI.VIEW_MODE.EDIT',
+      icon: 'edit',
+      canExecute: item => item.role == 'Owner' || item.role == 'Administrator'
+    }
+  ];
+
   readonly emptyGridBehavior: EmptyGridBehavior = {
     messageTranslationKey: 'WORKSPACES.GRID.ON_EMPTY',
     actionName: 'add',
@@ -81,10 +95,16 @@ export class WorkspaceGridComponent {
     console.log(event);
   }
 
+  handleRowAction(event: DataGridRowActionEvent) {
+    switch (event.name) {
+      case 'edit': this.#editWorkspace(event.id); break;
+      break;
+    }
+  }
+
   handleGridEvent(event: DataGridActionEvent) {
     switch (event.name) {
-      case 'add': this.#addNewWorkspace()
-        break;
+      case 'add': this.#addNewWorkspace(); break;
       default:
         break;
     }
@@ -92,5 +112,9 @@ export class WorkspaceGridComponent {
 
   #addNewWorkspace() {
     this.#store.dispatch(new Navigate(['workspaces', 'new']));
+  }
+
+  #editWorkspace(id: string) {
+    this.#store.dispatch(new Navigate(['workspaces', id]));
   }
 }

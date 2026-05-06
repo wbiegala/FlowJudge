@@ -5,7 +5,7 @@ export interface WorkspaceStatus {
 
 export interface WorkspaceAccessRole {
   name: string;
-  nameKey: string;
+  nameTranslationKey: string;
 }
 
 export interface WorkspaceUser {
@@ -17,6 +17,6 @@ export interface WorkspaceUser {
 export interface WorkspaceMember {
   user: WorkspaceUser;
   role: WorkspaceAccessRole;
-  assignedBy?: WorkspaceUser;
+  assignedBy: WorkspaceUser | null;
   assingedAt: Date;
 }

@@ -1,5 +1,17 @@
 {
   "WORKSPACES": {
+    "MODEL": {
+      "STATUS": {
+        "UNACTIVE": "Unactive",
+        "ACTIVE": "Active",
+        "ARCHIVED": "Archived"
+      },
+      "ROLE": {
+        "OWNER": "Owner",
+        "ADMINISTRATOR": "Administrator",
+        "MEMBER": "Member"
+      }
+    },
     "GRID": {
       "TITLE": "Workspaces",
       "ON_EMPTY": "No workspaces...",
@@ -26,6 +38,9 @@
       "ACTIONS": {
         "SAVE": "Save",
         "EXIT": "Exit"
+      },
+      "RESULTS": {
+        "SAVE_SUCCESS": "Workspace saved."
       },
       "FORMS": {
         "BASIC": {

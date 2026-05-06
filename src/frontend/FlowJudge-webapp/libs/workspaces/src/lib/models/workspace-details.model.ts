@@ -1,4 +1,4 @@
-import { WorkspaceMember, WorkspaceUser, WorkspaceStatus } from './workspace-shared.model';
+import { WorkspaceMember, WorkspaceStatus, WorkspaceUser } from './workspace-shared.model';
 
 
 export interface WorkspaceDetails {
@@ -9,3 +9,4 @@ export interface WorkspaceDetails {
   createdBy: WorkspaceUser;
   members: Array<WorkspaceMember>;
 }
+

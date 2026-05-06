@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
-import { DatePipe } from '@angular/common';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator'
-import { MatSort, MatSortModule, SortDirection } from '@angular/material/sort';
+import { MatPaginatorModule } from '@angular/material/paginator'
+import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
@@ -12,10 +11,9 @@ import { DataGridAction, DataGridActionEvent, DataGridColumn, DataGridRow, DataG
 import { LoadingComponent } from '../../../progress/components/loading.component';
 import { ViewportService } from '../../../viewport/viewport.service';
 
-
 @Component({
   selector: 'lib-data-grid',
-  imports: [LoadingComponent, MatTableModule, MatSortModule, MatPaginatorModule, MatButtonModule, MatMenuModule, MatIconModule, MatTooltipModule, DatePipe, TranslatePipe],
+  imports: [LoadingComponent, MatTableModule, MatSortModule, MatPaginatorModule, MatButtonModule, MatMenuModule, MatIconModule, MatTooltipModule, TranslatePipe],
   templateUrl: './data-grid.component.html',
   styleUrl: './data-grid.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -40,7 +38,15 @@ export class DataGridComponent<TRow extends DataGridRow> {
     return null;
   });
 
-  displayedColumns = computed(() => this.gridColumns().filter(col => col.isVisible).map(col => col.id));
+  displayedColumns = computed(() => {
+    let allColumns = this.gridColumns().filter(col => col.isVisible).map(col => col.id);
+    const rowActions = this.rowActions();
+    if (rowActions.length > 0) {
+      allColumns = [...allColumns, 'row-actions'];
+    }
+
+    return allColumns;
+  });
 
   gridActionEvent = output<DataGridActionEvent>();
   gridRowActionEvent = output<DataGridRowActionEvent>();

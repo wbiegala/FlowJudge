@@ -1,5 +1,17 @@
 {
   "WORKSPACES": {
+    "MODEL": {
+      "STATUS": {
+        "UNACTIVE": "Nieaktywna",
+        "ACTIVE": "Aktywna",
+        "ARCHIVED": "Zarchiwizowana"
+      },
+      "ROLE": {
+        "OWNER": "Właściciel",
+        "ADMINISTRATOR": "Administrator",
+        "MEMBER": "Współpracownik"
+      }
+    },
     "GRID": {
       "TITLE": "Przestrzenie robocze",
       "ON_EMPTY": "Brak przestrzeni roboczych...",
@@ -26,6 +38,9 @@
       "ACTIONS": {
         "SAVE": "Zapisz",
         "EXIT": "Opuść"
+      },
+      "RESULTS": {
+        "SAVE_SUCCESS": "Zapisano przestrzeń roboczą."
       },
       "FORMS": {
         "BASIC": {
