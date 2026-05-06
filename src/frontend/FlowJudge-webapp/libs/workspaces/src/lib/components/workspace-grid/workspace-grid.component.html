@@ -3,4 +3,10 @@
   [gridColumns]="gridColumns"
   [rows]="items()"
   [gridActions]="gridActions"
-  [emptyGridBehavior]="emptyGridBehavior"></lib-data-grid>
+  [emptyGridBehavior]="emptyGridBehavior">
+</lib-data-grid>
+<lib-pagination
+  [pageSize]="pageSize()"
+  [totalCount]="totalCount()"
+  [itemsCount]="items().length">
+</lib-pagination>

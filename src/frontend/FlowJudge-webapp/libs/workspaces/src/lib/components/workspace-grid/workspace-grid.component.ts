@@ -1,4 +1,4 @@
-import { DataGridAction, DataGridColumn, DataGridComponent, EmptyGridBehavior } from '@flow-judge-webapp/ui';
+import { DataGridAction, DataGridColumn, DataGridComponent, EmptyGridBehavior, PaginationComponent } from '@flow-judge-webapp/ui';
 import { ChangeDetectionStrategy, Component, computed, effect, inject } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { WorkspacesGridState } from '../../store/workspaces-grid/workspaces-grid.state';
@@ -7,7 +7,7 @@ import { WorkspaceGridItem } from '../../models/workspace-grid-item.model';
 
 @Component({
   selector: 'lib-workspace-grid',
-  imports: [DataGridComponent],
+  imports: [ DataGridComponent, PaginationComponent ],
   templateUrl: './workspace-grid.component.html',
   styleUrl: './workspace-grid.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

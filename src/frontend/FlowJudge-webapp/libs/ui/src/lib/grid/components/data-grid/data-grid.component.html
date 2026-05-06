@@ -2,14 +2,20 @@
   <lib-loading></lib-loading>
 }
 @else {
-  @let executableGridActions = (gridActions() ?? []).filter(a => a.canExecute());
+  @let executableGridActions = gridActions().filter(a => a.canExecute());
   @if (executableGridActions.length > 0) {
     <div class="data-grid-actions">
       @for (action of executableGridActions; track $index) {
-        <button matFab extended (click)="onGridActionClick(action.name)">
-          <mat-icon>{{ action.icon }}</mat-icon>
-          {{ action.nameTranslationKey | translate }}
-        </button>
+        @if (isViewportNarrow()) {
+          <button matMiniFab (click)="onGridActionClick(action.name)" [aria-label]="`data-grid.actions.${action.name}`" [matTooltip]="action.nameTranslationKey | translate">
+            <mat-icon>{{ action.icon }}</mat-icon>
+          </button>
+        } @else {
+          <button matFab extended (click)="onGridActionClick(action.name)" [aria-label]="`data-grid.actions.${action.name}`">
+            <mat-icon>{{ action.icon }}</mat-icon>
+            {{ action.nameTranslationKey | translate }}
+          </button>
+        }
       }
     </div>
   }
@@ -23,7 +29,7 @@
       </ng-container>
     }
 
-    @let singleRowActions = rowActions() ?? [];
+    @let singleRowActions = rowActions();
     @if (singleRowActions.length > 0) {
       <ng-container matColumnDef="row-actions">
         <th mat-header-cell *matHeaderCellDef>{{ 'UI.GRID.COLUMNS.ACTIONS' | translate }}</th>
@@ -52,12 +58,14 @@
       @let emptyGridAction = actionOnEmpty();
       <tr class="mat-row" *matNoDataRow>
         <td class="mat-cell" colspan="4">
-          <div>{{ onEmptyGrid.messageTranslationKey | translate }}</div>
-          @if (emptyGridAction !== null) {
-            <button matFab aria-label="data-grid.empty-grid-action" [matTooltip]="emptyGridAction.nameTranslationKey | translate">
-              <mat-icon>{{ emptyGridAction.icon }}</mat-icon>
-            </button>
-          }
+          <div class="data-grid-empty">
+            <div class="data-grid-empty-message">{{ onEmptyGrid.messageTranslationKey | translate }}</div>
+            @if (emptyGridAction !== null) {
+              <button matFab aria-label="data-grid.empty-grid-action" [matTooltip]="emptyGridAction.nameTranslationKey | translate">
+                <mat-icon>{{ emptyGridAction.icon }}</mat-icon>
+              </button>
+            }
+          </div>
         </td>
       </tr>
     }

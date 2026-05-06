@@ -5,9 +5,10 @@ import { Injectable, inject } from '@angular/core';
 import { WorkspacesService } from '../../workspaces.service';
 import { InitializeWorkspacesGrid, LoadWorkspacesGridItems } from './workspaces-grid.actions';
 import { tap } from 'rxjs';
+import { PageSize } from '@flow-judge-webapp/ui';
 
 export interface WorkspacesGridStateModel {
-  pageSize: number;
+  pageSize: PageSize;
   pageNumber: number;
   totalCount: number;
   items: Array<WorkspaceGridItem>;
@@ -68,7 +69,7 @@ export class WorkspacesGridState {
     return this.#workspacesService.getWorkspacesGridData(action.pageNumber, action.pageSize).pipe(
       tap(data => ctx.setState(produce(draft => {
         draft.totalCount = data.totalCount;
-        draft.pageSize = data.pageSize;
+        draft.pageSize = data.pageSize as PageSize;
         draft.pageNumber = data.pageNumber;
         draft.items = data.items.map(MapDtoToModel);
         draft.isLoading = false;

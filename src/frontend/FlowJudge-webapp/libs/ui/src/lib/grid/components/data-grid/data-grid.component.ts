@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator'
 import { MatSort, MatSortModule, SortDirection } from '@angular/material/sort';
@@ -8,8 +8,9 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslatePipe } from '@ngx-translate/core';
-import { DataGridAction, DataGridActionEvent, DataGridColumn, DataGridRow, DataGridRowAction, DataGridRowActionEvent, EmptyGridBehavior } from '../data-grid.model';
-import { LoadingComponent } from '../../progress/components/loading.component';
+import { DataGridAction, DataGridActionEvent, DataGridColumn, DataGridRow, DataGridRowAction, DataGridRowActionEvent, EmptyGridBehavior } from '../../data-grid.model';
+import { LoadingComponent } from '../../../progress/components/loading.component';
+import { ViewportService } from '../../../viewport/viewport.service';
 
 
 @Component({
@@ -20,6 +21,7 @@ import { LoadingComponent } from '../../progress/components/loading.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataGridComponent<TRow extends DataGridRow> {
+  isViewportNarrow = inject(ViewportService).isNarrow;
   isLoading = input(false);
   gridActions = input<Array<DataGridAction>>([]);
   gridColumns = input.required<Array<DataGridColumn<TRow>>>();
