@@ -64,8 +64,8 @@ namespace FlowJudge.API.Service.Controllers
             var result = await _mediator.SendQueryAsync<GetWorkspaceQuery, WorkspaceData>(query, ct);
             if (!result.IsSuccess)
             {
-                var errorCode = result.Error!.Code.EndsWith("not_found") 
-                    ? System.Net.HttpStatusCode.NotFound 
+                var errorCode = result.Error!.Code.EndsWith("not_found")
+                    ? System.Net.HttpStatusCode.NotFound
                     : System.Net.HttpStatusCode.BadRequest;
                 return result.Error!.ToResponse(errorCode);
             }
@@ -98,6 +98,34 @@ namespace FlowJudge.API.Service.Controllers
             }
 
             return Ok(new CreatedResponse(result.Data));
+        }
+
+        [HttpPut("{id:Guid}")]
+        public async Task<IActionResult> UpdateWorkspaceAsync(
+            [FromRoute] Guid id,
+            [FromBody] UpdateWorkspaceRequest request,
+            CancellationToken ct = default)
+        {
+            //TODO: validation
+
+            var userContext = this.HttpContext.User.GetUserContext();
+            var command = new UpdateWorkspaceCommand
+            {
+                WorkspaceId = id,
+                Name = request.Name,
+                IssuerId = userContext.Id
+            };
+
+            var result = await _mediator.SendCommandAsync<UpdateWorkspaceCommand>(command, ct);
+            if (!result.IsSuccess)
+            {
+                if (result.Error!.Code.EndsWith("insufficient_permissions"))
+                    return result.Error!.ToResponse(System.Net.HttpStatusCode.Forbidden);
+
+                return result.Error!.ToResponse(System.Net.HttpStatusCode.BadRequest);
+            }
+
+            return NoContent();
         }
     }
 }
