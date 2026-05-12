@@ -1,4 +1,4 @@
-﻿namespace FlowJudge.Users.Application
+﻿namespace FlowJudge.Users.Application.Abstractions
 {
     public static class ErrorCodes
     {

@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using FlowJudge.Common.Sql.UnitOfWork;
+using FlowJudge.Users.Application.Abstractions.Ports;
 using FlowJudge.Users.Domain.Model;
 
 namespace FlowJudge.Users.Infrastructure.Repositories.DocumentVersions

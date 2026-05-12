@@ -26,7 +26,9 @@
     <ProjectReference Include="..\..\libs\FlowJudge.Common.Messaging\FlowJudge.Common.Messaging.csproj" />
     <ProjectReference Include="..\..\libs\FlowJudge.Common.Sql\FlowJudge.Common.Sql.csproj" />
     <ProjectReference Include="..\..\libs\FlowJudge.Common.Utils\FlowJudge.Common.Utils.csproj" />
+    <ProjectReference Include="..\..\libs\modules\FlowJudge.Users.Application.Abstractions\FlowJudge.Users.Application.Abstractions.csproj" />
     <ProjectReference Include="..\..\libs\modules\FlowJudge.Users.Application\FlowJudge.Users.Application.csproj" />
+    <ProjectReference Include="..\..\libs\modules\FlowJudge.Users.Infrastructure\FlowJudge.Users.Infrastructure.csproj" />
     <ProjectReference Include="..\..\libs\modules\FlowJudge.Workspaces.Application.Abstractions\FlowJudge.Workspaces.Application.Abstractions.csproj" />
     <ProjectReference Include="..\..\libs\modules\FlowJudge.Workspaces.Application\FlowJudge.Workspaces.Application.csproj" />
     <ProjectReference Include="..\..\libs\modules\FlowJudge.Workspaces.Infrastructure\FlowJudge.Workspaces.Infrastructure.csproj" />

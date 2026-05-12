@@ -5,6 +5,7 @@ using FlowJudge.API.Service.ErrorHandling;
 using FlowJudge.Common.Application.Mediator;
 using FlowJudge.Common.Http.Extensions;
 using FlowJudge.Common.Utils.Pagination;
+using FlowJudge.Users.Application.Abstractions.Queries;
 using FlowJudge.Users.Application.Models;
 using FlowJudge.Users.Application.Queries;
 using FlowJudge.Workspaces.Application.Abstractions.Commands;

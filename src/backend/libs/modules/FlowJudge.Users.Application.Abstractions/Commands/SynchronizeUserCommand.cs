@@ -1,6 +1,6 @@
 ﻿using FlowJudge.Common.Application.Mediator;
 
-namespace FlowJudge.Users.Application.Commands
+namespace FlowJudge.Users.Application.Abstractions.Commands
 {
     public sealed record SynchronizeUserCommand : ICommand
     {

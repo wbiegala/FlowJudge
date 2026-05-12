@@ -2,7 +2,10 @@
 using FlowJudge.Common.Application.Transactional;
 using FlowJudge.Common.Sql.UnitOfWork;
 using FlowJudge.Common.Utils.Time;
-using FlowJudge.Users.Infrastructure;
+using FlowJudge.Users.Application.Abstractions;
+using FlowJudge.Users.Application.Abstractions.Commands;
+using FlowJudge.Users.Application.Abstractions.Ports;
+using FlowJudge.Users.Application.Extensions;
 
 namespace FlowJudge.Users.Application.Commands
 {

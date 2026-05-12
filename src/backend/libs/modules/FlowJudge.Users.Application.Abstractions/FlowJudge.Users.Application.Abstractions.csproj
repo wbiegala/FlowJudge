@@ -8,12 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\FlowJudge.Common.Application\FlowJudge.Common.Application.csproj" />
-    <ProjectReference Include="..\FlowJudge.Users.Application.Abstractions\FlowJudge.Users.Application.Abstractions.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-	<InternalsVisibleTo Include="FlowJudge.Users.UnitTests" />
-	<InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
+    <ProjectReference Include="..\FlowJudge.Users.Domain\FlowJudge.Users.Domain.csproj" />
   </ItemGroup>
 
 </Project>

@@ -3,6 +3,7 @@ using FlowJudge.Common.Application.Mediator;
 using FlowJudge.Common.Utils.Pagination;
 using FlowJudge.Workspaces.Application.Abstractions.Models;
 using FlowJudge.Workspaces.Application.Abstractions.Ports;
+using FlowJudge.Workspaces.Application.Abstractions.Queries;
 
 namespace FlowJudge.Workspaces.Application.Queries
 {

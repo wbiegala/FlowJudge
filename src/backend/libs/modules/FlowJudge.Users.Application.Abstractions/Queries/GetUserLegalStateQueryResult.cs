@@ -1,6 +1,6 @@
 ﻿using FlowJudge.Users.Application.Models;
 
-namespace FlowJudge.Users.Application.Queries
+namespace FlowJudge.Users.Application.Abstractions.Queries
 {
     public sealed record GetUserLegalStateQueryResult
     {

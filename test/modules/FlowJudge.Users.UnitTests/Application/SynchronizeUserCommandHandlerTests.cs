@@ -2,7 +2,8 @@
 using FlowJudge.Common.Sql.UnitOfWork;
 using FlowJudge.Users.Application.Commands;
 using FlowJudge.Users.Domain.Model;
-using FlowJudge.Users.Infrastructure;
+using FlowJudge.Users.Application.Abstractions.Ports;
+using FlowJudge.Users.Application.Abstractions.Commands;
 
 namespace FlowJudge.Users.UnitTests.Application
 {

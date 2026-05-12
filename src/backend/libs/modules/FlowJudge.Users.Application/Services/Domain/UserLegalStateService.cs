@@ -1,6 +1,6 @@
-﻿using FlowJudge.Users.Domain.Model;
+﻿using FlowJudge.Users.Application.Abstractions.Ports;
+using FlowJudge.Users.Domain.Model;
 using FlowJudge.Users.Domain.Services;
-using FlowJudge.Users.Infrastructure;
 
 namespace FlowJudge.Users.Application.Services.Domain
 {

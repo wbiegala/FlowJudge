@@ -1,8 +1,10 @@
 ﻿using FlowJudge.Common.Application;
 using FlowJudge.Common.Application.Mediator;
+using FlowJudge.Users.Application.Abstractions;
+using FlowJudge.Users.Application.Abstractions.Ports;
+using FlowJudge.Users.Application.Abstractions.Queries;
 using FlowJudge.Users.Application.Models;
 using FlowJudge.Users.Domain.Services;
-using FlowJudge.Users.Infrastructure;
 
 namespace FlowJudge.Users.Application.Queries
 {

@@ -1,6 +1,6 @@
 ﻿using FlowJudge.Users.Domain.Model;
 
-namespace FlowJudge.Users.Infrastructure
+namespace FlowJudge.Users.Application.Abstractions.Ports
 {
     public interface IUserRepository
     {

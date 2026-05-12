@@ -20,6 +20,7 @@
     <Project Path="backend/libs/FlowJudge.API.Contracts/FlowJudge.API.Contracts.csproj" Id="7940a57f-3855-41c6-b778-21b0337855c7" />
   </Folder>
   <Folder Name="/libs/modules/">
+    <Project Path="backend/libs/modules/FlowJudge.Users.Application.Abstractions/FlowJudge.Users.Application.Abstractions.csproj" Id="28b230f1-e0a2-4b0e-afa9-20b4f8f30168" />
     <Project Path="backend/libs/modules/FlowJudge.Users.Application/FlowJudge.Users.Application.csproj" Id="6314cded-df82-4af9-a4fc-0b0683a6d6a5" />
     <Project Path="backend/libs/modules/FlowJudge.Users.Domain/FlowJudge.Users.Domain.csproj" Id="d9a44606-8f4a-44e8-ab71-79f2f303b096" />
     <Project Path="backend/libs/modules/FlowJudge.Users.Infrastructure/FlowJudge.Users.Infrastructure.csproj" Id="98980643-93c5-420f-bd3b-633ac1328e6e" />

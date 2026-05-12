@@ -1,6 +1,7 @@
-﻿using FlowJudge.Users.Domain.Model;
+﻿using FlowJudge.Users.Application.Abstractions.Ports;
+using FlowJudge.Users.Domain.Model;
 
-namespace FlowJudge.Users.Infrastructure
+namespace FlowJudge.Users.Application.Extensions
 {
     public static class IDocumentVersionRepositoryExtensions
     {
