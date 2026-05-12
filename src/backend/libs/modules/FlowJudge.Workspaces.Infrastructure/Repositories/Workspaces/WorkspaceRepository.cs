@@ -2,8 +2,9 @@
 using FlowJudge.Common.Sql.UnitOfWork;
 using FlowJudge.Common.Utils.Pagination;
 using FlowJudge.Common.Utils.Serialization;
+using FlowJudge.Workspaces.Application.Abstractions.Models;
+using FlowJudge.Workspaces.Application.Abstractions.Ports;
 using FlowJudge.Workspaces.Domain.Workspace.Model;
-using FlowJudge.Workspaces.Domain.Workspace.ReadModels;
 using FlowJudge.Workspaces.Infrastructure.Repositories.Workspaces.DbModel;
 using FlowJudge.Workspaces.Infrastructure.Repositories.Workspaces.Mappers;
 using Cfg = FlowJudge.Workspaces.Infrastructure.WorkspacesContextConfiguration;
@@ -75,7 +76,7 @@ namespace FlowJudge.Workspaces.Infrastructure.Repositories.Workspaces
                 ct);
             var workspaceDbModels = await Connection.QueryAsync<WorkspaceListItemDbModel>(getItemsCommand);
 
-            var items = workspaceDbModels.Select(x => x.ToDomainModel()).ToList();
+            var items = workspaceDbModels.Select(x => x.ToModel()).ToList();
 
             return new PagedList<WorkspaceListItem>(items, pagination.PageSize, pagination.PageNumber, totalCount);
         }

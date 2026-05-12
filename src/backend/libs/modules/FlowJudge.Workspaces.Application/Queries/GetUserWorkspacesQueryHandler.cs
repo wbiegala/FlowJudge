@@ -1,8 +1,8 @@
 ﻿using FlowJudge.Common.Application;
 using FlowJudge.Common.Application.Mediator;
 using FlowJudge.Common.Utils.Pagination;
-using FlowJudge.Workspaces.Domain.Workspace.ReadModels;
-using FlowJudge.Workspaces.Infrastructure;
+using FlowJudge.Workspaces.Application.Abstractions.Models;
+using FlowJudge.Workspaces.Application.Abstractions.Ports;
 
 namespace FlowJudge.Workspaces.Application.Queries
 {

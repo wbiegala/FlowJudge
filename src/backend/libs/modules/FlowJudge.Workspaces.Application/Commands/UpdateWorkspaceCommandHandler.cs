@@ -1,8 +1,10 @@
 ﻿using FlowJudge.Common.Application;
 using FlowJudge.Common.Application.Mediator;
 using FlowJudge.Common.Domain;
+using FlowJudge.Workspaces.Application.Abstractions;
+using FlowJudge.Workspaces.Application.Abstractions.Commands;
+using FlowJudge.Workspaces.Application.Abstractions.Ports;
 using FlowJudge.Workspaces.Domain.Workspace.Model;
-using FlowJudge.Workspaces.Infrastructure;
 
 namespace FlowJudge.Workspaces.Application.Commands
 {
@@ -42,7 +44,7 @@ namespace FlowJudge.Workspaces.Application.Commands
             }
             catch (Exception ex)
             {
-                return ApplicationResultFactory.Failure(ex, "workspace.update_failed");
+                return ApplicationResultFactory.Failure(ex, ErrorCodes.WorkspaceUpdateFailed);
             }
         }
     }

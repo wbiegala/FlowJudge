@@ -1,7 +1,7 @@
 ﻿using FlowJudge.Common.Application.Mediator;
-using FlowJudge.Workspaces.Domain.Workspace.ReadModels;
+using FlowJudge.Workspaces.Application.Abstractions.Models;
 
-namespace FlowJudge.Workspaces.Application.Queries
+namespace FlowJudge.Workspaces.Application.Abstractions.Queries
 {
     public sealed record GetWorkspaceQuery(Guid WorkspaceId, Guid UserId) : IQuery<WorkspaceData>;
 }

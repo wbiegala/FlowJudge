@@ -1,9 +1,12 @@
 ﻿using FlowJudge.Common.Application;
 using FlowJudge.Common.Application.Mediator;
+using FlowJudge.Workspaces.Application.Abstractions;
+using FlowJudge.Workspaces.Application.Abstractions.Models;
+using FlowJudge.Workspaces.Application.Abstractions.Ports;
+using FlowJudge.Workspaces.Application.Abstractions.Queries;
+using FlowJudge.Workspaces.Application.Extensions;
 using FlowJudge.Workspaces.Domain.Workspace.Extensions;
 using FlowJudge.Workspaces.Domain.Workspace.Model;
-using FlowJudge.Workspaces.Domain.Workspace.ReadModels;
-using FlowJudge.Workspaces.Infrastructure;
 
 namespace FlowJudge.Workspaces.Application.Queries
 {
@@ -26,7 +29,7 @@ namespace FlowJudge.Workspaces.Application.Queries
                 return ApplicationResultFactory.Failure<WorkspaceData>("Workspace not found.", ErrorCodes.WorkspaceNotFound);
             }
 
-            return ApplicationResultFactory.Success(workspace.ToReadModel());
+            return ApplicationResultFactory.Success(workspace.ToAbstraction());
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using FlowJudge.Common.Utils.Pagination;
+using FlowJudge.Workspaces.Application.Abstractions.Models;
 using FlowJudge.Workspaces.Domain.Workspace.Model;
-using FlowJudge.Workspaces.Domain.Workspace.ReadModels;
 
-namespace FlowJudge.Workspaces.Infrastructure
+namespace FlowJudge.Workspaces.Application.Abstractions.Ports
 {
     public interface IWorkspaceRepository
     {

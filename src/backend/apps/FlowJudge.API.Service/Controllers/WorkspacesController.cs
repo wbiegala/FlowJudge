@@ -7,9 +7,9 @@ using FlowJudge.Common.Http.Extensions;
 using FlowJudge.Common.Utils.Pagination;
 using FlowJudge.Users.Application.Models;
 using FlowJudge.Users.Application.Queries;
-using FlowJudge.Workspaces.Application.Commands;
-using FlowJudge.Workspaces.Application.Queries;
-using FlowJudge.Workspaces.Domain.Workspace.ReadModels;
+using FlowJudge.Workspaces.Application.Abstractions.Commands;
+using FlowJudge.Workspaces.Application.Abstractions.Models;
+using FlowJudge.Workspaces.Application.Abstractions.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,4 +1,5 @@
-﻿using FlowJudge.Workspaces.Infrastructure.Repositories.Workspaces;
+﻿using FlowJudge.Workspaces.Application.Abstractions.Ports;
+using FlowJudge.Workspaces.Infrastructure.Repositories.Workspaces;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FlowJudge.Workspaces.Infrastructure

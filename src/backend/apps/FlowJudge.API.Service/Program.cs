@@ -7,6 +7,7 @@ using FlowJudge.Common.Sql.Migrations;
 using FlowJudge.Common.Utils;
 using FlowJudge.Users.Application;
 using FlowJudge.Workspaces.Application;
+using FlowJudge.Workspaces.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -63,7 +64,9 @@ builder.Services.AddCache(cfg =>
 builder.Services.AddTimeService();
 
 builder.Services.AddUsersModule();
-builder.Services.AddWorkspacesModule();
+
+builder.Services.AddWorkspacesApplication();
+builder.Services.AddWorkspacesInfrastructure();
 
 builder.Services.AddControllers();
 

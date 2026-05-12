@@ -1,6 +1,6 @@
 ﻿using FlowJudge.Workspaces.Domain.Workspace.Model;
 
-namespace FlowJudge.Workspaces.Domain.Workspace.ReadModels
+namespace FlowJudge.Workspaces.Application.Abstractions.Models
 {
     public sealed record WorkspaceListItem
     {

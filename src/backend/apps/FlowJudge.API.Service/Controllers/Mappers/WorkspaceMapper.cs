@@ -1,6 +1,6 @@
 ﻿using FlowJudge.API.Contracts.Workspaces;
 using FlowJudge.Users.Application.Models;
-using FlowJudge.Workspaces.Domain.Workspace.ReadModels;
+using FlowJudge.Workspaces.Application.Abstractions.Models;
 
 namespace FlowJudge.API.Service.Controllers.Mappers
 {
