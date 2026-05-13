@@ -1,11 +1,12 @@
 import { Navigate } from '@ngxs/router-plugin';
 import { DataGridAction, DataGridActionEvent, DataGridColumn, DataGridComponent, DataGridRowAction, DataGridRowActionEvent, EmptyGridBehavior, PaginationComponent, PaginationEvent, ViewHeaderComponent } from '@flow-judge-webapp/ui';
-import { ChangeDetectionStrategy, Component, computed, effect, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { WorkspacesGridState } from '../../store/workspaces-grid/workspaces-grid.state';
 import { LoadWorkspacesGridItems } from '../../store/workspaces-grid/workspaces-grid.actions';
 import { WorkspaceGridItem } from '../../models/workspace-grid-item.model';
 import { TranslatePipe } from '@ngx-translate/core';
+import { SetWorkspaceContext } from '../../store/workspace-context/workspace-context.actions';
 
 @Component({
   selector: 'lib-workspace-grid',
@@ -76,13 +77,19 @@ export class WorkspaceGridComponent {
       name: 'preview',
       nameTranslationKey: 'UI.VIEW_MODE.PREVIEW',
       icon: 'preview',
-      canExecute: item => true
+      canExecute: item => item.role !== 'Owner'
     },
     {
       name: 'edit',
       nameTranslationKey: 'UI.VIEW_MODE.EDIT',
       icon: 'edit',
-      canExecute: item => item.role == 'Owner' || item.role == 'Administrator'
+      canExecute: item => item.role === 'Owner'
+    },
+    {
+      name: 'setContext',
+      nameTranslationKey: 'WORKSPACES.GRID.ROW_ACTIONS.SET_CONTEXT',
+      icon: 'play_arrow',
+      canExecute: item => true
     }
   ];
 
@@ -98,7 +105,7 @@ export class WorkspaceGridComponent {
   handleRowAction(event: DataGridRowActionEvent) {
     switch (event.name) {
       case 'edit': this.#editWorkspace(event.id); break;
-      break;
+      case 'setContext': this.#setWorkspaceContext(event.id); break;
     }
   }
 
@@ -116,5 +123,9 @@ export class WorkspaceGridComponent {
 
   #editWorkspace(id: string) {
     this.#store.dispatch(new Navigate(['workspaces', id]));
+  }
+
+  #setWorkspaceContext(id: string) {
+    this.#store.dispatch(new SetWorkspaceContext(id));
   }
 }

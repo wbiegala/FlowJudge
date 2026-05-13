@@ -8,7 +8,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { Navigate } from '@ngxs/router-plugin';
 import { Store } from '@ngxs/store';
 import { WorkspaceState } from '../../store/workspace/workspace.state';
-import { SaveWorkspace } from '../../store/workspace/workspace.actions';
+import { CleanWorkspace, SaveWorkspace } from '../../store/workspace/workspace.actions';
 
 @Component({
   selector: 'lib-workspace-details',
@@ -64,7 +64,7 @@ export class WorkspaceDetailsComponent {
   }
 
   #handleExitAction() {
-    this.#store.dispatch(new Navigate(['workspaces']));
+    this.#store.dispatch([new CleanWorkspace(), new Navigate(['workspaces'])]);
 
   }
 }

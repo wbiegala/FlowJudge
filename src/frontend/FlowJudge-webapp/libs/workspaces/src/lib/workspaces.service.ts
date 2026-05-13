@@ -2,7 +2,7 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { API_BASE_URL, CreatedResponse, PagedResult, PaginationQueryParams } from '@flow-judge-webapp/common';
-import { CreateWorkspaceRequest, GetWorkspaceResponse, GetWorkspacesResponseItem } from './workspaces.model';
+import { CreateWorkspaceRequest, GetWorkspaceResponse, GetWorkspacesResponseItem, UpdateWorkspaceRequest } from './workspaces.model';
 
 @Injectable({ providedIn: 'root' })
 export class WorkspacesService {
@@ -34,5 +34,14 @@ export class WorkspacesService {
     const url = `${this.#baseUrl}/${this.#workspacesPathSegment}`;
 
     return this.#httpClient.post<CreatedResponse>(url, dto);
+  }
+
+  updateWorkspace(id: string, name: string): Observable<unknown> {
+    const dto = {
+      name: name,
+    } satisfies UpdateWorkspaceRequest;
+    const url = `${this.#baseUrl}/${this.#workspacesPathSegment}/${id}`
+
+    return this.#httpClient.put<unknown>(url, dto);
   }
 }

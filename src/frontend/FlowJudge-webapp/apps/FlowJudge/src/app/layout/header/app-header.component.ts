@@ -7,10 +7,11 @@ import { HeaderUserPanelComponent } from './header-user-panel/header-user-panel.
 import { RouterLink } from "@angular/router";
 import { Store } from '@ngxs/store';
 import { AuthenticationState } from '@flow-judge-webapp/auth';
+import { HeaderWorkspacePanelComponent } from './header-workspace-panel/header-workspace-panel.component';
 
 @Component({
   selector: 'app-header',
-  imports: [HeaderProgressBarComponent, HeaderUserPanelComponent, MatToolbarModule, MatButtonModule, MatIconModule, RouterLink],
+  imports: [HeaderProgressBarComponent, HeaderWorkspacePanelComponent, HeaderUserPanelComponent, MatToolbarModule, MatButtonModule, MatIconModule, RouterLink],
   templateUrl: './app-header.component.html',
   styleUrl: './app-header.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

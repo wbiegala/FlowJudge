@@ -9,6 +9,9 @@
 
     <span class="spacer"></span>
     <span class="app-options-container">
+      @if (hideMenuButton() === false) {
+        <app-header-workspace-panel></app-header-workspace-panel>
+      }
       <app-header-user-panel></app-header-user-panel>
   </span>
 </mat-toolbar>

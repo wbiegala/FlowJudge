@@ -1,30 +1,32 @@
+import { AuthenticationState } from '@flow-judge-webapp/auth';
 import { NotificationService, ProgressService, ViewMode } from "@flow-judge-webapp/ui";
 import { Action, Selector, State, StateContext, StateToken, Store } from "@ngxs/store";
 import { inject, Injectable } from "@angular/core";
 import { WorkspaceDetails } from "../../models/workspace-details.model";
-import { InitializeEditWorkspace, InitializeNewWorkspace, SaveWorkspace } from "./workspace.actions";
+import { CleanWorkspace, InitializeEditWorkspace, InitializeNewWorkspace, SaveWorkspace } from "./workspace.actions";
 import { produce } from "immer";
 import { WorkspacesService } from "../../workspaces.service";
 import { tap } from "rxjs";
-import { Navigate } from "@ngxs/router-plugin";
 import { mapToModel } from "../../mappers/dto-model.mapper";
+
+interface BasicFormModel {
+  name: string;
+}
 
 export interface WorkspaceStateModel {
   viewMode: ViewMode;
-  model?: WorkspaceDetails;
+  model: WorkspaceDetails | null;
   basicForm: {
-    model: {
-      name: string;
-    };
+    model: BasicFormModel;
     dirty: boolean;
     status: string;
-    errors: any;
+    errors: object;
   }
 }
 
 const defaultState: WorkspaceStateModel = {
   viewMode: 'Preview',
-  model: undefined,
+  model: null,
   basicForm: {
     model: {
       name: ''
@@ -46,7 +48,6 @@ export class WorkspaceState {
   #workspaceService = inject(WorkspacesService);
   #notificationService = inject(NotificationService);
   #progressService = inject(ProgressService);
-  #store = inject(Store);
 
   @Selector()
   static viewMode(state: WorkspaceStateModel) {
@@ -62,11 +63,15 @@ export class WorkspaceState {
 
   @Action(InitializeEditWorkspace)
   initializeEditWorkspace(ctx: StateContext<WorkspaceStateModel>, action: InitializeEditWorkspace) {
+    const currentUser = inject(Store).selectSnapshot(AuthenticationState.userData);
     return this.#progressService.runInProgressBar(() => this.#workspaceService.getWorkspace(action.workspaceId)).pipe(
       tap(response => {
         ctx.setState(produce(draft => {
           const model = mapToModel(response);
-          draft.viewMode = 'Edit';
+          const currentRole = response.members.filter(m => m.member.userId === currentUser?.id)[0].role;
+          draft.viewMode = currentRole === 'Owner'
+            ? 'Edit'
+            : 'Preview';
           draft.model = model;
           draft.basicForm.model = {
             name: model.name
@@ -83,9 +88,21 @@ export class WorkspaceState {
       return;
     }
 
-    //only new for now...
-    return this.#progressService.runInProgressBar(() => this.#workspaceService.createWorkspace(state.basicForm.model.name)).pipe(
-      tap(_ => this.#notificationService.showSuccess('WORKSPACES.DETAILS.RESULTS.SAVE_SUCCESS')),
+    if (state.viewMode === 'Edit' && (state.model === null || state.model.id === null )) {
+      return;
+    }
+
+    const saveAction = state.viewMode === 'Edit'
+      ? this.#workspaceService.updateWorkspace(state.model?.id ?? '', state.basicForm.model.name)
+      : this.#workspaceService.createWorkspace(state.basicForm.model.name);
+
+    return this.#progressService.runInProgressBar(() => saveAction).pipe(
+      tap(() => this.#notificationService.showSuccess('WORKSPACES.DETAILS.RESULTS.SAVE_SUCCESS')),
     );
+  }
+
+  @Action(CleanWorkspace)
+  cleanWorkspace(ctx: StateContext<WorkspaceStateModel>) {
+    ctx.setState(defaultState);
   }
 }

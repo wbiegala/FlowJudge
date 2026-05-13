@@ -1,0 +1,12 @@
+@if (isWorkspaceContext()) {
+  <button mat-button color="primary" extended (click)="onClick()" [matTooltip]="'WORKSPACE_CONTEXT.CONTEXT_SET.TOOLTIP'  | translate">
+    <mat-icon>workspaces</mat-icon>
+    {{ workspaceContext()?.name }}
+  </button>
+}
+@else {
+  <button mat-button color="primary" extended (click)="onClick()" [matTooltip]="'WORKSPACE_CONTEXT.EMPTY_CONTEXT.TOOLTIP' | translate">
+    <mat-icon>workspaces</mat-icon>
+    {{ 'WORKSPACE_CONTEXT.EMPTY_CONTEXT.NAME' | translate }}
+  </button>
+}

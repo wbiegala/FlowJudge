@@ -31,6 +31,9 @@
       },
       "ACTIONS": {
         "ADD": "Swórz nową przestrzeń roboczą"
+      },
+      "ROW_ACTIONS": {
+        "SET_CONTEXT": "Ustaw w kontekście"
       }
     },
     "DETAILS": {
@@ -49,6 +52,12 @@
             "NAME": "Nazwa"
           }
         }
+      }
+    },
+    "CONTEXT": {
+      "NOTIFICATIONS": {
+        "SET_SUCCESS": "Przełączono przestrzeń roboczą: {{workspaceName}}",
+        "SET_ERROR_NO_ROLE": "Niewłaściwa rola dla tej przestrzeni roboczej"
       }
     }
   }

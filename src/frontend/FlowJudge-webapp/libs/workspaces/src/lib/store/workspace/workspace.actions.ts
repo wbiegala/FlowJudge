@@ -10,3 +10,7 @@ export class InitializeEditWorkspace {
 export class SaveWorkspace {
   static readonly type = '[Workspace] Saves workspace';
 }
+
+export class CleanWorkspace {
+  static readonly type = '[Workspace] Clean workspace';
+}

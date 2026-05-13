@@ -31,6 +31,9 @@
       },
       "ACTIONS": {
         "ADD": "Add new workspace"
+      },
+      "ROW_ACTIONS": {
+        "SET_CONTEXT": "Set context"
       }
     },
     "DETAILS": {
@@ -49,6 +52,12 @@
             "NAME": "Name"
           }
         }
+      }
+    },
+    "CONTEXT": {
+      "NOTIFICATIONS": {
+        "SET_SUCCESS": "Workspace context has been set: {{workspaceName}}",
+        "SET_ERROR_NO_ROLE": "Invalid role for access this workspace."
       }
     }
   }

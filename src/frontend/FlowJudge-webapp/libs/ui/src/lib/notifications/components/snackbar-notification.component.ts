@@ -35,7 +35,7 @@ type SnackbarTheme = {
       </span>
 
       <span class="message">
-        {{ data.message | translate }}
+        {{ data.message | translate : data.messageArgs }}
       </span>
     </span>
 

@@ -18,6 +18,7 @@ import { DefaultHttpErrorHandler } from './app/utils/default-http-error-handler'
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { provideValidationErrors } from '@flow-judge-webapp/ui';
 import { LegalErrorHandler } from './app/utils/legal-error-handler';
+import { WorkspaceContextState } from '@flow-judge-webapp/workspaces';
 
 
 fetch(environment.configUrl, { cache: 'no-store' })
@@ -44,6 +45,7 @@ fetch(environment.configUrl, { cache: 'no-store' })
         provideZonelessChangeDetection(),
         provideStore([
           AuthenticationState,
+          WorkspaceContextState,
         ],
           ...(!environment.production ? [withNgxsReduxDevtoolsPlugin()] : []),
           withNgxsRouterPlugin(),

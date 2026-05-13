@@ -34,3 +34,7 @@ export interface GetWorkspaceResponse {
 export interface CreateWorkspaceRequest {
   name: string;
 }
+
+export interface UpdateWorkspaceRequest {
+  name: string;
+}
