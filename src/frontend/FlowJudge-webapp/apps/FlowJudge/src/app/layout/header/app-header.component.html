@@ -4,11 +4,14 @@
       <mat-icon>menu</mat-icon>
     </button>
     <span class="app-logo-container">
-      <a class="logo-text" routerLink="/">FlowJudge</a>
+      <a class="logo-text" [routerLink]="logoLinkUrl()">FlowJudge</a>
     </span>
 
     <span class="spacer"></span>
     <span class="app-options-container">
+      @if (hideMenuButton() === false) {
+        <app-header-workspace-panel></app-header-workspace-panel>
+      }
       <app-header-user-panel></app-header-user-panel>
   </span>
 </mat-toolbar>

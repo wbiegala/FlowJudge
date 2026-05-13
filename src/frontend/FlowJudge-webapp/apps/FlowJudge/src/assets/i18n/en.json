@@ -1,4 +1,13 @@
 {
+  "WORKSPACE_CONTEXT": {
+    "EMPTY_CONTEXT": {
+      "NAME": "Workspaces",
+      "TOOLTIP": "No workspace context was set. Click to go to the workspaces."
+    },
+    "CONTEXT_SET": {
+      "TOOLTIP": "Click to change workspace context."
+    }
+  },
   "ERRORS": {
     "GENERIC": "Error occured."
   }

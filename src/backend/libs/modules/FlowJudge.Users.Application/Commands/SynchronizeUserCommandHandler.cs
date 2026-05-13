@@ -2,8 +2,9 @@
 using FlowJudge.Common.Application.Transactional;
 using FlowJudge.Common.Sql.UnitOfWork;
 using FlowJudge.Shared.Domain.ValueObjects;
+using FlowJudge.Users.Application.Abstractions.Commands;
+using FlowJudge.Users.Application.Abstractions.Ports;
 using FlowJudge.Users.Domain.Model;
-using FlowJudge.Users.Infrastructure;
 
 namespace FlowJudge.Users.Application.Commands
 {

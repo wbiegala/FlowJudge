@@ -1,6 +1,9 @@
 ﻿using Dapper;
 using FlowJudge.Common.Sql.UnitOfWork;
+using FlowJudge.Common.Utils.Pagination;
 using FlowJudge.Common.Utils.Serialization;
+using FlowJudge.Workspaces.Application.Abstractions.Models;
+using FlowJudge.Workspaces.Application.Abstractions.Ports;
 using FlowJudge.Workspaces.Domain.Workspace.Model;
 using FlowJudge.Workspaces.Infrastructure.Repositories.Workspaces.DbModel;
 using FlowJudge.Workspaces.Infrastructure.Repositories.Workspaces.Mappers;
@@ -53,6 +56,30 @@ namespace FlowJudge.Workspaces.Infrastructure.Repositories.Workspaces
             await Connection.ExecuteAsync(updateMembersCmd);
         }
 
+        public async Task<PagedList<WorkspaceListItem>> GetUserWorkspacesAsync(Guid userId, PageQuery pagination, CancellationToken ct = default)
+        {
+            await EnsureConnectionOpenAsync(ct);
+
+            var offset = (pagination.PageNumber - 1) * pagination.PageSize;
+
+            var getCountCommand = Command(GetUserWorkspacesCountSql, new { UserId = userId }, ct);
+            var totalCount = await Connection.QuerySingleAsync<int>(getCountCommand);
+
+            var getItemsCommand = Command(
+                GetUserWorkspacesSql,
+                new
+                {
+                    UserId = userId,
+                    Offset = offset,
+                    Limit = pagination.PageSize
+                },
+                ct);
+            var workspaceDbModels = await Connection.QueryAsync<WorkspaceListItemDbModel>(getItemsCommand);
+
+            var items = workspaceDbModels.Select(x => x.ToModel()).ToList();
+
+            return new PagedList<WorkspaceListItem>(items, pagination.PageSize, pagination.PageNumber, totalCount);
+        }
 
         private const string GetWorkspaceByAggregateIdSql = @$"
 SELECT 
@@ -171,5 +198,29 @@ WHERE target.{nameof(WorkspaceMemberDbModel.workspace_id)} = @WorkspaceId
       FROM source s
       WHERE s.id = target.{nameof(WorkspaceMemberDbModel.id)}
   );";
+
+        private const string GetUserWorkspacesCountSql = $@"
+SELECT COUNT(DISTINCT w.{nameof(WorkspaceDbModel.id)})
+FROM {Cfg.SchemaName}.{Cfg.WorkspacesTableName} w
+INNER JOIN {Cfg.SchemaName}.{Cfg.WorkspaceMembersTableName} wm 
+    ON wm.{nameof(WorkspaceMemberDbModel.workspace_id)} = w.{nameof(WorkspaceDbModel.id)}
+WHERE wm.{nameof(WorkspaceMemberDbModel.member_id)} = @UserId";
+
+        private const string GetUserWorkspacesSql = $@"
+SELECT 
+     w.{nameof(WorkspaceDbModel.aggregate_id)} as {nameof(WorkspaceListItemDbModel.workspace_id)}
+    ,w.{nameof(WorkspaceDbModel.name)} as {nameof(WorkspaceListItemDbModel.name)}
+    ,(SELECT {nameof(WorkspaceMemberDbModel.member_id)}
+      FROM {Cfg.SchemaName}.{Cfg.WorkspaceMembersTableName}
+      WHERE {nameof(WorkspaceMemberDbModel.workspace_id)} = w.{nameof(WorkspaceDbModel.id)}
+        AND {nameof(WorkspaceMemberDbModel.role)} = 'Owner'
+      LIMIT 1) as {nameof(WorkspaceListItemDbModel.owner_id)}
+    ,wm.{nameof(WorkspaceMemberDbModel.role)} as {nameof(WorkspaceListItemDbModel.role)}
+    ,w.{nameof(WorkspaceDbModel.created_at)} as {nameof(WorkspaceListItemDbModel.created_at)}
+FROM {Cfg.SchemaName}.{Cfg.WorkspacesTableName} w
+INNER JOIN {Cfg.SchemaName}.{Cfg.WorkspaceMembersTableName} wm 
+    ON wm.{nameof(WorkspaceMemberDbModel.workspace_id)} = w.{nameof(WorkspaceDbModel.id)}
+WHERE wm.{nameof(WorkspaceMemberDbModel.member_id)} = @UserId
+OFFSET @Offset ROWS FETCH NEXT @Limit ROWS ONLY";
     }
 }

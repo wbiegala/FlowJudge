@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\FlowJudge.Common.Sql\FlowJudge.Common.Sql.csproj" />
+    <ProjectReference Include="..\FlowJudge.Workspaces.Application.Abstractions\FlowJudge.Workspaces.Application.Abstractions.csproj" />
     <ProjectReference Include="..\FlowJudge.Workspaces.Domain\FlowJudge.Workspaces.Domain.csproj" />
   </ItemGroup>
 

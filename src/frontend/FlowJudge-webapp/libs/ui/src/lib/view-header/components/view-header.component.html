@@ -1,0 +1,16 @@
+<div class="view-header-container">
+  <div class="view-header-container-title">
+    {{ title() }}
+  </div>
+  <div class="view-header-container-actions">
+    @for (action of actions().filter(a => a.canExecute()); track $index) {
+      <button matFab (click)="onActionClick(action)" [aria-label]="`view-header.actions.${action.name}`" [matTooltip]="action.nameTranslationKey | translate">
+        <mat-icon>{{ action.icon }}</mat-icon>
+      </button>
+    }
+  </div>
+</div>
+<div class="view-header-container-content">
+  <ng-content></ng-content>
+</div>
+

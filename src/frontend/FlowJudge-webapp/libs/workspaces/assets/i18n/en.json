@@ -1,0 +1,64 @@
+{
+  "WORKSPACES": {
+    "MODEL": {
+      "STATUS": {
+        "UNACTIVE": "Unactive",
+        "ACTIVE": "Active",
+        "ARCHIVED": "Archived"
+      },
+      "ROLE": {
+        "OWNER": "Owner",
+        "ADMINISTRATOR": "Administrator",
+        "MEMBER": "Member"
+      }
+    },
+    "GRID": {
+      "TITLE": "Workspaces",
+      "ON_EMPTY": "No workspaces...",
+      "COLUMNS": {
+        "NAME": {
+          "HEADER": "Name"
+        },
+        "OWNER": {
+          "HEADER": "Owner"
+        },
+        "ROLE": {
+          "HEADER": "Role"
+        },
+        "CREATED_AT": {
+          "HEADER": "Creation time"
+        }
+      },
+      "ACTIONS": {
+        "ADD": "Add new workspace"
+      },
+      "ROW_ACTIONS": {
+        "SET_CONTEXT": "Set context"
+      }
+    },
+    "DETAILS": {
+      "TITLE": "Workspace",
+      "ACTIONS": {
+        "SAVE": "Save",
+        "EXIT": "Exit"
+      },
+      "RESULTS": {
+        "SAVE_SUCCESS": "Workspace saved."
+      },
+      "FORMS": {
+        "BASIC": {
+          "SECTION_NAME": "Basic data",
+          "FIELDS": {
+            "NAME": "Name"
+          }
+        }
+      }
+    },
+    "CONTEXT": {
+      "NOTIFICATIONS": {
+        "SET_SUCCESS": "Workspace context has been set: {{workspaceName}}",
+        "SET_ERROR_NO_ROLE": "Invalid role for access this workspace."
+      }
+    }
+  }
+}

@@ -1,8 +1,10 @@
 ﻿using FlowJudge.Common.Application;
 using FlowJudge.Common.Application.Mediator;
+using FlowJudge.Users.Application.Abstractions.Ports;
+using FlowJudge.Users.Application.Abstractions.Queries;
+using FlowJudge.Users.Application.Extensions;
 using FlowJudge.Users.Application.Models;
 using FlowJudge.Users.Domain.Model;
-using FlowJudge.Users.Infrastructure;
 
 namespace FlowJudge.Users.Application.Queries
 {
@@ -24,7 +26,7 @@ namespace FlowJudge.Users.Application.Queries
             if (documentVersion is null)
                 return ApplicationResultFactory.Failure<GetActualDocumentVersionQueryResult>(
                     $"Actual document version with kind={query.Kind.ToString()} not found",
-                    ErrorCodes.DocumentVersionNotFound,
+                    ErrorCodeGenerator.NotFound("document_version"),
                     new Dictionary<string, object> { { "kind", query.Kind } });
 
             return ApplicationResultFactory.Success(new GetActualDocumentVersionQueryResult

@@ -1,0 +1,11 @@
+@if (totalCount() > pageSize()) {
+  <mat-paginator
+    [length]="totalCount()"
+    [pageSize]="pageSize()"
+    [pageSizeOptions]="pageSizes"
+    aria-label="paginator.page"
+    (page)="onPageEvent($event)">
+  </mat-paginator>
+}
+
+

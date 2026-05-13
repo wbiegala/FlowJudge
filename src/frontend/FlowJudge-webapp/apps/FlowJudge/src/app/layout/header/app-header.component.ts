@@ -7,21 +7,25 @@ import { HeaderUserPanelComponent } from './header-user-panel/header-user-panel.
 import { RouterLink } from "@angular/router";
 import { Store } from '@ngxs/store';
 import { AuthenticationState } from '@flow-judge-webapp/auth';
+import { HeaderWorkspacePanelComponent } from './header-workspace-panel/header-workspace-panel.component';
+import { WorkspaceContextState } from '@flow-judge-webapp/workspaces';
 
 @Component({
   selector: 'app-header',
-  imports: [HeaderProgressBarComponent, HeaderUserPanelComponent, MatToolbarModule, MatButtonModule, MatIconModule, RouterLink],
+  imports: [HeaderProgressBarComponent, HeaderWorkspacePanelComponent, HeaderUserPanelComponent, MatToolbarModule, MatButtonModule, MatIconModule, RouterLink],
   templateUrl: './app-header.component.html',
   styleUrl: './app-header.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppHeaderComponent {
   #store = inject(Store);
+  readonly #isAuthenticated = this.#store.selectSignal(AuthenticationState.isAuthenticated);
+  readonly #isWorkspaceContext = this.#store.selectSignal(WorkspaceContextState.isWorkspaceContext);
+  readonly #workspaceContextId = this.#store.selectSignal(WorkspaceContextState.workspaceContextId);
   hideMenuButton = computed(() => {
-    const isAuth = this.#store.selectSignal(AuthenticationState.isAuthenticated);
     const isLegal = signal(true);
 
-    if (isAuth() === null || isAuth() === false) {
+    if (this.#isAuthenticated() === null || this.#isAuthenticated() === false) {
       return true;
     }
 
@@ -30,6 +34,20 @@ export class AppHeaderComponent {
     }
 
     return false;
+  });
+
+  readonly logoLinkUrl = computed(() => {
+    if (this.#isAuthenticated() === null || this.#isAuthenticated() === false) {
+      return '/';
+    }
+
+    if (this.#isWorkspaceContext() === false) {
+      return '/';
+    }
+
+    const contextId = this.#workspaceContextId();
+
+    return `/w/${contextId}`;
   });
 
   menuClicked = output();

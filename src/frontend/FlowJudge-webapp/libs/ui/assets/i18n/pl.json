@@ -11,6 +11,28 @@
         "HEADER": "Błąd",
         "DETAILS": "Szczegóły błędu"
       }
+    },
+    "GRID": {
+      "COLUMNS": {
+        "ACTIONS": "Akcje"
+      }
+    },
+    "VIEW_MODE": {
+      "NEW": "Nowy",
+      "PREVIEW": "Podgląd",
+      "EDIT": "Edycja"
+    },
+    "VALIDATION": {
+      "ERRORS": {
+        "required": "To pole jest wymagane",
+        "requiredTrue": "To pole musi być zaznaczone",
+        "email": "Nieprawidłowy adres e-mail",
+        "maxlength": "Maksymalnie {{ requiredLength }} znaków",
+        "minlength": "Minimum {{ requiredLength }} znaków",
+        "min": "Minimalna wartość to {{ min }}",
+        "max": "Maksymalna wartość to {{ max }}",
+        "pattern": "Nieprawidłowy format"
+      }
     }
   }
 }

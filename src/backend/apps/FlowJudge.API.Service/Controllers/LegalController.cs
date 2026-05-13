@@ -1,7 +1,7 @@
 ﻿using FlowJudge.API.Service.Controllers.Mappers;
 using FlowJudge.API.Service.ErrorHandling;
 using FlowJudge.Common.Application.Mediator;
-using FlowJudge.Users.Application.Queries;
+using FlowJudge.Users.Application.Abstractions.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;

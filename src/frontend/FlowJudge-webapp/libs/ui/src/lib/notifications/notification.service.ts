@@ -7,25 +7,25 @@ import { SnackbarNotificationComponent } from './components/snackbar-notificatio
 export class NotificationService {
   #snackBar = inject(MatSnackBar);
 
-  showWarning(messageTranslationKey: string) {
-    this.#openSnackbar(messageTranslationKey, 'warning');
+  showWarning(messageTranslationKey: string, messageArgs?: unknown) {
+    this.#openSnackbar(messageTranslationKey, 'warning', messageArgs);
   }
 
-  showError(messageTranslationKey: string) {
-    this.#openSnackbar(messageTranslationKey, 'error');
+  showError(messageTranslationKey: string, messageArgs?: unknown) {
+    this.#openSnackbar(messageTranslationKey, 'error', messageArgs);
   }
 
-  showInfo(messageTranslationKey: string) {
-    this.#openSnackbar(messageTranslationKey, 'info');
+  showInfo(messageTranslationKey: string, messageArgs?: unknown) {
+    this.#openSnackbar(messageTranslationKey, 'info', messageArgs);
   }
 
-  showSuccess(messageTranslationKey: string) {
-    this.#openSnackbar(messageTranslationKey, 'success');
+  showSuccess(messageTranslationKey: string, messageArgs?: unknown) {
+    this.#openSnackbar(messageTranslationKey, 'success', messageArgs);
   }
 
-  #openSnackbar(message: string, variant: SnackbarVariant, duration = 5000) {
+  #openSnackbar(message: string, variant: SnackbarVariant, messageArgs?: unknown, duration = 5000) {
     this.#snackBar.openFromComponent(SnackbarNotificationComponent, {
-      data: { message, variant },
+      data: { message, messageArgs, variant },
       duration,
       horizontalPosition: 'center',
       verticalPosition: 'top',

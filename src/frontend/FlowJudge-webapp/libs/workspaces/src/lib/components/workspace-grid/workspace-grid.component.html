@@ -1,0 +1,22 @@
+<lib-view-header [title]="titleKey | translate">
+
+  <lib-data-grid
+    [isLoading]="isLoading()"
+    [gridColumns]="gridColumns"
+    [rows]="items()"
+    [gridActions]="gridActions"
+    [rowActions]="rowActions"
+    [emptyGridBehavior]="emptyGridBehavior"
+    (gridActionEvent)="handleGridEvent($event)"
+    (gridRowActionEvent)="handleRowAction($event)">
+  </lib-data-grid>
+
+  <lib-pagination
+    [pageSize]="pageSize()"
+    [totalCount]="totalCount()"
+    [itemsCount]="items().length"
+    (paginationEvent)="handlePaginationEvent($event)">
+  </lib-pagination>
+
+</lib-view-header>
+

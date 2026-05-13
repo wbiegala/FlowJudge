@@ -1,8 +1,8 @@
 import { Route } from '@angular/router';
 import { RoutingLayoutComponent } from './layout/routing-layout.component';
-import { HomePageComponent } from './home-page/home-page.component';
-import { authRoutes, tokenExchangeGuard } from '@flow-judge-webapp/auth';
+import { authenticatedGuard, authRoutes, tokenExchangeGuard } from '@flow-judge-webapp/auth';
 import { userLegalGuard, userRoutes } from '@flow-judge-webapp/user';
+import { workspacesRoutes, workspaceContextGuard } from '@flow-judge-webapp/workspaces';
 
 export const appRoutes: Route[] = [
   {
@@ -13,10 +13,37 @@ export const appRoutes: Route[] = [
     children: [
       {
         path: '',
-        component: HomePageComponent
+        loadComponent: () => import('./home-page/home-page.component').then(m => m.HomePageComponent)
       },
-      ...authRoutes,
-      ...userRoutes
+      {
+        path: 'workspaces',
+        canActivate: [authenticatedGuard],
+        canActivateChild: [authenticatedGuard],
+        children: workspacesRoutes,
+      },
+      {
+        path: 'w/:workspaceId',
+        canActivate: [authenticatedGuard, workspaceContextGuard],
+        canActivateChild: [authenticatedGuard],
+        children: [
+          {
+            path: '',
+            loadComponent: () => import('./home-page/home-page.component').then(m => m.HomePageComponent)
+          },
+          {
+            path: 'workspaces',
+            children: workspacesRoutes,
+          },
+        ],
+      },
+      {
+        path: '',
+        children: authRoutes,
+      },
+      {
+        path: '',
+        children: userRoutes,
+      }
     ]
   }
 ];

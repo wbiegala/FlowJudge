@@ -1,13 +1,13 @@
-﻿using FlowJudge.Workspaces.Infrastructure;
+﻿using FlowJudge.Common.Application;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FlowJudge.Workspaces.Application
 {
     public static class Installer
     {
-        public static IServiceCollection AddWorkspacesModule(this IServiceCollection services)
+        public static IServiceCollection AddWorkspacesApplication(this IServiceCollection services)
         {
-            services.AddWorkspacesInfrastructure();
+            services.AddMediator(typeof(Installer).Assembly);
 
             return services;
         }

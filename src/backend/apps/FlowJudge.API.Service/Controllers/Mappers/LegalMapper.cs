@@ -1,5 +1,5 @@
 ﻿using FlowJudge.API.Contracts.Legal;
-using FlowJudge.Users.Application.Queries;
+using FlowJudge.Users.Application.Abstractions.Queries;
 
 namespace FlowJudge.API.Service.Controllers.Mappers
 {

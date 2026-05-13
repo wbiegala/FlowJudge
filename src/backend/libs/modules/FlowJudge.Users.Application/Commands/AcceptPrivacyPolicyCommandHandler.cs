@@ -2,7 +2,9 @@
 using FlowJudge.Common.Application.Transactional;
 using FlowJudge.Common.Sql.UnitOfWork;
 using FlowJudge.Common.Utils.Time;
-using FlowJudge.Users.Infrastructure;
+using FlowJudge.Users.Application.Abstractions.Commands;
+using FlowJudge.Users.Application.Abstractions.Ports;
+using FlowJudge.Users.Application.Extensions;
 
 namespace FlowJudge.Users.Application.Commands
 {
@@ -30,7 +32,8 @@ namespace FlowJudge.Users.Application.Commands
 
             if (user is null)
             {
-                return ApplicationResultFactory.Failure($"User with given identityId={command.UserIdentityId} not found.", ErrorCodes.UserNotFound);
+                return ApplicationResultFactory.Failure($"User with given identityId={command.UserIdentityId} not found.",
+                    ErrorCodeGenerator.NotFound(nameof(user)));
             }
 
             var privacyPolicyVersion = await _documentVersionRepository.GetPrivacyPolicyByIdAsync(command.PrivacyPolicyVersionId, cancellationToken);
@@ -38,13 +41,13 @@ namespace FlowJudge.Users.Application.Commands
             if (privacyPolicyVersion is null)
             {
                 return ApplicationResultFactory.Failure($"Privacy policy version with given id={command.PrivacyPolicyVersionId} not found.",
-                    ErrorCodes.PrivacyPolicyVersionNotFound);
+                    ErrorCodeGenerator.NotFound("privacy_policy_version"));
             }
 
             if (!privacyPolicyVersion.IsAcceptable)
             {
                 return ApplicationResultFactory.Failure($"Privacy policy version with given id={command.PrivacyPolicyVersionId} is not acceptable.",
-                    ErrorCodes.PrivacyPolicyVersionNotFound);
+                    ErrorCodeGenerator.NotAcceptable("privacy_policy_version"));
             }
 
             user.AcceptPrivacyPolicy(privacyPolicyVersion.Number, _timeService.UtcNow);

@@ -15,7 +15,10 @@ import { appRoutes } from './app/app.routes';
 import { environment } from './environments/environment';
 import { accessTokenInterceptor, provideRestoreSessionFactory, AuthenticationState, InsufficientPermissionsErrorHandler, UnauthorizedErrorHandler } from '@flow-judge-webapp/auth';
 import { DefaultHttpErrorHandler } from './app/utils/default-http-error-handler';
-import { LegalErrorHandler } from '@flow-judge-webapp/user';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
+import { provideValidationErrors } from '@flow-judge-webapp/ui';
+import { LegalErrorHandler } from './app/utils/legal-error-handler';
+import { WorkspaceContextState } from '@flow-judge-webapp/workspaces';
 
 
 fetch(environment.configUrl, { cache: 'no-store' })
@@ -36,17 +39,30 @@ fetch(environment.configUrl, { cache: 'no-store' })
         provideApiBaseUrl(cfg.apiUrl),
         { provide: APP_CONFIG, useValue: cfg },
         ...provideAppErrorHandling(),
+        ...provideFormValidationErrorMappers(),
         provideAnimations(),
         provideBrowserGlobalErrorListeners(),
         provideZonelessChangeDetection(),
         provideStore([
-          AuthenticationState
-        ], withNgxsReduxDevtoolsPlugin(), withNgxsRouterPlugin(), withNgxsFormPlugin()),
+          AuthenticationState,
+          WorkspaceContextState,
+        ],
+          ...(!environment.production ? [withNgxsReduxDevtoolsPlugin()] : []),
+          withNgxsRouterPlugin(),
+          withNgxsFormPlugin(),
+        ),
         provideTranslateService({
           loader: { provide: TranslateLoader, useFactory: translationHttpLoaderFactory, deps: [HttpBackend] },
           lang: 'pl',
           fallbackLang: 'en'
-        })
+        }),
+        {
+          provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
+          useValue: {
+            appearance: 'outline',
+            subscriptSizing: 'dynamic',
+          },
+        }
       ],
     })
   )
@@ -62,7 +78,8 @@ fetch(environment.configUrl, { cache: 'no-store' })
       { prefix: '/assets/i18n/', suffix: '.json' },
       { prefix: '/assets/i18n/auth/', suffix: '.json' },
       { prefix: '/assets/i18n/user/', suffix: '.json'},
-      { prefix: '/assets/i18n/ui/', suffix: '.json'}
+      { prefix: '/assets/i18n/ui/', suffix: '.json'},
+      { prefix: '/assets/i18n/workspaces/', suffix: '.json' }
     ]);
   }
 
@@ -72,5 +89,11 @@ fetch(environment.configUrl, { cache: 'no-store' })
       provideAppErrorHandler(InsufficientPermissionsErrorHandler),
       provideAppErrorHandler(LegalErrorHandler),
       provideAppErrorHandler(UnauthorizedErrorHandler)
+    ];
+  }
+
+  export function provideFormValidationErrorMappers(): any[] {
+    return [
+      provideValidationErrors()
     ];
   }

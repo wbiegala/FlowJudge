@@ -1,4 +1,5 @@
-﻿using FlowJudge.Workspaces.Domain.Workspace.Model;
+﻿using FlowJudge.Workspaces.Application.Abstractions.Models;
+using FlowJudge.Workspaces.Domain.Workspace.Model;
 using FlowJudge.Workspaces.Infrastructure.Repositories.Workspaces.DbModel;
 
 namespace FlowJudge.Workspaces.Infrastructure.Repositories.Workspaces.Mappers
@@ -53,6 +54,18 @@ namespace FlowJudge.Workspaces.Infrastructure.Repositories.Workspaces.Mappers
             };
 
             return (workspace, members);
+        }
+
+        public static WorkspaceListItem ToModel(this WorkspaceListItemDbModel dbModel)
+        {
+            return new WorkspaceListItem
+            {
+                Id = dbModel.workspace_id,
+                Name = dbModel.name,
+                OwnerId = dbModel.owner_id,
+                Role = Enum.Parse<WorkspaceRole>(dbModel.role),
+                CreatedAt = dbModel.created_at.DateTime
+            };
         }
     }
 }

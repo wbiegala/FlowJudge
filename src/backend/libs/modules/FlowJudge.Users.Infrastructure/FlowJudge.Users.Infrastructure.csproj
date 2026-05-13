@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\FlowJudge.Common.Sql\FlowJudge.Common.Sql.csproj" />
+    <ProjectReference Include="..\FlowJudge.Users.Application.Abstractions\FlowJudge.Users.Application.Abstractions.csproj" />
     <ProjectReference Include="..\FlowJudge.Users.Domain\FlowJudge.Users.Domain.csproj" />
   </ItemGroup>
 

@@ -23,7 +23,8 @@
           { "glob": "**/*.json",                  "input": "apps/FlowJudge/src/assets/i18n", "output": "assets/i18n" },
           { "glob": "**/*.json",                  "input": "libs/auth/assets/i18n", "output": "assets/i18n/auth" },
           { "glob": "**/*.json",                  "input": "libs/user/assets/i18n", "output": "assets/i18n/user" },
-          { "glob": "**/*.json",                  "input": "libs/ui/assets/i18n",   "output": "assets/i18n/ui"}
+          { "glob": "**/*.json",                  "input": "libs/ui/assets/i18n",   "output": "assets/i18n/ui"},
+          { "glob": "**/*.json",                  "input": "libs/workspaces/assets/i18n",   "output": "assets/i18n/workspaces"}
         ],
         "styles": [
           "apps/FlowJudge/src/styles.scss",
@@ -36,7 +37,7 @@
             {
               "type": "initial",
               "maximumWarning": "500kb",
-              "maximumError": "1mb"
+              "maximumError": "2mb"
             },
             {
               "type": "anyComponentStyle",
@@ -68,7 +69,7 @@
             {
               "type": "initial",
               "maximumWarning": "500kb",
-              "maximumError": "1mb"
+              "maximumError": "2mb"
             },
             {
               "type": "anyComponentStyle",

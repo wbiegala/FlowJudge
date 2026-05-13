@@ -6,7 +6,7 @@ using FlowJudge.API.Service.Auth.Legal;
 using FlowJudge.API.Service.ErrorHandling;
 using FlowJudge.Common.Application.Mediator;
 using FlowJudge.Common.Http.Extensions;
-using FlowJudge.Users.Application.Commands;
+using FlowJudge.Users.Application.Abstractions.Commands;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;

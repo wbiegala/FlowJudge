@@ -3,8 +3,9 @@ using FlowJudge.API.Service.Auth.Legal;
 using FlowJudge.API.Service.ErrorHandling;
 using FlowJudge.Common.Application.Mediator;
 using FlowJudge.Common.Http.Extensions;
+using FlowJudge.Users.Application.Abstractions.Commands;
+using FlowJudge.Users.Application.Abstractions.Queries;
 using FlowJudge.Users.Application.Models;
-using FlowJudge.Users.Application.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -32,7 +33,7 @@ namespace FlowJudge.API.Service.Controllers
             CancellationToken cancellationToken = default)
         {
             var userContext = this.HttpContext.User.GetUserContext();
-            var command = new Users.Application.Commands.AcceptTermsAndConditionsCommand(userContext.Id, termsVersionId);
+            var command = new AcceptTermsAndConditionsCommand(userContext.Id, termsVersionId);
             var result = await _mediator.SendCommandAsync(command, cancellationToken);
 
             if (!result.IsSuccess)
@@ -53,7 +54,7 @@ namespace FlowJudge.API.Service.Controllers
             CancellationToken cancellationToken = default)
         {
             var userContext = this.HttpContext.User.GetUserContext();
-            var command = new Users.Application.Commands.AcceptPrivacyPolicyCommand(userContext.Id, privacyPolicyVersionId);
+            var command = new AcceptPrivacyPolicyCommand(userContext.Id, privacyPolicyVersionId);
             var result = await _mediator.SendCommandAsync(command, cancellationToken);
 
             if (!result.IsSuccess)

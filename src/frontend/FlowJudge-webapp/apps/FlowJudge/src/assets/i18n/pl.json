@@ -1,4 +1,13 @@
 {
+  "WORKSPACE_CONTEXT": {
+    "EMPTY_CONTEXT": {
+      "NAME": "Przestrzenie robocze",
+      "TOOLTIP": "Nie ustawiono kontekstu przestrzni roboczej. Kliknij, aby przejść do przestrzni roboczych."
+    },
+    "CONTEXT_SET": {
+      "TOOLTIP": "Kliknij, aby zmienić kontekst przestrzeni roboczej."
+    }
+  },
   "ERRORS": {
     "GENERIC": "Wystąpił błąd."
   }

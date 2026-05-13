@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using System.Collections;
 
 namespace FlowJudge.Common.Application.Mediator
 {
@@ -23,6 +24,23 @@ namespace FlowJudge.Common.Application.Mediator
                 var error = new MissingHandlerErrorResult { Error = new MissingHandlerError() };
 
                 return Task.FromResult<IResult>(error);
+            }
+
+            return handler.ExecuteAsync(command, cancellationToken);
+        }
+
+        public Task<IResult<TResult>> SendCommandAsync<TCommand, TResult>(
+            TCommand command,
+            CancellationToken cancellationToken = default)
+                where TCommand : ICommand<TResult>
+        {
+            var handler = _serviceProvider.GetService<ICommandHandler<TCommand, TResult>>();
+
+            if (handler is null)
+            {
+                var error = new MissingHandlerErrorResult<TResult> { Error = new MissingHandlerError() };
+
+                return Task.FromResult<IResult<TResult>>(error);
             }
 
             return handler.ExecuteAsync(command, cancellationToken);
@@ -64,7 +82,7 @@ namespace FlowJudge.Common.Application.Mediator
 
         private sealed record MissingHandlerError : IError
         {
-            public string Code => ApplicationErrorCodes.NotImplemented;
+            public string Code => ErrorCodes.NotImplemented;
             public string Message => "Missing handler.";
             public IDictionary<string, object>? Properties => null;
             public Exception? Exception => null;

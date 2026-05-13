@@ -1,0 +1,64 @@
+{
+  "WORKSPACES": {
+    "MODEL": {
+      "STATUS": {
+        "UNACTIVE": "Nieaktywna",
+        "ACTIVE": "Aktywna",
+        "ARCHIVED": "Zarchiwizowana"
+      },
+      "ROLE": {
+        "OWNER": "Właściciel",
+        "ADMINISTRATOR": "Administrator",
+        "MEMBER": "Współpracownik"
+      }
+    },
+    "GRID": {
+      "TITLE": "Przestrzenie robocze",
+      "ON_EMPTY": "Brak przestrzeni roboczych...",
+      "COLUMNS": {
+        "NAME": {
+          "HEADER": "Nazwa"
+        },
+        "OWNER": {
+          "HEADER": "Właściciel"
+        },
+        "ROLE": {
+          "HEADER": "Rola"
+        },
+        "CREATED_AT": {
+          "HEADER": "Utworzono"
+        }
+      },
+      "ACTIONS": {
+        "ADD": "Swórz nową przestrzeń roboczą"
+      },
+      "ROW_ACTIONS": {
+        "SET_CONTEXT": "Ustaw w kontekście"
+      }
+    },
+    "DETAILS": {
+      "TITLE": "Przestrzeń robocza",
+      "ACTIONS": {
+        "SAVE": "Zapisz",
+        "EXIT": "Opuść"
+      },
+      "RESULTS": {
+        "SAVE_SUCCESS": "Zapisano przestrzeń roboczą."
+      },
+      "FORMS": {
+        "BASIC": {
+          "SECTION_NAME": "Dane podstawowe",
+          "FIELDS": {
+            "NAME": "Nazwa"
+          }
+        }
+      }
+    },
+    "CONTEXT": {
+      "NOTIFICATIONS": {
+        "SET_SUCCESS": "Przełączono przestrzeń roboczą: {{workspaceName}}",
+        "SET_ERROR_NO_ROLE": "Niewłaściwa rola dla tej przestrzeni roboczej"
+      }
+    }
+  }
+}

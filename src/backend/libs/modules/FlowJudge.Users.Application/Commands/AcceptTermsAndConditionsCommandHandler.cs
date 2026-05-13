@@ -2,7 +2,9 @@
 using FlowJudge.Common.Application.Transactional;
 using FlowJudge.Common.Sql.UnitOfWork;
 using FlowJudge.Common.Utils.Time;
-using FlowJudge.Users.Infrastructure;
+using FlowJudge.Users.Application.Abstractions.Commands;
+using FlowJudge.Users.Application.Abstractions.Ports;
+using FlowJudge.Users.Application.Extensions;
 
 namespace FlowJudge.Users.Application.Commands
 {
@@ -29,7 +31,8 @@ namespace FlowJudge.Users.Application.Commands
 
             if (user is null)
             {
-                return ApplicationResultFactory.Failure($"User with given identityId={command.UserIdentityId} not found.", ErrorCodes.UserNotFound);
+                return ApplicationResultFactory.Failure($"User with given identityId={command.UserIdentityId} not found.",
+                    ErrorCodeGenerator.NotFound(nameof(user)));
             }
 
             var termsAndConditionsVersion = await _documentVersionRepository.GetTermsAndConditionsByIdAsync(command.TermsAndConditionsVersionId, cancellationToken);
@@ -37,13 +40,13 @@ namespace FlowJudge.Users.Application.Commands
             if (termsAndConditionsVersion is null)
             {
                 return ApplicationResultFactory.Failure($"Terms and conditions version with given id={command.TermsAndConditionsVersionId} not found.",
-                    ErrorCodes.TermsAndConditionsVersionNotFound);
+                    ErrorCodeGenerator.NotFound("terms_and_conditions_version"));
             }
 
             if (!termsAndConditionsVersion.IsAcceptable)
             {
                 return ApplicationResultFactory.Failure($"Terms and conditions version with given id={command.TermsAndConditionsVersionId} is not acceptable.",
-                    ErrorCodes.TermsAndConditionsVersionNotAcceptable);
+                    ErrorCodeGenerator.NotAcceptable("terms_and_conditions_version"));
             }
 
             user.AcceptTermsAndConditions(termsAndConditionsVersion.Number, _timeService.UtcNow);

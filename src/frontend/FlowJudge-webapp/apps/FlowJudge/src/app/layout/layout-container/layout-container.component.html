@@ -1,4 +1,4 @@
-<app-header (menuClicked)="toggleMainMenu()"></app-header>
+<app-header class="app-toolbar" (menuClicked)="toggleMainMenu()"></app-header>
 <mat-drawer-container class="app-container">
   <mat-drawer #drawer [opened]="isMainMenu()" class="menu-sidenav-content" mode="side">
     <app-main-menu></app-main-menu>
