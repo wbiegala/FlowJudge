@@ -3,7 +3,6 @@ using FlowJudge.Common.Application.Transactional;
 using FlowJudge.Common.Domain;
 using FlowJudge.Common.Sql.UnitOfWork;
 using FlowJudge.Common.Utils.Time;
-using FlowJudge.Workspaces.Application.Abstractions;
 using FlowJudge.Workspaces.Application.Abstractions.Commands;
 using FlowJudge.Workspaces.Application.Abstractions.Ports;
 using FlowJudge.Workspaces.Domain.Workspace.Model;
@@ -42,7 +41,8 @@ namespace FlowJudge.Workspaces.Application.Commands
             }
             catch (Exception ex)
             {
-                return ApplicationResultFactory.Failure<Guid>(ex.Message, ErrorCodes.WorkspaceCreateFailed);
+                return ApplicationResultFactory.Failure<Guid>(ex.Message,
+                    ErrorCodeGenerator.CreateFailed("workspace"));
             }
         }
     }

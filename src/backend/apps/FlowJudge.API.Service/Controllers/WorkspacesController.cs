@@ -2,12 +2,12 @@
 using FlowJudge.API.Contracts.Workspaces;
 using FlowJudge.API.Service.Controllers.Mappers;
 using FlowJudge.API.Service.ErrorHandling;
+using FlowJudge.Common.Application;
 using FlowJudge.Common.Application.Mediator;
 using FlowJudge.Common.Http.Extensions;
 using FlowJudge.Common.Utils.Pagination;
 using FlowJudge.Users.Application.Abstractions.Queries;
 using FlowJudge.Users.Application.Models;
-using FlowJudge.Users.Application.Queries;
 using FlowJudge.Workspaces.Application.Abstractions.Commands;
 using FlowJudge.Workspaces.Application.Abstractions.Models;
 using FlowJudge.Workspaces.Application.Abstractions.Queries;
@@ -65,7 +65,7 @@ namespace FlowJudge.API.Service.Controllers
             var result = await _mediator.SendQueryAsync<GetWorkspaceQuery, WorkspaceData>(query, ct);
             if (!result.IsSuccess)
             {
-                var errorCode = result.Error!.Code.EndsWith("not_found")
+                var errorCode = result.Error!.IsNotFound()
                     ? System.Net.HttpStatusCode.NotFound
                     : System.Net.HttpStatusCode.BadRequest;
                 return result.Error!.ToResponse(errorCode);
@@ -120,7 +120,7 @@ namespace FlowJudge.API.Service.Controllers
             var result = await _mediator.SendCommandAsync<UpdateWorkspaceCommand>(command, ct);
             if (!result.IsSuccess)
             {
-                if (result.Error!.Code.EndsWith("insufficient_permissions"))
+                if (result.Error!.IsInsufficientPermissions())
                     return result.Error!.ToResponse(System.Net.HttpStatusCode.Forbidden);
 
                 return result.Error!.ToResponse(System.Net.HttpStatusCode.BadRequest);

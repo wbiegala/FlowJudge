@@ -1,6 +1,5 @@
 ﻿using FlowJudge.Common.Application;
 using FlowJudge.Common.Application.Mediator;
-using FlowJudge.Workspaces.Application.Abstractions;
 using FlowJudge.Workspaces.Application.Abstractions.Models;
 using FlowJudge.Workspaces.Application.Abstractions.Ports;
 using FlowJudge.Workspaces.Application.Abstractions.Queries;
@@ -26,7 +25,8 @@ namespace FlowJudge.Workspaces.Application.Queries
 
             if (workspace is null || !workspace.IsUserMember(query.UserId))
             { 
-                return ApplicationResultFactory.Failure<WorkspaceData>("Workspace not found.", ErrorCodes.WorkspaceNotFound);
+                return ApplicationResultFactory.Failure<WorkspaceData>("Workspace not found.",
+                    ErrorCodeGenerator.NotFound(nameof(workspace)));
             }
 
             return ApplicationResultFactory.Success(workspace.ToAbstraction());

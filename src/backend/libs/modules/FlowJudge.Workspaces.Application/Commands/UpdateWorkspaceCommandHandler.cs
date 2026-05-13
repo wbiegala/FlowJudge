@@ -1,7 +1,6 @@
 ﻿using FlowJudge.Common.Application;
 using FlowJudge.Common.Application.Mediator;
 using FlowJudge.Common.Domain;
-using FlowJudge.Workspaces.Application.Abstractions;
 using FlowJudge.Workspaces.Application.Abstractions.Commands;
 using FlowJudge.Workspaces.Application.Abstractions.Ports;
 using FlowJudge.Workspaces.Domain.Workspace.Model;
@@ -25,7 +24,8 @@ namespace FlowJudge.Workspaces.Application.Commands
             var workspace = await _workspaceRepository.GetWorkspaceByAggregateIdAsync(workspaceId, cancellationToken);
 
             if (workspace is null)
-                return ApplicationResultFactory.Failure("Workspace not found.", ErrorCodes.WorkspaceNotFound);
+                return ApplicationResultFactory.Failure("Workspace not found.",
+                    ErrorCodeGenerator.NotFound(nameof(workspace)));
 
             try
             {
@@ -44,7 +44,8 @@ namespace FlowJudge.Workspaces.Application.Commands
             }
             catch (Exception ex)
             {
-                return ApplicationResultFactory.Failure(ex, ErrorCodes.WorkspaceUpdateFailed);
+                return ApplicationResultFactory.Failure(ex,
+                    ErrorCodeGenerator.UpdateFailed(nameof(workspace)));
             }
         }
     }

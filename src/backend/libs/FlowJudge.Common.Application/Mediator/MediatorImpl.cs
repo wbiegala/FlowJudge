@@ -82,7 +82,7 @@ namespace FlowJudge.Common.Application.Mediator
 
         private sealed record MissingHandlerError : IError
         {
-            public string Code => ApplicationErrorCodes.NotImplemented;
+            public string Code => ErrorCodes.NotImplemented;
             public string Message => "Missing handler.";
             public IDictionary<string, object>? Properties => null;
             public Exception? Exception => null;

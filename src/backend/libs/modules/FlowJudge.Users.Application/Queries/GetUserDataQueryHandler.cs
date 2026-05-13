@@ -1,6 +1,5 @@
 ﻿using FlowJudge.Common.Application;
 using FlowJudge.Common.Application.Mediator;
-using FlowJudge.Users.Application.Abstractions;
 using FlowJudge.Users.Application.Abstractions.Ports;
 using FlowJudge.Users.Application.Abstractions.Queries;
 using FlowJudge.Users.Application.Models;
@@ -23,7 +22,7 @@ namespace FlowJudge.Users.Application.Queries
         {
             return await _userRepository.GetUserByIdentityIdAsync(query.UserId, cancellationToken) is User user
                 ? ApplicationResultFactory.Success(new UserData { UserId = user.IdentityId, UserName = user.UserName, EmailAddress = user.EmailAddress })
-                : ApplicationResultFactory.Failure<UserData>("User not found", ErrorCodes.UserNotFound);
+                : ApplicationResultFactory.Failure<UserData>("User not found", ErrorCodeGenerator.NotFound(nameof(user)));
         }
     }
 }
