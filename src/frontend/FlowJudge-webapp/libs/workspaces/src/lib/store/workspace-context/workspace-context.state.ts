@@ -63,10 +63,10 @@ export class WorkspaceContextState {
 
     return this.#progressService.runInProgressBar(() => this.#workspacesService.getWorkspace(action.workspaceId).pipe(
       tap(response => {
-        const memberRole = response.members.filter(m => m.member.userId === currentUserId)[0].role;
+        const memberRole = response.members.find(m => m.member.userId === currentUserId)?.role;
         if (memberRole === undefined || memberRole === null) {
           this.#notificationService.showError('WORKSPACES.CONTEXT.NOTIFICATIONS.SET_ERROR_NO_ROLE');
-          return;
+          throw new Error('Authenticated user is not a member of the selected workspace.');
         }
 
         ctx.setState(produce(draft => {
@@ -77,7 +77,9 @@ export class WorkspaceContextState {
             role: memberRole,
           };
         }));
-        this.#notificationService.showInfo('WORKSPACES.CONTEXT.NOTIFICATIONS.SET_SUCCESS', { workspaceName: response.name });
+        if (action.options.showSuccessNotification !== false) {
+          this.#notificationService.showInfo('WORKSPACES.CONTEXT.NOTIFICATIONS.SET_SUCCESS', { workspaceName: response.name });
+        }
       })
     ));
   }

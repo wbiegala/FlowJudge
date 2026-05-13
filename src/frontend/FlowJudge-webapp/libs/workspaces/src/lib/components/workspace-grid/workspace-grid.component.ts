@@ -126,6 +126,8 @@ export class WorkspaceGridComponent {
   }
 
   #setWorkspaceContext(id: string) {
-    this.#store.dispatch(new SetWorkspaceContext(id));
+    this.#store.dispatch(new SetWorkspaceContext(id)).subscribe(() => {
+      this.#store.dispatch(new Navigate(['/w', id]));
+    });
   }
 }
