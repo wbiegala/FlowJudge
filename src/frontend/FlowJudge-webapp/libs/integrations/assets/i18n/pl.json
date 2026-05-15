@@ -1,5 +1,11 @@
 {
   "INTEGRATIONS": {
-
+    "MODEL": {
+      "STATUS": {
+        "INACTIVE": "Nieaktywowana",
+        "ACTIVE": "Aktywna",
+        "DELETED": "Usunięta"
+      }
+    }
   }
 }

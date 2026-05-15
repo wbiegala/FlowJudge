@@ -4,7 +4,7 @@ import { IntegrationProvider, IntegrationStatus } from './integration-shared.mod
 
 export interface IntegrationGridItem extends DataGridRow {
   name: string;
-  provider: EnumValue<IntegrationProvider>;
+  provider: IntegrationProvider;
   status: EnumValue<IntegrationStatus>;
   createdAt: Date;
   creatorEmail: string;

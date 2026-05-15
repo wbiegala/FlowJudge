@@ -26,6 +26,7 @@ export class AppErrorDispatcher {
     const matching = this.handlers
       .filter(handler => handler.canHandle(context))
       .sort((a, b) => b.priority - a.priority);
+    console.log(matching);
 
     return matching[0] ?? null;
   }

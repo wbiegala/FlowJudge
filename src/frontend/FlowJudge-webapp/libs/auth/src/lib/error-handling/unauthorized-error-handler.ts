@@ -5,7 +5,7 @@ import { Observable, of } from 'rxjs';
 
 @Injectable()
 export class UnauthorizedErrorHandler implements AppErrorHandler {
-  readonly priority = 2;
+  readonly priority = 1;
   #router = inject(Router);
 
   canHandle(context: HttpErrorContext): boolean {
@@ -13,8 +13,9 @@ export class UnauthorizedErrorHandler implements AppErrorHandler {
   }
 
   handle(context: HttpErrorContext): Observable<ErrorHandlerResult> {
+    console.log('UnauthorizedErrorHandler');
     void this.#router.navigate(['/no-access']);
 
-    return of({ handled: true })
+    return of({ handled: true });
   }
 }

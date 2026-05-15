@@ -45,6 +45,10 @@ namespace FlowJudge.API.Service.Auth.Keycloak.Client
 
                 return tokens!;
             }
+            catch (TokenReceiveException)
+            {
+                throw;
+            }
             catch (HttpRequestException ex)
             {
                 throw new AuthenticationProviderException("Auth server error response", ex);

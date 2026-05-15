@@ -13,7 +13,7 @@ import { apiPrefixInterceptor, appErrorInterceptor, provideApiBaseUrl, provideAp
 import { App } from './app/app';
 import { appRoutes } from './app/app.routes';
 import { environment } from './environments/environment';
-import { accessTokenInterceptor, provideRestoreSessionFactory, AuthenticationState, InsufficientPermissionsErrorHandler, UnauthorizedErrorHandler } from '@flow-judge-webapp/auth';
+import { accessTokenInterceptor, provideRestoreSessionFactory, AuthenticationState, InsufficientPermissionsErrorHandler, MissingRefreshTokenErrorHandler, UnauthorizedErrorHandler } from '@flow-judge-webapp/auth';
 import { DefaultHttpErrorHandler } from './app/utils/default-http-error-handler';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { provideValidationErrors } from '@flow-judge-webapp/ui';
@@ -34,7 +34,7 @@ fetch(environment.configUrl, { cache: 'no-store' })
         })),
         provideRestoreSessionFactory,
         provideHttpClient(
-          withInterceptors([apiPrefixInterceptor, accessTokenInterceptor, workspaceContextInterceptor, appErrorInterceptor]),
+          withInterceptors([apiPrefixInterceptor, appErrorInterceptor, accessTokenInterceptor, workspaceContextInterceptor]),
         ),
         provideApiBaseUrl(cfg.apiUrl),
         { provide: APP_CONFIG, useValue: cfg },

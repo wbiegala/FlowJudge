@@ -6,7 +6,7 @@ import { Observable, of } from 'rxjs';
 @Injectable()
 export class DefaultHttpErrorHandler implements AppErrorHandler {
   #notificationService = inject(NotificationService);
-  readonly priority = 9999;
+  readonly priority = 0;
 
   canHandle(context: HttpErrorContext): boolean {
     if (context.request.url.endsWith('refresh-token')) {
