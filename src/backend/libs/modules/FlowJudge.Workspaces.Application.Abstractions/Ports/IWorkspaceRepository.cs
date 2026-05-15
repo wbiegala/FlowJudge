@@ -9,7 +9,7 @@ namespace FlowJudge.Workspaces.Application.Abstractions.Ports
         Task<WorkspaceRoot?> GetWorkspaceByAggregateIdAsync(WorkspaceId workspaceId, CancellationToken ct = default);
         Task AddWorkspaceAsync(WorkspaceRoot workspace, CancellationToken ct = default);
         Task UpdateWorkspaceAsync(WorkspaceRoot workspace, CancellationToken ct = default);
-
         Task<PagedList<WorkspaceListItem>> GetUserWorkspacesAsync(Guid userId, PageQuery pagination, CancellationToken ct = default);
+        Task<WorkspaceRole?> GetUserRoleInWorkspaceAsync(WorkspaceId workspaceId, Guid userId, CancellationToken ct = default);
     }
 }

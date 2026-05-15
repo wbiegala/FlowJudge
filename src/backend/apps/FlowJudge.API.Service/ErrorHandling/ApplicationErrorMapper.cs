@@ -20,6 +20,22 @@ namespace FlowJudge.API.Service.ErrorHandling
             return problemDetails;
         }
 
+        public static IActionResult ErrorResponse(
+            string errorCode,
+            string errorMessage,
+            HttpStatusCode httpCode = HttpStatusCode.InternalServerError)
+        {
+            var problemDetails = new ProblemDetails
+            {
+                Title = errorCode,
+                Type = $"https://httpstatuses.com/{(int)httpCode}",
+                Status = (int)httpCode,
+                Detail = errorMessage
+            };
+
+            return problemDetails.ToResponse();
+        }
+
         public static IActionResult ToResponse(this IError error, HttpStatusCode httpCode = HttpStatusCode.InternalServerError)
         {
             var problemDetails = error.ToProblemDetails(httpCode);

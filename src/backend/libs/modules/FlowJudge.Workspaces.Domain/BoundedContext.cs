@@ -1,7 +1,16 @@
 ﻿namespace FlowJudge.Workspaces.Domain
 {
-    internal static class BoundedContext
+    public static class WorkspacesBoundedContext
     {
         public const string Name = "Workspaces";
+
+        public enum Actions
+        {
+            ViewIntegration,
+            CreateIntegration,
+            ConnectIntegration,
+            DisconnectIntegration,
+            DeactivateIntegration,
+        }
     }
 }

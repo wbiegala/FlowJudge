@@ -14,5 +14,7 @@
         public static string NotAcceptable(string businessObjectName) =>
             $"{businessObjectName}.{ErrorCodes.NotAcceptable}";
 
+        public static string Forbidden(string businessObjectName) =>
+            $"{businessObjectName}.{ErrorCodes.InsufficientPermissions}";
     }
 }

@@ -1,11 +1,12 @@
 import { produce } from 'immer';
 import { Action, Selector, State, StateContext, StateToken } from '@ngxs/store';
-import { MapDtoToModel, WorkspaceGridItem } from '../../models/workspace-grid-item.model';
+import { WorkspaceGridItem } from '../../models/workspace-grid-item.model';
 import { Injectable, inject } from '@angular/core';
 import { WorkspacesService } from '../../workspaces.service';
-import { InitializeWorkspacesGrid, LoadWorkspacesGridItems } from './workspaces-grid.actions';
+import { CleanWorkspacesGrid, LoadWorkspacesGridItems } from './workspaces-grid.actions';
 import { tap } from 'rxjs';
 import { PageSize } from '@flow-judge-webapp/ui';
+import { MapGridDtoToModel } from '../../mappers/dto-model.mapper';
 
 export interface WorkspacesGridStateModel {
   pageSize: PageSize;
@@ -58,8 +59,8 @@ export class WorkspacesGridState {
     return state.isLoading;
   }
 
-  @Action(InitializeWorkspacesGrid)
-  initializeWorkspacesGrid(ctx: StateContext<WorkspacesGridStateModel>) {
+  @Action(CleanWorkspacesGrid)
+  cleanWorkspacesGrid(ctx: StateContext<WorkspacesGridStateModel>) {
     ctx.setState(defaultState);
   }
 
@@ -71,9 +72,9 @@ export class WorkspacesGridState {
         draft.totalCount = data.totalCount;
         draft.pageSize = data.pageSize as PageSize;
         draft.pageNumber = data.pageNumber;
-        draft.items = data.items.map(MapDtoToModel);
+        draft.items = data.items.map(MapGridDtoToModel);
         draft.isLoading = false;
       })))
-    )
+    );
   }
 }

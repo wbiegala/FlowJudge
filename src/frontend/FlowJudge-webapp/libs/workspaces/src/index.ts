@@ -11,3 +11,5 @@ export * from './lib/store/workspace-context/workspace-context.state';
 export * from './lib/workspaces-routes';
 export * from './lib/workspace-context.guard';
 export * from './lib/workspace-context-url-watcher.service';
+export * from './lib/workspace-context.interceptor';
+export * from './lib/workspace-navigation.service';

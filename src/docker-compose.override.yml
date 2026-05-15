@@ -132,6 +132,9 @@ services:
       - Auth__JWT__Issuer=${JWT_ISSUER}
       - Auth__JWT__Audience=${JWT_AUDIENCE}
       - Auth__JWT__PublicKey=${JWT_PUBLIC_KEY}
+      - Integrations__GitHub__CallbackUri=${GITHUB_CALLBACK_URL}
+      - Integrations__GitHub__ClientId=${GITHUB_CLIENT_ID}
+      - Integrations__GitHub__ClientSecret=${GITHUB_CLIENT_SECRET}
     ports:
       - "8080"
       - "10443:8081"

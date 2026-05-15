@@ -1,3 +1,5 @@
+import { WorkspaceRole, WorkspaceStatus } from './models/workspace-shared.model';
+
 export interface WorkspaceUserData {
   userId: string;
   userName: string;
@@ -10,9 +12,6 @@ export interface WorkspaceMemberData {
   assignedBy?: WorkspaceUserData;
   assingedAt: Date;
 }
-
-export type WorkspaceRole = 'Member' | 'Administrator' | 'Owner';
-export type WorkspaceStatus = 'Unactive' | 'Active' | 'Archived';
 
 export interface GetWorkspacesResponseItem {
   workspaceId: string;

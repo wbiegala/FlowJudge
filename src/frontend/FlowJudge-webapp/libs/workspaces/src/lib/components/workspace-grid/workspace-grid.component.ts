@@ -5,8 +5,9 @@ import { Store } from '@ngxs/store';
 import { WorkspacesGridState } from '../../store/workspaces-grid/workspaces-grid.state';
 import { LoadWorkspacesGridItems } from '../../store/workspaces-grid/workspaces-grid.actions';
 import { WorkspaceGridItem } from '../../models/workspace-grid-item.model';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { SetWorkspaceContext } from '../../store/workspace-context/workspace-context.actions';
+import { formatDateTime } from '@flow-judge-webapp/common';
 
 @Component({
   selector: 'lib-workspace-grid',
@@ -18,6 +19,7 @@ import { SetWorkspaceContext } from '../../store/workspace-context/workspace-con
 export class WorkspaceGridComponent {
   readonly titleKey = 'WORKSPACES.GRID.TITLE';
   #store = inject(Store);
+  #translateService = inject(TranslateService);
   pageNumber = this.#store.selectSignal(WorkspacesGridState.pageNumber);
   pageSize = this.#store.selectSignal(WorkspacesGridState.pageSize);
   totalCount = this.#store.selectSignal(WorkspacesGridState.totalCount);
@@ -49,7 +51,7 @@ export class WorkspaceGridComponent {
       id: 'role',
       name: 'role',
       headerTranslationKey: 'WORKSPACES.GRID.COLUMNS.ROLE.HEADER',
-      cell: row => row.role,
+      cell: row => this.#translateService.instant(row.role.translationKey),
       isVisible: true,
       isSortable: false,
     },
@@ -57,7 +59,7 @@ export class WorkspaceGridComponent {
       id: 'createdAt',
       name: 'createdAt',
       headerTranslationKey: 'WORKSPACES.GRID.COLUMNS.CREATED_AT.HEADER',
-      cell: row => row.createdAt,
+      cell: row => formatDateTime(row.createdAt),
       isVisible: true,
       isSortable: false,
     }
@@ -77,13 +79,13 @@ export class WorkspaceGridComponent {
       name: 'preview',
       nameTranslationKey: 'UI.VIEW_MODE.PREVIEW',
       icon: 'preview',
-      canExecute: item => item.role !== 'Owner'
+      canExecute: item => item.role.value !== 'Owner'
     },
     {
       name: 'edit',
       nameTranslationKey: 'UI.VIEW_MODE.EDIT',
       icon: 'edit',
-      canExecute: item => item.role === 'Owner'
+      canExecute: item => item.role.value === 'Owner'
     },
     {
       name: 'setContext',

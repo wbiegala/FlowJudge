@@ -1,0 +1,13 @@
+.main-menu-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-manu-button {
+  width: 100%;
+  padding-top: 25px;
+  padding-bottom: 25px;
+  font-size: large;
+  justify-content: flex-start;
+}
