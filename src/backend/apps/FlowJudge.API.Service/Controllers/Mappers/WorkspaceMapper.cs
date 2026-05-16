@@ -1,12 +1,11 @@
 ﻿using FlowJudge.API.Contracts.Workspaces;
-using FlowJudge.Users.Application.Models;
 using FlowJudge.Workspaces.Application.Abstractions.Models;
 
 namespace FlowJudge.API.Service.Controllers.Mappers
 {
     public static class WorkspaceMapper
     {
-        public static GetWorkspacesResponseItem ToResponseItem(this WorkspaceListItem item, Func<Guid, UserData> getOwnerData)
+        public static GetWorkspacesResponseItem ToResponseItem(this WorkspaceListItem item, Func<Guid, Users.Application.Models.UserData> getOwnerData)
         {
             var owner = getOwnerData(item.OwnerId);
 
@@ -14,7 +13,7 @@ namespace FlowJudge.API.Service.Controllers.Mappers
             {
                 WorkspaceId = item.Id,
                 Name = item.Name,
-                Owner = new WorkspaceUserData
+                Owner = new Contracts.Shared.UserData
                 { 
                     UserId = owner.UserId,
                     UserName = owner.UserName,
@@ -25,7 +24,7 @@ namespace FlowJudge.API.Service.Controllers.Mappers
             };
         }
 
-        public static GetWorkspaceResponse ToResponse(this WorkspaceData workspace, Func<Guid, UserData> getUserData)
+        public static GetWorkspaceResponse ToResponse(this WorkspaceData workspace, Func<Guid, Users.Application.Models.UserData> getUserData)
         {
             var owner = getUserData(workspace.CreatedBy);
 
@@ -35,7 +34,7 @@ namespace FlowJudge.API.Service.Controllers.Mappers
                 Name = workspace.Name,
                 Status = workspace.Status.ToString(),
                 CreatedAt = workspace.CreatedAt,
-                CreatedBy = new WorkspaceUserData
+                CreatedBy = new Contracts.Shared.UserData
                 {
                     UserId = owner.UserId,
                     UserName = owner.UserName,
@@ -48,7 +47,8 @@ namespace FlowJudge.API.Service.Controllers.Mappers
 
                     return new WorkspaceMemberData
                     {
-                        Member = new WorkspaceUserData                         {
+                        Member = new Contracts.Shared.UserData
+                        {
                             UserId = memberData.UserId,
                             UserName = memberData.UserName,
                             EmailAddress = memberData.EmailAddress,
@@ -56,8 +56,8 @@ namespace FlowJudge.API.Service.Controllers.Mappers
                         Role = member.Role.ToString(),
                         AssingedAt = member.AssignedAt,
                         AssignedBy = assinerData is not null
-                        ? new WorkspaceUserData
-                            {
+                        ? new Contracts.Shared.UserData
+                        {
                                 UserId = assinerData.UserId,
                                 UserName = assinerData.UserName,
                                 EmailAddress = assinerData.EmailAddress,

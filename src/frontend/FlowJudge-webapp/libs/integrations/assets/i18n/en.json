@@ -1,0 +1,35 @@
+{
+  "INTEGRATIONS": {
+    "MODEL": {
+      "STATUS": {
+        "INACTIVE": "Inactive",
+        "ACTIVE": "Active",
+        "DELETED": "Deleted"
+      }
+    },
+    "GRID": {
+      "TITLE": "Integrations",
+      "ON_EMPTY": "No integrations yet...",
+      "COLUMNS": {
+        "NAME": {
+          "HEADER": "Name"
+        },
+        "PROVIDER": {
+          "HEADER": "Provider"
+        },
+        "STATUS": {
+          "HEADER": "Status"
+        },
+        "CREATED": {
+          "HEADER": "Created"
+        }
+      },
+      "ACTIONS": {
+        "ADD_GITHUB": ""
+      },
+      "ROW_ACTIONS": {
+
+      }
+    }
+  }
+}

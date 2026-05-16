@@ -7,7 +7,7 @@ namespace FlowJudge.Workspaces.Domain.Workspace.Model.Exceptions
         private const string ExceptionErrorCode = "workspace.invalid_status";
 
         public InvalidWorkspaceStatusException()
-            : base(Domain.BoundedContext.Name, nameof(WorkspaceRoot), ExceptionErrorCode)
+            : base(Domain.WorkspacesBoundedContext.Name, nameof(WorkspaceRoot), ExceptionErrorCode)
         {
         }
     }

@@ -1,5 +1,4 @@
 import { Action, Selector, State, StateContext, StateToken, Store } from "@ngxs/store";
-import { WorkspaceRole } from "../../workspaces.model";
 import { inject, Injectable } from "@angular/core";
 import { CleanWorkspaceContext, SetWorkspaceContext } from "./workspace-context.actions";
 import { WorkspacesService } from "../../workspaces.service";
@@ -7,6 +6,7 @@ import { NotificationService, ProgressService } from "@flow-judge-webapp/ui";
 import { tap } from "rxjs";
 import { produce } from "immer";
 import { AuthenticationState } from "@flow-judge-webapp/auth";
+import { WorkspaceRole } from "../../models/workspace-shared.model";
 
 export interface WorkspaceContext {
   id: string;

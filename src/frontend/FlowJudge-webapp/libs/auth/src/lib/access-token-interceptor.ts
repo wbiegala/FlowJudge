@@ -2,9 +2,9 @@ import { inject } from '@angular/core';
 import { HttpErrorResponse, HttpInterceptorFn, HttpRequest } from '@angular/common/http';
 import { catchError, finalize, map, Observable, shareReplay, switchMap, tap, throwError } from 'rxjs';
 import { Store } from '@ngxs/store';
-import { Navigate } from '@ngxs/router-plugin';
 import { AuthenticationService } from './authentication.service';
 import { AuthenticationState } from './store/authentication.state';
+import { API_BASE_URL } from '@flow-judge-webapp/common';
 
 import { Authenticate, ClearAuthenticatedUserContext } from './store/authentication.actions';
 
@@ -19,10 +19,14 @@ const isRefreshEndpoint = (url: string) =>
 export const accessTokenInterceptor: HttpInterceptorFn = (req, next) => {
   const store = inject(Store);
   const authService = inject(AuthenticationService);
+  const apiBaseUrl = inject(API_BASE_URL, { optional: true }) ?? '';
+  const normalizedApiBaseUrl = apiBaseUrl.replace(/\/+$/, '');
+  const isFirstPartyAbsoluteApiUrl =
+    normalizedApiBaseUrl !== '' && req.url.startsWith(`${normalizedApiBaseUrl}/api`);
 
   // skipping Authorization and localurls
   const shouldAttachAuth =
-    !isAbsolute(req.url) &&
+    (!isAbsolute(req.url) || isFirstPartyAbsoluteApiUrl) &&
     !req.url.startsWith('/assets') &&
     !isRefreshEndpoint(req.url);
 
@@ -45,6 +49,10 @@ export const accessTokenInterceptor: HttpInterceptorFn = (req, next) => {
             ),
             // after state update - get new token
             map(() => store.selectSnapshot(AuthenticationState.accessToken) ?? ''),
+            catchError(e => {
+              store.dispatch(new ClearAuthenticatedUserContext());
+              return throwError(() => e);
+            }),
             // share result to rest of subscribers
             shareReplay(1),
             // clear "in-flight" after success/fail
@@ -59,14 +67,6 @@ export const accessTokenInterceptor: HttpInterceptorFn = (req, next) => {
             // call again orginal request
             const retried = shouldAttachAuth ? withAuth(req, newToken) : req;
             return next(retried);
-          }),
-          // if refresh fails - clear user context and redirect to /session-expired
-          catchError(e => {
-            store.dispatch([
-              new ClearAuthenticatedUserContext(),
-              new Navigate(['/session-expired'])
-            ]);
-            return throwError(() => e);
           })
         );
       }

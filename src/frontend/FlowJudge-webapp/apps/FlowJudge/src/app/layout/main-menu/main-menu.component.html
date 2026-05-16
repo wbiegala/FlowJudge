@@ -1,1 +1,10 @@
-<p>MainMenuComponent works!</p>
+<div class="main-menu-container">
+  @for (item of items; track $index) {
+    @if(item.canDisplay()) {
+    <button matButton class="main-manu-button" (click)="item.action()">
+      <mat-icon>{{ item.icon }}</mat-icon>
+      {{ item.nameTranslationKey | translate }}
+    </button>
+    }
+  }
+</div>

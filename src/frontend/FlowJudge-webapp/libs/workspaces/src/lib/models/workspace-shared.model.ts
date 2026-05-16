@@ -1,12 +1,7 @@
-export interface WorkspaceStatus {
-  value: string;
-  valueTranslationKey: string;
-}
+import { EnumValue } from "@flow-judge-webapp/common";
 
-export interface WorkspaceAccessRole {
-  name: string;
-  nameTranslationKey: string;
-}
+export type WorkspaceRole = 'Member' | 'Administrator' | 'Owner';
+export type WorkspaceStatus = 'Unactive' | 'Active' | 'Archived';
 
 export interface WorkspaceUser {
   id: string;
@@ -16,7 +11,7 @@ export interface WorkspaceUser {
 
 export interface WorkspaceMember {
   user: WorkspaceUser;
-  role: WorkspaceAccessRole;
+  role: EnumValue<WorkspaceRole>;
   assignedBy: WorkspaceUser | null;
   assingedAt: Date;
 }

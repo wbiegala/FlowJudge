@@ -1,0 +1,35 @@
+{
+  "INTEGRATIONS": {
+    "MODEL": {
+      "STATUS": {
+        "INACTIVE": "Nieaktywowana",
+        "ACTIVE": "Aktywna",
+        "DELETED": "Usunięta"
+      }
+    },
+    "GRID": {
+      "TITLE": "Integracje",
+      "ON_EMPTY": "Brak dodanych integracji...",
+      "COLUMNS": {
+        "NAME": {
+          "HEADER": "Nazwa"
+        },
+        "PROVIDER": {
+          "HEADER": "Platforma"
+        },
+        "STATUS": {
+          "HEADER": "Status"
+        },
+        "CREATED": {
+          "HEADER": "Utworzono"
+        }
+      },
+      "ACTIONS": {
+        "ADD_GITHUB": "Dodaj integrację z GitHub"
+      },
+      "ROW_ACTIONS": {
+
+      }
+    }
+  }
+}

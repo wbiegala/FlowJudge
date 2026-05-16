@@ -13,12 +13,12 @@ import { apiPrefixInterceptor, appErrorInterceptor, provideApiBaseUrl, provideAp
 import { App } from './app/app';
 import { appRoutes } from './app/app.routes';
 import { environment } from './environments/environment';
-import { accessTokenInterceptor, provideRestoreSessionFactory, AuthenticationState, InsufficientPermissionsErrorHandler, UnauthorizedErrorHandler } from '@flow-judge-webapp/auth';
+import { accessTokenInterceptor, provideRestoreSessionFactory, AuthenticationState, InsufficientPermissionsErrorHandler, MissingRefreshTokenErrorHandler, UnauthorizedErrorHandler } from '@flow-judge-webapp/auth';
 import { DefaultHttpErrorHandler } from './app/utils/default-http-error-handler';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { provideValidationErrors } from '@flow-judge-webapp/ui';
 import { LegalErrorHandler } from './app/utils/legal-error-handler';
-import { WorkspaceContextState } from '@flow-judge-webapp/workspaces';
+import { workspaceContextInterceptor, WorkspaceContextState } from '@flow-judge-webapp/workspaces';
 
 
 fetch(environment.configUrl, { cache: 'no-store' })
@@ -34,7 +34,7 @@ fetch(environment.configUrl, { cache: 'no-store' })
         })),
         provideRestoreSessionFactory,
         provideHttpClient(
-          withInterceptors([apiPrefixInterceptor, accessTokenInterceptor, appErrorInterceptor]),
+          withInterceptors([apiPrefixInterceptor, appErrorInterceptor, accessTokenInterceptor, workspaceContextInterceptor]),
         ),
         provideApiBaseUrl(cfg.apiUrl),
         { provide: APP_CONFIG, useValue: cfg },
@@ -79,7 +79,8 @@ fetch(environment.configUrl, { cache: 'no-store' })
       { prefix: '/assets/i18n/auth/', suffix: '.json' },
       { prefix: '/assets/i18n/user/', suffix: '.json'},
       { prefix: '/assets/i18n/ui/', suffix: '.json'},
-      { prefix: '/assets/i18n/workspaces/', suffix: '.json' }
+      { prefix: '/assets/i18n/workspaces/', suffix: '.json' },
+      { prefix: '/assets/i18n/integrations/', suffix: '.json' }
     ]);
   }
 

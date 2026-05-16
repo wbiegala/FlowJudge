@@ -12,4 +12,9 @@
     <ProjectReference Include="..\FlowJudge.Workspaces.Application.Abstractions\FlowJudge.Workspaces.Application.Abstractions.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+	<InternalsVisibleTo Include="FlowJudge.Workspaces.UnitTests" />
+	<InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
+  </ItemGroup>
+
 </Project>

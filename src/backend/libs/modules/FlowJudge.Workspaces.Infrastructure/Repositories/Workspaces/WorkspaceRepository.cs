@@ -81,6 +81,21 @@ namespace FlowJudge.Workspaces.Infrastructure.Repositories.Workspaces
             return new PagedList<WorkspaceListItem>(items, pagination.PageSize, pagination.PageNumber, totalCount);
         }
 
+        public async Task<WorkspaceRole?> GetUserRoleInWorkspaceAsync(
+            WorkspaceId workspaceId,
+            Guid userId,
+            CancellationToken ct = default)
+        {
+            await EnsureConnectionOpenAsync(ct);
+            var getRoleCommand = Command(GetUserRoleInWorkspaceSql, new { AggregateId = workspaceId.Value, UserId = userId }, ct);
+            var roleStr = await Connection.QuerySingleOrDefaultAsync<string>(getRoleCommand);
+
+            if (!string.IsNullOrWhiteSpace(roleStr) && Enum.TryParse<WorkspaceRole>(roleStr, true, out var role))
+                return role;
+
+            return null;
+        }
+
         private const string GetWorkspaceByAggregateIdSql = @$"
 SELECT 
      {nameof(WorkspaceDbModel.id)}
@@ -222,5 +237,13 @@ INNER JOIN {Cfg.SchemaName}.{Cfg.WorkspaceMembersTableName} wm
     ON wm.{nameof(WorkspaceMemberDbModel.workspace_id)} = w.{nameof(WorkspaceDbModel.id)}
 WHERE wm.{nameof(WorkspaceMemberDbModel.member_id)} = @UserId
 OFFSET @Offset ROWS FETCH NEXT @Limit ROWS ONLY";
+
+        private const string GetUserRoleInWorkspaceSql = $@"
+SELECT DISTINCT {nameof(WorkspaceMemberDbModel.role)}
+FROM {Cfg.SchemaName}.{Cfg.WorkspacesTableName} w
+LEFT JOIN {Cfg.SchemaName}.{Cfg.WorkspaceMembersTableName} wm
+    ON wm.{nameof(WorkspaceMemberDbModel.workspace_id)} = w.{nameof(WorkspaceDbModel.id)}
+WHERE w.{nameof(WorkspaceDbModel.aggregate_id)} = @AggregateId
+    AND wm.{nameof(WorkspaceMemberDbModel.member_id)} = @UserId";
     }
 }

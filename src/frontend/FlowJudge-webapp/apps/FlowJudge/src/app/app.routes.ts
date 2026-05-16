@@ -28,12 +28,16 @@ export const appRoutes: Route[] = [
         children: [
           {
             path: '',
-            loadComponent: () => import('./home-page/home-page.component').then(m => m.HomePageComponent)
+            loadComponent: () => import('./home-page/home-page.component').then(m => m.HomePageComponent),
           },
           {
             path: 'workspaces',
             children: workspacesRoutes,
           },
+          {
+            path: 'integrations',
+            loadChildren: () => import('@flow-judge-webapp/integrations').then(m => m.integrationsRoutes),
+          }
         ],
       },
       {

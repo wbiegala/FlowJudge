@@ -1,4 +1,20 @@
 {
+  "MAIN_MENU": {
+    "BUTTONS": {
+      "INTEGRATIONS": {
+        "NAME": "Integrations",
+        "TOOLTIP": ""
+      },
+      "WORKSPACES": {
+        "NAME": "Workspaces",
+        "TOOLTIP": ""
+      },
+      "USER_ACCOUNT": {
+        "NAME": "User account",
+        "TOOLTIP": ""
+      }
+    }
+  },
   "WORKSPACE_CONTEXT": {
     "EMPTY_CONTEXT": {
       "NAME": "Workspaces",

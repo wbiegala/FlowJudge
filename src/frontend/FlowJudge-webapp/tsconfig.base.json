@@ -19,7 +19,8 @@
       "@flow-judge-webapp/auth": ["libs/auth/src/index.ts"],
       "@flow-judge-webapp/ui": ["libs/ui/src/index.ts"],
       "@flow-judge-webapp/user": ["libs/user/src/index.ts"],
-      "@flow-judge-webapp/workspaces": ["libs/workspaces/src/index.ts"]
+      "@flow-judge-webapp/workspaces": ["libs/workspaces/src/index.ts"],
+      "@flow-judge-webapp/integrations": ["libs/integrations/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
