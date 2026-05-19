@@ -133,8 +133,8 @@ services:
       - Auth__JWT__Audience=${JWT_AUDIENCE}
       - Auth__JWT__PublicKey=${JWT_PUBLIC_KEY}
       - Integrations__GitHub__CallbackUri=${GITHUB_CALLBACK_URL}
-      - Integrations__GitHub__ClientId=${GITHUB_CLIENT_ID}
-      - Integrations__GitHub__ClientSecret=${GITHUB_CLIENT_SECRET}
+      - Integrations__GitHub__AppId=${GITHUB_APP_ID}
+      - Integrations__GitHub__PrivateKeyPath=/run/secrets/GITHUB_APP_PRIVATE_KEY
     ports:
       - "8080"
       - "10443:8081"
@@ -142,6 +142,8 @@ services:
       - ./https-dev-cert.pfx:/https/https-dev-cert.pfx:ro
     networks:
       - flowjudge
+    secrets:
+      - GITHUB_APP_PRIVATE_KEY
 
   flowjudge.supervisor:
     environment:
@@ -201,3 +203,7 @@ volumes:
 networks:
   flowjudge:
     name: flowjudge
+
+secrets:
+  GITHUB_APP_PRIVATE_KEY:
+    file: ./secrets/github.private-key.pem

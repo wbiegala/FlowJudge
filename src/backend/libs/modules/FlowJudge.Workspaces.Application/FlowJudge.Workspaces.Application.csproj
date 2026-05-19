@@ -8,7 +8,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\FlowJudge.Common.Application\FlowJudge.Common.Application.csproj" />
+    <ProjectReference Include="..\..\FlowJudge.Common.Cache\FlowJudge.Common.Cache.csproj" />
     <ProjectReference Include="..\..\FlowJudge.Common.Domain\FlowJudge.Common.Domain.csproj" />
+    <ProjectReference Include="..\..\FlowJudge.GitHub.Client\FlowJudge.GitHub.Client.csproj" />
     <ProjectReference Include="..\FlowJudge.Workspaces.Application.Abstractions\FlowJudge.Workspaces.Application.Abstractions.csproj" />
   </ItemGroup>
 

@@ -30,6 +30,27 @@
       "ROW_ACTIONS": {
 
       }
+    },
+    "DETAILS": {
+      "FORMS": {
+        "BASIC": {
+          "SECTION_NAME": "Basic data",
+          "FIELDS": {
+            "NAME": "Name"
+          }
+        }
+      }
+    },
+    "SETUP-WIZARD": {
+      "GITHUB": {
+        "TITLE": "GitHub setup",
+        "CONNECT_STEP": {
+          "BUTTON_INSTALL": "Install on GitHub"
+        }
+      },
+      "CONTROLS": {
+        "BUTTON_NEXT": "Next"
+      }
     }
   }
 }

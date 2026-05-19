@@ -1,5 +1,6 @@
 using FlowJudge.API.Service.Auth;
 using FlowJudge.API.Service.ErrorHandling;
+using FlowJudge.API.Service.Installers;
 using FlowJudge.Common.Cache;
 using FlowJudge.Common.Messaging;
 using FlowJudge.Common.Sql;
@@ -11,6 +12,9 @@ using FlowJudge.Workspaces.Application;
 using FlowJudge.Workspaces.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.InstallSecrets();
+builder.InstallIntegrations();
 
 var dbConnectionString = builder.Configuration.GetConnectionString("Postgres");
 var redisConnectionString = builder.Configuration.GetConnectionString("Redis");

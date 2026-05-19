@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { API_BASE_URL, CreatedResponse, PagedResult, PaginationQueryParams } from '@flow-judge-webapp/common';
-import { CreateIntegrationRequest, GetIntegrationsResponseItem } from './integrations.model';
+import { ConnectIntegrationResponse, CreateIntegrationRequest, GetIntegrationsResponseItem } from './integrations.model';
 import { IntegrationProvider } from './models/integration-shared.model';
 
 @Injectable({ providedIn: 'root' })
@@ -25,5 +25,11 @@ export class IntegrationsService {
     const url = `${this.#baseUrl}/${this.#integrationsPathSegment}`;
 
     return this.#httpClient.get<PagedResult<GetIntegrationsResponseItem>>(url, { params: params })
+  }
+
+  connectIntegration(id: string): Observable<ConnectIntegrationResponse> {
+    const url = `${this.#baseUrl}/${this.#integrationsPathSegment}/${id}/connect`;
+
+    return this.#httpClient.post<ConnectIntegrationResponse>(url, null);
   }
 }

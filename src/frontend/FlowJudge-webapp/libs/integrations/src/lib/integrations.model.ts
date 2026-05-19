@@ -18,3 +18,7 @@ export interface GetIntegrationsResponseItem {
   createdAt: Date;
   createdBy: UserData;
 }
+
+export interface ConnectIntegrationResponse {
+  redirectUrl: string;
+}

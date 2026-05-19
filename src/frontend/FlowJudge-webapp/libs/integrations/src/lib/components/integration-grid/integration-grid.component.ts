@@ -1,3 +1,4 @@
+import { WorkspaceNavigationService } from '@flow-judge-webapp/workspaces';
 import { ChangeDetectionStrategy, Component, effect, inject } from '@angular/core';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Store } from '@ngxs/store';
@@ -18,11 +19,13 @@ export class IntegrationGridComponent {
   readonly title = 'INTEGRATIONS.GRID.TITLE';
   #store = inject(Store);
   #translateService = inject(TranslateService);
+  #workspaceNavigationService = inject(WorkspaceNavigationService);
   pageNumber = this.#store.selectSignal(IntegrationsGridState.pageNumber);
   pageSize = this.#store.selectSignal(IntegrationsGridState.pageSize);
   totalCount = this.#store.selectSignal(IntegrationsGridState.totalCount);
   items = this.#store.selectSignal(IntegrationsGridState.items);
   isLoading = this.#store.selectSignal(IntegrationsGridState.isLoading);
+
 
   readonly #loadInitialData = effect(() => {
     this.#store.dispatch(new LoadIntegrationsGridItems(1, 25));
@@ -94,7 +97,7 @@ export class IntegrationGridComponent {
   }
 
   #addGitHubIntegration() {
-    console.log('add github');
+    return this.#workspaceNavigationService.navigate(['integrations', 'setup', 'github']);
   }
 
   #formatCreatedCell(creator: string, createdAt: Date) {

@@ -10,6 +10,15 @@ export const integrationsRoutes: Route[] = [
       {
         path: '',
         loadComponent: () => import('./components/integration-grid/integration-grid.component').then(m => m.IntegrationGridComponent),
+      },
+      {
+        path: 'setup',
+        children: [
+          {
+            path: 'github',
+            loadComponent: () => import('./components/setup-wizards/github-setup-wizard/github-setup-wizard.component').then(m => m.GitHubSetupWizardComponent)
+          }
+        ]
       }
     ]
   }
