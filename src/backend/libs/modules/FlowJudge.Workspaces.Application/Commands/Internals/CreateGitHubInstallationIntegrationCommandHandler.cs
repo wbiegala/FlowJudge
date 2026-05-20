@@ -4,6 +4,7 @@ using FlowJudge.Common.Sql.UnitOfWork;
 using FlowJudge.Workspaces.Application.Abstractions.Ports;
 using FlowJudge.Workspaces.Domain.Integration.Model;
 using FlowJudge.Workspaces.Domain.Integration.Services;
+using FlowJudge.Workspaces.Domain.Repository.Model;
 using FlowJudge.Workspaces.Domain.Workspace.Model;
 using FlowJudge.Workspaces.Domain.Workspace.Services;
 
@@ -15,16 +16,19 @@ namespace FlowJudge.Workspaces.Application.Commands.Internals
         private readonly IWorkspaceRepository _workspaceRepository;
         private readonly IIntegrationRepository _integrationRepository;
         private readonly IIntegrationFactory _integrationFactory;
+        private readonly IRepositoryRepository _repositoryRepository;
 
         public CreateGitHubInstallationIntegrationCommandHandler(
             IWorkspaceRepository workspaceRepository,
             IIntegrationRepository integrationRepository,
             IIntegrationFactory integrationFactory,
+            IRepositoryRepository repositoryRepository,
             IUnitOfWork unitOfWork) : base(unitOfWork)
         {
             _workspaceRepository = workspaceRepository;
             _integrationRepository = integrationRepository;
             _integrationFactory = integrationFactory;
+            _repositoryRepository = repositoryRepository;
         }
 
         protected override async Task<IResult<Guid>> ExecuteInTransactionAsync(
@@ -46,10 +50,19 @@ namespace FlowJudge.Workspaces.Application.Commands.Internals
 
             await _integrationRepository.AddIntegrationAsync(integrationRoot, cancellationToken);
 
+            foreach (var githubRepository in command.Repositories)
+            {
+                var repositoryRoot = RepositoryRoot.Create(
+                    workspaceId: command.WorkspaceId,
+                    integrationId: integrationRoot.AggregateId,
+                    externalId: githubRepository.GitHubId.ToString(),
+                    name: githubRepository.Name,
+                    fullname: githubRepository.FullName,
+                    trackingEnabled: githubRepository.TrackingEnabled);
+                await _repositoryRepository.AddRepositoryAsync(repositoryRoot, cancellationToken);
+            }
 
-            //TODO - repozytoria!
-
-
+            return ApplicationResultFactory.Success(integrationRoot.AggregateId.Value);
         }
 
         private async Task<bool> VerifyPermissionsAsync(WorkspaceId workspaceId, Guid userId, CancellationToken ct)

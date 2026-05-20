@@ -1,4 +1,3 @@
-import { WorkspaceNavigationService } from '@flow-judge-webapp/workspaces';
 import { ChangeDetectionStrategy, Component, effect, inject } from '@angular/core';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Store } from '@ngxs/store';
@@ -21,7 +20,6 @@ export class IntegrationGridComponent {
   #store = inject(Store);
   #translateService = inject(TranslateService);
   #progressService = inject(ProgressService);
-  #workspaceNavigationService = inject(WorkspaceNavigationService);
 
   #gitHubIntegrationService = inject(GitHubIntegrationsService);
 

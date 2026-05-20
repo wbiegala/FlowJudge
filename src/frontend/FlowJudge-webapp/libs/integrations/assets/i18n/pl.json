@@ -49,11 +49,17 @@
             "SECTION_NAME": "Dane podstawowe"
           },
           "REPOSITORIES": {
-            "SECTION_NAME": "Repozytoria"
+            "SECTION_NAME": "Repozytoria",
+            "FIELDS": {
+              "IS_TRACKING_ENABLED": "Śledzić?"
+            }
           }
         },
         "ACTIONS": {
           "COMMIT": "Zatwierdź"
+        },
+        "RESULTS": {
+          "SUCCESS": "Pomyślna instalacja w GitHub pod nazwą: {{integrationName}}"
         }
       },
       "CONTROLS": {

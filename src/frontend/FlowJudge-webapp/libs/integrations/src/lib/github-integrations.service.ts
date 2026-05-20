@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { API_BASE_URL } from '@flow-judge-webapp/common';
+import { API_BASE_URL, CreatedResponse } from '@flow-judge-webapp/common';
 import { Observable } from 'rxjs';
-import { ConnectIntegrationResponse, GetGitHubInstallationRepositoriesResponseItem } from './github-integrations.model';
+import { CommitGitHubIntegrationInstallationRequest, ConnectIntegrationResponse, GetGitHubInstallationRepositoriesResponseItem } from './github-integrations.model';
 
 @Injectable({ providedIn: 'root' })
 export class GitHubIntegrationsService {
@@ -20,5 +20,11 @@ export class GitHubIntegrationsService {
     const url = `${this.#baseUrl}/${this.#integrationsPathSegment}/${installationStateId}/repositories`;
 
     return this.#httpClient.get<Array<GetGitHubInstallationRepositoriesResponseItem>>(url);
+  }
+
+  commitGitHubInstallation(installationStateId: string, request: CommitGitHubIntegrationInstallationRequest) {
+    const url = `${this.#baseUrl}/${this.#integrationsPathSegment}/${installationStateId}/commit`;
+
+    return this.#httpClient.post<CreatedResponse>(url, request);
   }
 }

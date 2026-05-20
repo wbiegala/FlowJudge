@@ -52,11 +52,17 @@
             }
           },
           "REPOSITORIES": {
-            "SECTION_NAME": "Repositories"
+            "SECTION_NAME": "Repositories",
+            "FIELDS": {
+              "IS_TRACKING_ENABLED": "Track?"
+            }
           }
         },
         "ACTIONS": {
           "COMMIT": "Commit"
+        },
+        "RESULTS": {
+          "SUCCESS": "Successfully installed on GitHub with name: {{integrationName}}"
         }
       },
       "CONTROLS": {

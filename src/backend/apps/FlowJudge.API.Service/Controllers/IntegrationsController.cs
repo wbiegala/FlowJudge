@@ -1,5 +1,4 @@
 ﻿using FlowJudge.API.Contracts;
-using FlowJudge.API.Contracts.Integrations;
 using FlowJudge.API.Contracts.Integrations.GitHub;
 using FlowJudge.API.Service.Controllers.Mappers;
 using FlowJudge.API.Service.Controllers.Redirects;
@@ -101,6 +100,7 @@ namespace FlowJudge.API.Service.Controllers
             var result = await _githubInstallationService.ConfirmGitHubInstallationAsync(
                 stateId,
                 callbackData.installation_id,
+                callbackData.setup_action,
                 cancellationToken);
 
             if (!result.IsSuccess)

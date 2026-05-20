@@ -5,3 +5,27 @@
 .full-length-form-field {
   width: 100%;
 }
+
+.github-repository-config {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.github-repository-config-name-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.github-repository-config-name {
+  font-size: medium;
+}
+
+.github-repository-config-fullname {
+  font-size: small;
+  font-style: italic;
+}

@@ -1,4 +1,4 @@
-<lib-view-header [title]="'INTEGRATIONS.SETUP-WIZARD.GITHUB.TITLE' | translate" [actions]="actions">
+<lib-view-header [title]="'INTEGRATIONS.SETUP-WIZARD.GITHUB.TITLE' | translate" [actions]="actions" (headerEvent)="onHeaderEvent($event)">
   @if (isLoading()) {
     <lib-loading></lib-loading>
   } @else {
@@ -16,8 +16,19 @@
     </lib-form-section>
 
     <lib-form-section [title]="'INTEGRATIONS.SETUP-WIZARD.GITHUB.FORMS.REPOSITORIES.SECTION_NAME' | translate">
-      @for (repository of repositories(); track $index) {
-        <p>{{ repository.id }} | {{ repository.fullName }}</p>
+      @for (repository of repositoryData(); track repository.githubId) {
+        <div class="github-repository-config">
+          <div class="github-repository-config-name-section">
+            <div class="github-repository-config-name">{{ repository.name }}</div>
+            <div class="github-repository-config-fullname">{{ repository.fullName }}</div>
+          </div>
+          <div class="github-repository-config-config">
+            <mat-slide-toggle labelPosition="before" (change)="onEnabledChanged(repository.githubId, $event.checked)">
+              {{ 'INTEGRATIONS.SETUP-WIZARD.GITHUB.FORMS.REPOSITORIES.FIELDS.IS_TRACKING_ENABLED' | translate }}
+            </mat-slide-toggle>
+          </div>
+        </div>
+        <mat-divider></mat-divider>
       }
     </lib-form-section>
 

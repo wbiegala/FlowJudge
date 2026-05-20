@@ -161,6 +161,11 @@ namespace FlowJudge.Workspaces.Application.Services.GitHubInstallation
 
             var result = await _mediator.SendCommandAsync<CreateGitHubInstallationIntegrationCommand, Guid>(command, ct);
 
+            if (result.IsSuccess)
+            {
+                await _store.RemoveAsync(GetCacheKey(installationStateId), ct);
+            }
+
             return result;
         }
 
