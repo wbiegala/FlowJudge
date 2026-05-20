@@ -2,7 +2,7 @@
 
 namespace FlowJudge.GitHub.Client.Clients
 {
-    public interface IRepositoryClient
+    public interface IRepositoryClient : IGitHubClient
     {
         Task<GetInstallationRepositoriesResponse> GetInstallationRepositoriesAsync(string installationId, int perPage, int page, CancellationToken ct = default);
     }

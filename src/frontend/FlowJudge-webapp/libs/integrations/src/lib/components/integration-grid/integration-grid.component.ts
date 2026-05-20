@@ -2,11 +2,12 @@ import { WorkspaceNavigationService } from '@flow-judge-webapp/workspaces';
 import { ChangeDetectionStrategy, Component, effect, inject } from '@angular/core';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Store } from '@ngxs/store';
-import { DataGridAction, DataGridActionEvent, DataGridColumn, DataGridComponent, DataGridRowActionEvent, EmptyGridBehavior, PaginationComponent, PaginationEvent, ViewHeaderComponent } from '@flow-judge-webapp/ui';
+import { DataGridAction, DataGridActionEvent, DataGridColumn, DataGridComponent, DataGridRowActionEvent, EmptyGridBehavior, PaginationComponent, PaginationEvent, ProgressService, ViewHeaderComponent } from '@flow-judge-webapp/ui';
 import { IntegrationsGridState } from '../../store/integrations-grid/integrations-grid.state';
 import { LoadIntegrationsGridItems } from '../../store/integrations-grid/integrations-grid.actions';
 import { IntegrationGridItem } from '../../models/integration-grid-item.model';
 import { formatDateTime } from '@flow-judge-webapp/common';
+import { GitHubIntegrationsService } from '../../github-integrations.service';
 
 @Component({
   selector: 'lib-integration-grid',
@@ -19,7 +20,11 @@ export class IntegrationGridComponent {
   readonly title = 'INTEGRATIONS.GRID.TITLE';
   #store = inject(Store);
   #translateService = inject(TranslateService);
+  #progressService = inject(ProgressService);
   #workspaceNavigationService = inject(WorkspaceNavigationService);
+
+  #gitHubIntegrationService = inject(GitHubIntegrationsService);
+
   pageNumber = this.#store.selectSignal(IntegrationsGridState.pageNumber);
   pageSize = this.#store.selectSignal(IntegrationsGridState.pageSize);
   totalCount = this.#store.selectSignal(IntegrationsGridState.totalCount);
@@ -97,7 +102,10 @@ export class IntegrationGridComponent {
   }
 
   #addGitHubIntegration() {
-    return this.#workspaceNavigationService.navigate(['integrations', 'setup', 'github']);
+
+    this.#progressService.runInProgressBar(() => this.#gitHubIntegrationService.installGitHubApplication()).subscribe(response => {
+      window.location.href = response.redirectUrl;
+    });
   }
 
   #formatCreatedCell(creator: string, createdAt: Date) {

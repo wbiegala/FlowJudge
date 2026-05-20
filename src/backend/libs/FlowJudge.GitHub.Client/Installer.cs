@@ -28,6 +28,7 @@ namespace FlowJudge.GitHub.Client
                 var configuration = ctx.GetRequiredService<GitHubClientConfiguration>();
                 client.BaseAddress = new Uri(configuration.BaseApiUrl);
                 client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/vnd.github+json"));
+                client.DefaultRequestHeaders.UserAgent.ParseAdd(configuration.ApplicationName);
                 client.DefaultRequestHeaders.Add("X-GitHub-Api-Version", configuration.ApiVersion);
             });
 
@@ -36,6 +37,7 @@ namespace FlowJudge.GitHub.Client
                 var configuration = ctx.GetRequiredService<GitHubClientConfiguration>();
                 client.BaseAddress = new Uri(configuration.BaseApiUrl);
                 client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/vnd.github+json"));
+                client.DefaultRequestHeaders.UserAgent.ParseAdd(configuration.ApplicationName);
                 client.DefaultRequestHeaders.Add("X-GitHub-Api-Version", configuration.ApiVersion);
             });
 

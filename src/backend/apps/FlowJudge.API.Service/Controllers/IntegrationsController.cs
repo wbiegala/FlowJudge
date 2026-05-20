@@ -1,6 +1,7 @@
 ﻿using FlowJudge.API.Contracts;
 using FlowJudge.API.Contracts.Integrations;
 using FlowJudge.API.Service.Controllers.Mappers;
+using FlowJudge.API.Service.Controllers.Redirects;
 using FlowJudge.API.Service.ErrorHandling;
 using FlowJudge.API.Service.Extensions;
 using FlowJudge.Common.Application;
@@ -9,11 +10,9 @@ using FlowJudge.Common.Http.Extensions;
 using FlowJudge.Common.Utils.Pagination;
 using FlowJudge.Users.Application.Abstractions.Queries;
 using FlowJudge.Users.Application.Models;
-using FlowJudge.Workspaces.Application.Abstractions.Commands;
 using FlowJudge.Workspaces.Application.Abstractions.Models;
 using FlowJudge.Workspaces.Application.Abstractions.Queries;
 using FlowJudge.Workspaces.Application.Abstractions.Services;
-using FlowJudge.Workspaces.Domain.Integration.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -70,7 +69,6 @@ namespace FlowJudge.API.Service.Controllers
 
         [HttpPost("github/install")]
         public async Task<IActionResult> ConnectIntegrationAsync(
-            [FromRoute] Guid integrationId,
             CancellationToken cancellationToken = default)
         {
             var workspaceId = this.HttpContext.GetWorkspaceId();
@@ -91,22 +89,29 @@ namespace FlowJudge.API.Service.Controllers
         }
 
         [HttpGet("github/callback")]
+        [AllowAnonymous]
         public async Task<IActionResult> GitHubSetupCallbackAsync(
             [FromQuery] GitHubSetupCallbackQueryParams callbackData,
+            [FromServices] GitHubIntegrationRedirectionService redirectGithubService,
+            [FromServices] ErrorPageRedirectionService redirectErrorService,
             CancellationToken cancellationToken = default)
         {
             var stateId = Guid.Parse(callbackData.state);
-            var confirmationResult = await _githubInstallationService.ConfirmGitHubInstallationAsync(
+            var result = await _githubInstallationService.ConfirmGitHubInstallationAsync(
                 stateId,
                 callbackData.installation_id,
                 cancellationToken);
 
-            if (!confirmationResult.IsSuccess)
+            if (!result.IsSuccess)
             {
-                //TODO: redirect to error
+                var errorPageRedirectUrl = redirectErrorService.GetErrorPageReditectUrl(result.Error!);
+                return Redirect(errorPageRedirectUrl);
             }
 
-            return Redirect();
+            var redirectUrl = redirectGithubService.GetGitHubInstallationCallbackSuccessRedirectUrl(
+                result.Data!.WorkspaceId, result.Data!.InstallationStateId);
+
+            return Redirect(redirectUrl);
         }
 
         [HttpGet("github/{installationStateId:guid}/repositories")]
@@ -114,7 +119,25 @@ namespace FlowJudge.API.Service.Controllers
             [FromRoute] Guid installationStateId,
             CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            var workspaceId = this.HttpContext.GetWorkspaceId();
+            if (!workspaceId.HasValue)
+                return ApplicationErrorMapper.ErrorResponse(
+                    ErrorCodeGenerator.NotAcceptable("integration"),
+                    "Workspace context is missing",
+                    System.Net.HttpStatusCode.BadRequest);
+
+            var result = await _githubInstallationService.GetRepositoriesForInstallationAsync(installationStateId, cancellationToken);
+            if (!result.IsSuccess)
+                return result.Error!.ToResponse();
+
+            var response = result.Data!.Select(repo => new GetGitHubInstallationRepositoriesResponseItem
+            {
+                Id = repo.Id,
+                Name = repo.Name,
+                FullName = repo.FullName,
+            }).ToArray();
+
+            return Ok(response);
         }
 
         [HttpPost("github/{installationStateId:guid}/commit")]

@@ -1,4 +1,5 @@
 using FlowJudge.API.Service.Auth;
+using FlowJudge.API.Service.Controllers.Redirects;
 using FlowJudge.API.Service.ErrorHandling;
 using FlowJudge.API.Service.Installers;
 using FlowJudge.Common.Cache;
@@ -75,6 +76,11 @@ builder.Services.AddWorkspacesApplication();
 builder.Services.AddWorkspacesInfrastructure();
 
 builder.Services.AddControllers();
+builder.Services.AddSingleton(ctx =>
+{
+    var uiBaseUrl = builder.Configuration["UiRedirectBaseUrl"] ?? string.Empty;
+    return new ErrorPageRedirectionService(uiBaseUrl);
+});
 
 builder.Services.AddOpenApi();
 

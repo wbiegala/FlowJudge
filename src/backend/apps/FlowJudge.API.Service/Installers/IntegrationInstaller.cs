@@ -1,4 +1,5 @@
-﻿using FlowJudge.Common.Secrets;
+﻿using FlowJudge.API.Service.Controllers.Redirects;
+using FlowJudge.Common.Secrets;
 using FlowJudge.GitHub.Client;
 
 namespace FlowJudge.API.Service.Installers
@@ -12,6 +13,12 @@ namespace FlowJudge.API.Service.Installers
 
         private static void InstallGitHubIntegration(this WebApplicationBuilder builder)
         {
+            builder.Services.AddSingleton(ctx =>
+            {
+                var uiBaseUrl = builder.Configuration["UiRedirectBaseUrl"] ?? string.Empty;
+                return new GitHubIntegrationRedirectionService(uiBaseUrl);
+            });
+
             builder.Services.AddGitHubClient((sp, cfg) =>
             {
                 var secretProvider = sp.GetRequiredKeyedService<ISecretProvider>(SecretsInstaller.GithubPrivateKeySecretName);

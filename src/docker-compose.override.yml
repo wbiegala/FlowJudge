@@ -119,6 +119,7 @@ services:
       - ConnectionStrings__Postgres=Host=flowjudge.db;Port=5432;Database=${FLOWJUDGE_DB_NAME};Username=${FLOWJUDGE_DB_USER};Password=${FLOWJUDGE_DB_PASSWORD};SSL Mode=Disable;
       - ConnectionStrings__Redis=${FLOWJUDGE_REDIS_CONNECTION_STRING}
       - CorsAllowedOrigins=${ALLOWED_ORIGINS}
+      - UiRedirectBaseUrl=https://localhost:4200
       - Auth__Keycloak__BaseUrl=${AUTH_BASE_URL}
       - Auth__Keycloak__BaseUrlInternal=${AUTH_BASEURL_INTERNAL}
       - Auth__Keycloak__Realm=${AUTH_REALM}

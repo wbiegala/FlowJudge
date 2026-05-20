@@ -25,6 +25,7 @@
     }
   },
   "ERRORS": {
+    "HEADER": "Error",
     "GENERIC": "Error occured."
   }
 }

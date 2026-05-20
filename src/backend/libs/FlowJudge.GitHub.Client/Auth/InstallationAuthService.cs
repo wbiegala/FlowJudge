@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Security.Cryptography;
 
 namespace FlowJudge.GitHub.Client.Auth
@@ -27,7 +28,7 @@ namespace FlowJudge.GitHub.Client.Auth
         {
             if (!_isInstallationTokenConfiguration)
                 throw new NoConfigurationProvidedException();
-            
+
             var installationToken = await GetStoredInstallationTokenAsync(installationId, ct);
             if (string.IsNullOrWhiteSpace(installationToken))
             {
@@ -50,7 +51,7 @@ namespace FlowJudge.GitHub.Client.Auth
 
         private async Task<string?> ReceiveInstallationTokenAsync(string installationId, CancellationToken ct)
         {
-            var accessToken = await GetAccessTokenAsync(ct);
+            var accessToken = GetAccessToken();
 
             var response = await _httpClient.GetInstallationTokenAsync(installationId, accessToken, ct);
 
@@ -62,45 +63,41 @@ namespace FlowJudge.GitHub.Client.Auth
             return response.InstallationToken;
         }
 
-        public async Task<string> GetAccessTokenAsync(CancellationToken ct)
+        public string GetAccessToken()
         {
-            const string access_token_key = "github_access_token";
-            string? accessToken = null;
-            if (_isTokenStore)
+            var privateKey = _configuration
+                .InstallationTokenAuthConfiguration!
+                .PrivateKey
+                .Replace("\\n", "\n");
+
+            using var rsa = RSA.Create();
+            rsa.ImportFromPem(privateKey);
+
+            var now = DateTimeOffset.UtcNow;
+            var expires = now.AddMinutes(9);
+
+            var securityKey = new RsaSecurityKey(rsa)
             {
-                accessToken = await _tokenStore!.GetInstallationTokenAsync(access_token_key, ct);
-            }
+                KeyId = _configuration.InstallationTokenAuthConfiguration.ApplicationId
+            };
 
-            if (string.IsNullOrWhiteSpace(accessToken))
-            {
-                using var rsa = RSA.Create();
-                rsa.ImportFromPem(_configuration.InstallationTokenAuthConfiguration!.PrivateKey);
+            var credentials = new SigningCredentials(
+                securityKey,
+                SecurityAlgorithms.RsaSha256);
 
-                var now = DateTimeOffset.UtcNow;
+            var token = new JwtSecurityToken(
+                issuer: _configuration.InstallationTokenAuthConfiguration.ApplicationId,
+                claims:
+                [
+                    new Claim(
+                JwtRegisteredClaimNames.Iat,
+                now.AddSeconds(-60).ToUnixTimeSeconds().ToString(),
+                ClaimValueTypes.Integer64)
+                ],
+                expires: expires.UtcDateTime,
+                signingCredentials: credentials);
 
-                var securityKey = new RsaSecurityKey(rsa);
-                var credentials = new SigningCredentials(
-                    securityKey,
-                    SecurityAlgorithms.RsaSha256);
-
-                var expires = now.AddMinutes(9).UtcDateTime;
-
-                var token = new JwtSecurityToken(
-                    issuer: _configuration.InstallationTokenAuthConfiguration.ApplicationId,
-                    claims: [],
-                    notBefore: now.AddSeconds(-60).UtcDateTime,
-                    expires: expires,
-                    signingCredentials: credentials);
-
-                accessToken = new JwtSecurityTokenHandler().WriteToken(token);
-
-                if (_isTokenStore)
-                {
-                    await _tokenStore!.StoreInstallationTokenAsync(access_token_key, accessToken, expires, ct);
-                }         
-            }
-
-            return accessToken;
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }

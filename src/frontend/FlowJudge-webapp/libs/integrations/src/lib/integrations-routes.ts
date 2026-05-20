@@ -15,8 +15,8 @@ export const integrationsRoutes: Route[] = [
         path: 'setup',
         children: [
           {
-            path: 'github',
-            loadComponent: () => import('./components/setup-wizards/github-setup-wizard/github-setup-wizard.component').then(m => m.GitHubSetupWizardComponent)
+            path: 'github/:installationStateId',
+            loadComponent: () => import('./components/setup-wizards/github-setup-wizard/github-setup-wizard.component').then(m => m.GitHubSetupWizardComponent),
           }
         ]
       }

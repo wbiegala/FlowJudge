@@ -1,6 +1,8 @@
 ﻿using FlowJudge.GitHub.Client.Auth.Contract;
 using FlowJudge.GitHub.Client.Exceptions;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Text.Json;
 
 namespace FlowJudge.GitHub.Client.Auth
 {
@@ -15,19 +17,39 @@ namespace FlowJudge.GitHub.Client.Auth
         }
 
         public async Task<(string InstallationToken, DateTimeOffset ExpireAt)> GetInstallationTokenAsync(
-            string installationId, string accessToken, CancellationToken ct = default)
+            string installationId,
+            string appJwt,
+            CancellationToken ct = default)
         {
             var url = $"app/installations/{installationId}/access_tokens";
 
-            var request = new HttpRequestMessage(HttpMethod.Post, url);
-            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
-            var response = await _httpClient.SendAsync(request, ct);
-            response.EnsureSuccessStatusCode();
+            using var request = new HttpRequestMessage(HttpMethod.Post, url);
 
-            var responseContent = await response.Content.ReadFromJsonAsync<GetInstallationTokenResponse>(ct);
+            request.Headers.Authorization =
+                new AuthenticationHeaderValue("Bearer", appJwt);
+
+            using var response = await _httpClient.SendAsync(request, ct);
+
+            var body = await response.Content.ReadAsStringAsync(ct);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new InvalidOperationException(
+                    $"GitHub installation token request failed. Status: {(int)response.StatusCode} {response.StatusCode}. Body: {body}");
+            }
+
+            var responseContent = JsonSerializer.Deserialize<GetInstallationTokenResponse>(
+                body,
+                new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+
             if (responseContent is null)
+            {
                 throw new InvalidResponseException(url, typeof(GetInstallationTokenResponse));
-            
+            }
+
             return new(responseContent.token, responseContent.expires_at);
         }
     }
