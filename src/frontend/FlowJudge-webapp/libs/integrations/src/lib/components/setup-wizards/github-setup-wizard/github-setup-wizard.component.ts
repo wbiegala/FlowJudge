@@ -1,8 +1,8 @@
 import { MatInputModule } from '@angular/material/input';
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { ControlErrorDirective, LoadingComponent, ProgressService, ViewHeaderComponent } from '@flow-judge-webapp/ui';
+import { ControlErrorDirective, FormSectionComponent, LoadingComponent, ProgressService, ViewHeaderAction, ViewHeaderComponent } from '@flow-judge-webapp/ui';
 import { TranslatePipe } from '@ngx-translate/core';
 import { MatStepperModule} from '@angular/material/stepper';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -13,7 +13,18 @@ import { filter, finalize, map, switchMap, tap } from 'rxjs';
 
 @Component({
   selector: 'lib-github-setup-wizard',
-  imports: [ MatButtonModule, MatStepperModule, FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, ViewHeaderComponent, TranslatePipe, ControlErrorDirective, LoadingComponent ],
+  imports: [
+    MatButtonModule,
+    FormSectionComponent,
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    ViewHeaderComponent,
+    TranslatePipe,
+    ControlErrorDirective,
+    LoadingComponent,
+  ],
   templateUrl: './github-setup-wizard.component.html',
   styleUrl: './github-setup-wizard.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -24,6 +35,15 @@ export class GitHubSetupWizardComponent {
   #githubIntegrationService = inject(GitHubIntegrationsService);
 
   isLoading = signal(true);
+
+  readonly actions: Array<ViewHeaderAction> = [
+      {
+        name: 'commit',
+        nameTranslationKey: 'INTEGRATIONS.SETUP-WIZARD.GITHUB.ACTIONS.COMMIT',
+        icon: 'check',
+        canExecute: () => this.isLoading() === false
+      }
+    ];
 
   readonly repositories = toSignal(this.#activatedRoute.params.pipe(
     map(params => params['installationStateId'] as string | undefined),
@@ -41,4 +61,10 @@ export class GitHubSetupWizardComponent {
         )
     )
   ), { initialValue: [] });
+
+  basicDataForm = new FormGroup({
+    name: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.maxLength(128)] }),
+  });
+
+
 }

@@ -9,6 +9,6 @@ namespace FlowJudge.GitHub.Client.Contract
         public int TotalCount { get; init; }
 
         [JsonPropertyName("repositories")]
-        public IEnumerable<Repository> Repositiories { get; init; }
+        public IEnumerable<Repository> Repositories { get; init; } = Enumerable.Empty<Repository>();
     }
 }

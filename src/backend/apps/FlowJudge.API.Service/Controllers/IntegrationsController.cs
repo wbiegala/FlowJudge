@@ -1,5 +1,6 @@
 ﻿using FlowJudge.API.Contracts;
 using FlowJudge.API.Contracts.Integrations;
+using FlowJudge.API.Contracts.Integrations.GitHub;
 using FlowJudge.API.Service.Controllers.Mappers;
 using FlowJudge.API.Service.Controllers.Redirects;
 using FlowJudge.API.Service.ErrorHandling;
@@ -85,7 +86,7 @@ namespace FlowJudge.API.Service.Controllers
             if (!result.IsSuccess)
                 return result.Error!.ToResponse();
 
-            return Ok(new ConnectIntegrationResponse { RedirectUrl = result.Data.RedirectUrl });
+            return Ok(new InstallGitHubIntegrationResponse { RedirectUrl = result.Data.RedirectUrl });
         }
 
         [HttpGet("github/callback")]
@@ -143,9 +144,33 @@ namespace FlowJudge.API.Service.Controllers
         [HttpPost("github/{installationStateId:guid}/commit")]
         public async Task<IActionResult> CommitGitHubInstallationAsync(
             [FromRoute] Guid installationStateId,
+            [FromBody] CommitGitHubIntegrationInstallationRequest request,
             CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            var workspaceId = this.HttpContext.GetWorkspaceId();
+            if (!workspaceId.HasValue)
+                return ApplicationErrorMapper.ErrorResponse(
+                    ErrorCodeGenerator.NotAcceptable("integration"),
+                    "Workspace context is missing",
+                    System.Net.HttpStatusCode.BadRequest);
+
+            var userContext = this.HttpContext.User.GetUserContext();
+
+            var result = await _githubInstallationService.CommitGitHubInstallationAsync(
+                installationStateId,
+                request.Name,
+                request.RepositoriesConfiguration.Select(r => new GitHubInstallationRepositoryConfiguration
+                {
+                    GithubId = r.GithubId,
+                    EnableTracking = r.Track
+                }),
+                userContext.Id,
+                cancellationToken);
+
+            if (!result.IsSuccess)
+                return result.Error!.ToResponse();
+
+            return Ok(new CreatedResponse(result.Data!));
         }
 
         #endregion

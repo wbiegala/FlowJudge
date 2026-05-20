@@ -178,7 +178,7 @@ namespace FlowJudge.Workspaces.UnitTests.Domain
                 WorkspaceStatus.Active, CreationTimestamp, CreatorId, new List<WorkspaceMember> { owner, member });
 
             // Act
-            Assert.Throws<ForbiddenActionException>(() => workspace.AddOrUpdateMember(Guid.NewGuid(), WorkspaceRole.Member, DateTimeOffset.UtcNow, MemberId));
+            Assert.Throws<ForbiddenWorkspaceActionException>(() => workspace.AddOrUpdateMember(Guid.NewGuid(), WorkspaceRole.Member, DateTimeOffset.UtcNow, MemberId));
         }
 
         private static Guid WorkspaceDbId = Guid.Parse("a1b2c3d4-e5f6-7890-abcd-ef1234567890");

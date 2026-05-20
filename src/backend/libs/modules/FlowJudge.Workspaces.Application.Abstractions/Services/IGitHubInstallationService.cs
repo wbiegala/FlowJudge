@@ -12,16 +12,18 @@ namespace FlowJudge.Workspaces.Application.Abstractions.Services
         Task<IResult<(Guid WorkspaceId, Guid InstallationStateId)>> ConfirmGitHubInstallationAsync(
             Guid installationStateId,
             string installationId,
+            string? setupAction,
             CancellationToken ct);
 
         Task<IResult<IEnumerable<GitHubInstallationRepository>>> GetRepositoriesForInstallationAsync(
             Guid installationStateId,
             CancellationToken ct);
 
-        Task CommitGitHubInstallation(
+        Task<IResult<Guid>> CommitGitHubInstallationAsync(
             Guid installationStateId,
             string name,
-            GitHubInstallationRepositoryConfiguration initialRepositoriesConfiguration,
+            IEnumerable<GitHubInstallationRepositoryConfiguration> initialRepositoriesConfiguration,
+            Guid issuerId,
             CancellationToken ct);
     }
 
@@ -34,6 +36,7 @@ namespace FlowJudge.Workspaces.Application.Abstractions.Services
 
     public sealed record GitHubInstallationRepositoryConfiguration
     {
-
+        public int GithubId { get; init; }
+        public bool EnableTracking { get; init; }
     }
 }

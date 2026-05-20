@@ -12,6 +12,12 @@ namespace FlowJudge.Workspaces.Domain.Integration.Model
         public DateTimeOffset CreatedAt { get; private set; }
         public Guid CreatedBy { get; private set; }
 
+        internal void Deactivate(DateTimeOffset timestamp)
+        {
+            Status = IntegrationAuthenticationStatus.Inactive;
+            ValidTo = timestamp;
+        }
+
         public static IntegrationAuthentication Create(
             Guid integrationId,
             IntegrationAuthenticationType type,

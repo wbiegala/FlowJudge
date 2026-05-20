@@ -44,8 +44,19 @@
     "SETUP-WIZARD": {
       "GITHUB": {
         "TITLE": "GitHub setup",
-        "CONNECT_STEP": {
-          "BUTTON_INSTALL": "Install on GitHub"
+        "FORMS": {
+          "BASIC":{
+            "SECTION_NAME": "Basic data",
+            "FIELDS": {
+              "NAME": "Name"
+            }
+          },
+          "REPOSITORIES": {
+            "SECTION_NAME": "Repositories"
+          }
+        },
+        "ACTIONS": {
+          "COMMIT": "Commit"
         }
       },
       "CONTROLS": {

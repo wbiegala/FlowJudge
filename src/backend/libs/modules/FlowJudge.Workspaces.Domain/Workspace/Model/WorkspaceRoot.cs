@@ -149,10 +149,10 @@ namespace FlowJudge.Workspaces.Domain.Workspace.Model
         {
             var member = _members.SingleOrDefault(m => m.MemberId == issuerId);
             if (member == null)
-                throw new ForbiddenActionException();
+                throw new ForbiddenWorkspaceActionException();
 
             if (member.Role < requiredRole) { 
-                throw new ForbiddenActionException();
+                throw new ForbiddenWorkspaceActionException();
             }
         }
 

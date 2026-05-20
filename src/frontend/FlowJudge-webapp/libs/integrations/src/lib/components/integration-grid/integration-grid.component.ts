@@ -102,7 +102,6 @@ export class IntegrationGridComponent {
   }
 
   #addGitHubIntegration() {
-
     this.#progressService.runInProgressBar(() => this.#gitHubIntegrationService.installGitHubApplication()).subscribe(response => {
       window.location.href = response.redirectUrl;
     });

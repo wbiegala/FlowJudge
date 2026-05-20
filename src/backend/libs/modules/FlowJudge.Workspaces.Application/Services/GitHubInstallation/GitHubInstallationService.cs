@@ -1,13 +1,17 @@
 ﻿using FlowJudge.Common.Application;
+using FlowJudge.Common.Application.Mediator;
 using FlowJudge.Common.Cache;
 using FlowJudge.GitHub.Client;
 using FlowJudge.GitHub.Client.Clients;
 using FlowJudge.GitHub.Client.Contract.SharedModels;
 using FlowJudge.Workspaces.Application.Abstractions.Ports;
 using FlowJudge.Workspaces.Application.Abstractions.Services;
+using FlowJudge.Workspaces.Application.Commands.Internals;
 using FlowJudge.Workspaces.Application.Services.GitHubInstallation.Models;
+using FlowJudge.Workspaces.Domain.Integration.Model;
 using FlowJudge.Workspaces.Domain.Workspace.Model;
 using FlowJudge.Workspaces.Domain.Workspace.Services;
+using static FlowJudge.Workspaces.Application.Commands.Internals.CreateGitHubInstallationIntegrationCommand;
 using ClientRepositoryContract = FlowJudge.GitHub.Client.Contract.SharedModels.Repository;
 
 namespace FlowJudge.Workspaces.Application.Services.GitHubInstallation
@@ -18,15 +22,18 @@ namespace FlowJudge.Workspaces.Application.Services.GitHubInstallation
         private readonly IApplicationCache _store;
         private readonly IGitHubService _githubClientService;
         private readonly IWorkspaceRepository _workspaceRepository;
+        private readonly IMediator _mediator;
 
         public GitHubInstallationService(
             IApplicationCache applicationCache,
             IGitHubService githubClientService,
-            IWorkspaceRepository workspaceRepository)
+            IWorkspaceRepository workspaceRepository,
+            IMediator mediator)
         {
             _store = applicationCache;
             _githubClientService = githubClientService;
             _workspaceRepository = workspaceRepository;
+            _mediator = mediator;
         }
 
         public async Task<IResult<(Guid InstallationStateId, string RedirectUrl)>> StartGitHubInstallationAsync(
@@ -57,6 +64,7 @@ namespace FlowJudge.Workspaces.Application.Services.GitHubInstallation
         public async Task<IResult<(Guid WorkspaceId, Guid InstallationStateId)>> ConfirmGitHubInstallationAsync(
             Guid installationStateId,
             string installationId,
+            string? setupAction,
             CancellationToken ct)
         {
             var installationState = await _store.GetObjectAsync<GitHubInstallationModel>(GetCacheKey(installationStateId), ct);
@@ -66,6 +74,7 @@ namespace FlowJudge.Workspaces.Application.Services.GitHubInstallation
                     ErrorCodeGenerator.NotFound("installation-state"));
 
             installationState.InstallationId = installationId;
+            installationState.SetupAction = setupAction;
 
             await _store.SetObjectAsync(GetCacheKey(installationState.StateId), installationState, TimeSpan.FromMinutes(StoreTtlInMinutes), ct);
 
@@ -109,13 +118,50 @@ namespace FlowJudge.Workspaces.Application.Services.GitHubInstallation
             return ApplicationResultFactory.Success<IEnumerable<GitHubInstallationRepository>>(result);
         }
 
-        public Task CommitGitHubInstallation(
+        public async Task<IResult<Guid>> CommitGitHubInstallationAsync(
             Guid installationStateId,
             string name,
-            GitHubInstallationRepositoryConfiguration initialRepositoriesConfiguration,
+            IEnumerable<GitHubInstallationRepositoryConfiguration> initialRepositoriesConfiguration,
+            Guid issuerId,
             CancellationToken ct)
         {
-            throw new NotImplementedException();
+            var installationState = await _store.GetObjectAsync<GitHubInstallationModel>(GetCacheKey(installationStateId), ct);
+            if (installationState is null)
+                return ApplicationResultFactory.Failure<Guid>(
+                    $"Installation state id={installationStateId} not found",
+                    ErrorCodeGenerator.NotFound("installation-state"));
+
+            var canProcess = await VerifyPermissionsAsync(WorkspaceId.Create(installationState.WorkspaceId), issuerId, ct);
+            if (!canProcess)
+                return ApplicationResultFactory.Failure<Guid>(
+                    "Cannot connect integration.", ErrorCodeGenerator.Forbidden("workspace"));
+
+            var getStoredRepoData = (int repoId) => installationState.Repositories!.FirstOrDefault(r => r.Id == repoId);
+           
+
+            var command = new CreateGitHubInstallationIntegrationCommand
+            {
+                WorkspaceId = installationState.WorkspaceId,
+                IssuerId = issuerId,
+                Name = name,
+                GitHubInstallationId = installationState.InstallationId!,
+                InitialStatus = installationState.SetupAction switch
+                {
+                    "install" => IntegrationStatus.Active,
+                    _ => IntegrationStatus.Inactive
+                },
+                Repositories = initialRepositoriesConfiguration.Select(repo => new GitHubRepositoryInitialConfiguration
+                {
+                    GitHubId = repo.GithubId,
+                    Name = getStoredRepoData(repo.GithubId).Name,
+                    FullName = getStoredRepoData(repo.GithubId).FullName,
+                    TrackingEnabled = repo.EnableTracking
+                }).ToArray(),
+            };
+
+            var result = await _mediator.SendCommandAsync<CreateGitHubInstallationIntegrationCommand, Guid>(command, ct);
+
+            return result;
         }
 
 
@@ -141,24 +187,19 @@ namespace FlowJudge.Workspaces.Application.Services.GitHubInstallation
             var firstPage = await client.GetInstallationRepositoriesAsync(installationId, pageSize, 1, ct);
 
             if (firstPage.TotalCount <= pageSize)
-                return firstPage.Repositiories;
+                return firstPage.Repositories;
 
             var result = new List<ClientRepositoryContract>();
-            result.AddRange(firstPage.Repositiories);
+            result.AddRange(firstPage.Repositories);
 
             var totalCount = firstPage.TotalCount;
-            var pagesCount = Math.Ceiling(decimal.Divide(totalCount, pageSize));
+            var pagesCount = (int)Math.Ceiling(decimal.Divide(totalCount, pageSize));
 
             for (var currentPage = 2; currentPage <= pagesCount; currentPage++)
             {
-                if (ct.IsCancellationRequested)
-                    break;
                 var reposPage = await client.GetInstallationRepositoriesAsync(installationId, pageSize, currentPage, ct);
-                result.AddRange(reposPage.Repositiories);
+                result.AddRange(reposPage.Repositories);
             }
-
-            if (ct.IsCancellationRequested)
-                return Enumerable.Empty<ClientRepositoryContract>();
 
             return result;
         }

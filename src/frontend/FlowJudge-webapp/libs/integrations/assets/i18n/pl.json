@@ -44,8 +44,16 @@
     "SETUP-WIZARD": {
       "GITHUB": {
         "TITLE": "Instalacja GitHub",
-        "CONNECT_STEP": {
-          "BUTTON_INSTALL": "Zainstaluj na GitHub"
+        "FORMS": {
+          "BASIC":{
+            "SECTION_NAME": "Dane podstawowe"
+          },
+          "REPOSITORIES": {
+            "SECTION_NAME": "Repozytoria"
+          }
+        },
+        "ACTIONS": {
+          "COMMIT": "Zatwierdź"
         }
       },
       "CONTROLS": {

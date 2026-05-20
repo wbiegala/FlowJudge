@@ -9,6 +9,7 @@ namespace FlowJudge.Workspaces.Application.Services.GitHubInstallation.Models
         public Guid IssuerId { get; set; }
         public string? Name { get; set; }
         public string? InstallationId { get; set; }
+        public string? SetupAction { get; set; }
         public IEnumerable<GitHubRepository>? Repositories { get; set; }
         
         internal sealed class GitHubRepository
