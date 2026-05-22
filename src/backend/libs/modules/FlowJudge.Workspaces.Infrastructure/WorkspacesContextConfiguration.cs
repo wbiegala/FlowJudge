@@ -7,5 +7,6 @@
         public const string WorkspaceMembersTableName = "workspace_members";
         public const string IntegrationsTableName = "integrations";
         public const string IntegrationAuthenticationTableName = "integration_authentication";
+        public const string RepositoriesTableName = "repositories";
     }
 }

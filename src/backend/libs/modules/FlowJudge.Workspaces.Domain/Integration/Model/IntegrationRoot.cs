@@ -1,4 +1,5 @@
 ﻿using FlowJudge.Common.Domain;
+using FlowJudge.Workspaces.Domain.Integration.Model.Exceptions;
 using FlowJudge.Workspaces.Domain.Workspace.Model;
 
 namespace FlowJudge.Workspaces.Domain.Integration.Model
@@ -32,5 +33,27 @@ namespace FlowJudge.Workspaces.Domain.Integration.Model
         public IReadOnlyCollection<IntegrationAuthentication> AuthenticationData => _authenticationData.AsReadOnly();
         public DateTimeOffset CreatedAt { get; protected set; }
         public Guid CreatedBy { get; protected set; }
+
+
+        public virtual void Activate()
+        {
+            if (Status != IntegrationStatus.Inactive)
+                throw new InvalidIntegrationStatusException();
+
+            Status = IntegrationStatus.Active;
+        }
+
+        public virtual void Deactivate()
+        {
+            if (Status != IntegrationStatus.Active)
+                throw new InvalidIntegrationStatusException();
+
+            Status = IntegrationStatus.Inactive;
+        }
+
+        public void Rename(IntegrationName name)
+        {
+            Name = name;
+        }
     }
 }

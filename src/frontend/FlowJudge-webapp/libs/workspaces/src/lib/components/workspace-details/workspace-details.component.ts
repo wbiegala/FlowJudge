@@ -53,8 +53,6 @@ export class WorkspaceDetailsComponent {
     this.basicDataForm.markAllAsTouched();
     this.basicDataForm.updateValueAndValidity({ emitEvent: true });
     this.#cdr.markForCheck();
-    const nameError = this.basicDataForm.controls.name.errors;
-    console.log(nameError);
 
     if (this.basicDataForm.invalid) {
       return;

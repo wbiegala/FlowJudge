@@ -88,6 +88,22 @@ namespace FlowJudge.Workspaces.Infrastructure.Repositories.Integrations
                 totalCount);
         }
 
+        public async Task<IntegrationProvider?> GetIntegrationProviderAsync(IntegrationId integrationId, CancellationToken ct = default)
+        {
+            await EnsureConnectionOpenAsync(ct);
+            var command = Command(GetIntegrationProviderSql, new { AggregateId = integrationId.Value }, ct);
+            var providerStr = await Connection.ExecuteScalarAsync<string?>(command);
+
+            if (string.IsNullOrWhiteSpace(providerStr))
+                return null;
+
+            if (Enum.TryParse<IntegrationProvider>(providerStr, out var provider))
+                return provider;
+
+            return null;
+        }
+
+
         private const string AddIntegrationSql = $@"
 INSERT INTO {Cfg.SchemaName}.{Cfg.IntegrationsTableName} (
      {nameof(IntegrationDbModel.id)}
@@ -144,7 +160,7 @@ WITH source AS (
     FROM jsonb_to_recordset(CAST(@AuthenticationData AS jsonb)) AS x
     (
          {nameof(IntegrationAuthenticationDbModel.id)} uuid
-        ,{nameof(IntegrationAuthenticationDbModel.integration_id)} uuid,
+        ,{nameof(IntegrationAuthenticationDbModel.integration_id)} uuid
         ,{nameof(IntegrationAuthenticationDbModel.type)} text
         ,{nameof(IntegrationAuthenticationDbModel.status)} text
         ,{nameof(IntegrationAuthenticationDbModel.value)} text
@@ -236,5 +252,10 @@ SELECT
 FROM {Cfg.SchemaName}.{Cfg.IntegrationsTableName}
 WHERE {nameof(IntegrationDbModel.workspace_id)} = @WorkspaceId
 OFFSET @Offset ROWS FETCH NEXT @Limit ROWS ONLY";
+
+        private const string GetIntegrationProviderSql = $@"
+SELECT {nameof(IntegrationDbModel.provider)}
+FROM {Cfg.SchemaName}.{Cfg.IntegrationsTableName}
+WHERE {nameof(IntegrationDbModel.aggregate_id)} = @AggregateId";
     }
 }

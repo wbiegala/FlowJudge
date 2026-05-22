@@ -1,24 +1,23 @@
 ﻿using FlowJudge.Common.Application;
-using FlowJudge.Common.Application.Mediator;
-using FlowJudge.Common.Domain;
+using FlowJudge.Common.Application.Transactional;
+using FlowJudge.Common.Sql.UnitOfWork;
 using FlowJudge.Workspaces.Application.Abstractions.Commands;
 using FlowJudge.Workspaces.Application.Abstractions.Ports;
 using FlowJudge.Workspaces.Domain.Workspace.Model;
 
 namespace FlowJudge.Workspaces.Application.Commands
 {
-    internal sealed class UpdateWorkspaceCommandHandler : ICommandHandler<UpdateWorkspaceCommand>
+    internal sealed class UpdateWorkspaceCommandHandler : TransactionalCommandHandler<UpdateWorkspaceCommand>
     {
         private readonly IWorkspaceRepository _workspaceRepository;
 
-        public UpdateWorkspaceCommandHandler(IWorkspaceRepository workspaceRepository)
+        public UpdateWorkspaceCommandHandler(IWorkspaceRepository workspaceRepository, IUnitOfWork unitOfWork)
+            :base(unitOfWork)
         {
             _workspaceRepository = workspaceRepository;
         }
 
-        public async Task<IResult> ExecuteAsync(
-            UpdateWorkspaceCommand command,
-            CancellationToken cancellationToken = default)
+        protected override async Task<IResult> ExecuteInTransactionAsync(UpdateWorkspaceCommand command, CancellationToken cancellationToken = default)
         {
             var workspaceId = WorkspaceId.Create(command.WorkspaceId);
             var workspace = await _workspaceRepository.GetWorkspaceByAggregateIdAsync(workspaceId, cancellationToken);
@@ -27,26 +26,14 @@ namespace FlowJudge.Workspaces.Application.Commands
                 return ApplicationResultFactory.Failure("Workspace not found.",
                     ErrorCodeGenerator.NotFound(nameof(workspace)));
 
-            try
+            if (workspace.Name != command.Name)
             {
-                if (workspace.Name != command.Name)
-                {
-                    workspace.Rename(WorkspaceName.Create(command.Name), command.IssuerId);
-                }
+                workspace.Rename(WorkspaceName.Create(command.Name), command.IssuerId);
+            }
 
-                await _workspaceRepository.UpdateWorkspaceAsync(workspace, cancellationToken);
+            await _workspaceRepository.UpdateWorkspaceAsync(workspace, cancellationToken);
 
-                return ApplicationResultFactory.Success();
-            }
-            catch (DomainException ex)
-            {
-                return ApplicationResultFactory.Failure(ex.Message, ex.ErrorCode);
-            }
-            catch (Exception ex)
-            {
-                return ApplicationResultFactory.Failure(ex,
-                    ErrorCodeGenerator.UpdateFailed(nameof(workspace)));
-            }
+            return ApplicationResultFactory.Success();
         }
     }
 }

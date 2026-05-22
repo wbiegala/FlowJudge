@@ -16,6 +16,10 @@ export const appRoutes: Route[] = [
         loadComponent: () => import('./home-page/home-page.component').then(m => m.HomePageComponent)
       },
       {
+        path: 'error',
+        loadComponent: () => import('./layout/pages/error-page.component').then(m => m.ErrorPageComponent)
+      },
+      {
         path: 'workspaces',
         canActivate: [authenticatedGuard],
         canActivateChild: [authenticatedGuard],

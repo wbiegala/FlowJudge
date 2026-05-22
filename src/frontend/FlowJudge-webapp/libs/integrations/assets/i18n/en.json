@@ -30,6 +30,44 @@
       "ROW_ACTIONS": {
 
       }
+    },
+    "DETAILS": {
+      "FORMS": {
+        "BASIC": {
+          "SECTION_NAME": "Basic data",
+          "FIELDS": {
+            "NAME": "Name"
+          }
+        }
+      }
+    },
+    "SETUP-WIZARD": {
+      "GITHUB": {
+        "TITLE": "GitHub setup",
+        "FORMS": {
+          "BASIC":{
+            "SECTION_NAME": "Basic data",
+            "FIELDS": {
+              "NAME": "Name"
+            }
+          },
+          "REPOSITORIES": {
+            "SECTION_NAME": "Repositories",
+            "FIELDS": {
+              "IS_TRACKING_ENABLED": "Track?"
+            }
+          }
+        },
+        "ACTIONS": {
+          "COMMIT": "Commit"
+        },
+        "RESULTS": {
+          "SUCCESS": "Successfully installed on GitHub with name: {{integrationName}}"
+        }
+      },
+      "CONTROLS": {
+        "BUTTON_NEXT": "Next"
+      }
     }
   }
 }

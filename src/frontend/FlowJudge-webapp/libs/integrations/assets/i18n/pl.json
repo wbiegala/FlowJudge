@@ -30,6 +30,41 @@
       "ROW_ACTIONS": {
 
       }
+    },
+    "DETAILS": {
+      "FORMS": {
+        "BASIC": {
+          "SECTION_NAME": "Basic data",
+          "FIELDS": {
+            "NAME": "Name"
+          }
+        }
+      }
+    },
+    "SETUP-WIZARD": {
+      "GITHUB": {
+        "TITLE": "Instalacja GitHub",
+        "FORMS": {
+          "BASIC":{
+            "SECTION_NAME": "Dane podstawowe"
+          },
+          "REPOSITORIES": {
+            "SECTION_NAME": "Repozytoria",
+            "FIELDS": {
+              "IS_TRACKING_ENABLED": "Śledzić?"
+            }
+          }
+        },
+        "ACTIONS": {
+          "COMMIT": "Zatwierdź"
+        },
+        "RESULTS": {
+          "SUCCESS": "Pomyślna instalacja w GitHub pod nazwą: {{integrationName}}"
+        }
+      },
+      "CONTROLS": {
+        "BUTTON_NEXT": "Dalej"
+      }
     }
   }
 }

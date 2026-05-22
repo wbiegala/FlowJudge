@@ -13,11 +13,15 @@
     <Project Path="backend/libs/FlowJudge.Common.Domain/FlowJudge.Common.Domain.csproj" Id="0687ecef-67ae-4926-b80d-7c303a63af27" />
     <Project Path="backend/libs/FlowJudge.Common.Http/FlowJudge.Common.Http.csproj" Id="21a433fb-a9e7-456d-9e0d-0aa7b27ab7ea" />
     <Project Path="backend/libs/FlowJudge.Common.Messaging/FlowJudge.Common.Messaging.csproj" Id="7221443b-2e8c-4b4a-8992-6c02eb5bf03e" />
+    <Project Path="backend/libs/FlowJudge.Common.Secrets/FlowJudge.Common.Secrets.csproj" Id="36b7c255-27e6-4c04-bb33-e65f89597703" />
     <Project Path="backend/libs/FlowJudge.Common.Sql/FlowJudge.Common.Sql.csproj" Id="419c32d9-ef5e-4bd5-97e0-e63ce23e43eb" />
     <Project Path="backend/libs/FlowJudge.Common.Utils/FlowJudge.Common.Utils.csproj" Id="d4beb6cc-5400-443a-adfe-036fc4db5192" />
   </Folder>
   <Folder Name="/libs/contracts/">
     <Project Path="backend/libs/FlowJudge.API.Contracts/FlowJudge.API.Contracts.csproj" Id="7940a57f-3855-41c6-b778-21b0337855c7" />
+  </Folder>
+  <Folder Name="/libs/integrations/">
+    <Project Path="backend/libs/FlowJudge.GitHub.Client/FlowJudge.GitHub.Client.csproj" Id="c8b56c74-ddc1-4933-ad95-bcef3e0f185e" />
   </Folder>
   <Folder Name="/libs/modules/">
     <Project Path="backend/libs/modules/FlowJudge.Users.Application.Abstractions/FlowJudge.Users.Application.Abstractions.csproj" Id="28b230f1-e0a2-4b0e-afa9-20b4f8f30168" />

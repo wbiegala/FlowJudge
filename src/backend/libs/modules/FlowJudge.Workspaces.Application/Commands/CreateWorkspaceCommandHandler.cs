@@ -27,23 +27,12 @@ namespace FlowJudge.Workspaces.Application.Commands
         protected override async Task<IResult<Guid>> ExecuteInTransactionAsync(CreateWorkspaceCommand command,
             CancellationToken cancellationToken = default)
         {
-            try
-            {
-                var workspace = WorkspaceRoot.Create(command.Name, command.CreatorId, _timeService.UtcNow);
+            var workspace = WorkspaceRoot.Create(command.Name, command.CreatorId, _timeService.UtcNow);
 
-                await _workspaceRepository.AddWorkspaceAsync(workspace, cancellationToken);
+            await _workspaceRepository.AddWorkspaceAsync(workspace, cancellationToken);
 
-                return ApplicationResultFactory.Success(workspace.Id);
-            }
-            catch (DomainException ex)
-            {
-                return ApplicationResultFactory.Failure<Guid>(ex, ex.ErrorCode);
-            }
-            catch (Exception ex)
-            {
-                return ApplicationResultFactory.Failure<Guid>(ex.Message,
-                    ErrorCodeGenerator.CreateFailed("workspace"));
-            }
+            return ApplicationResultFactory.Success(workspace.Id);
+
         }
     }
 }

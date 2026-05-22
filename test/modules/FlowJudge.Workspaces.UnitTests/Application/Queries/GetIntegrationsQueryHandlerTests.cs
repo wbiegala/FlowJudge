@@ -7,7 +7,7 @@ using FlowJudge.Workspaces.Domain.Integration.Model;
 using FlowJudge.Workspaces.Domain.Workspace.Model;
 using Moq;
 
-namespace FlowJudge.Workspaces.UnitTests.Application
+namespace FlowJudge.Workspaces.UnitTests.Application.Queries
 {
     public class GetIntegrationsQueryHandlerTests
     {

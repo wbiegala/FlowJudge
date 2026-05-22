@@ -8,7 +8,7 @@ using FlowJudge.Workspaces.Domain.Integration.Services;
 using FlowJudge.Workspaces.Domain.Workspace.Model;
 using Moq;
 
-namespace FlowJudge.Workspaces.UnitTests.Application
+namespace FlowJudge.Workspaces.UnitTests.Application.Commands
 {
     public class CreateIntegrationCommandHandlerTests
     {

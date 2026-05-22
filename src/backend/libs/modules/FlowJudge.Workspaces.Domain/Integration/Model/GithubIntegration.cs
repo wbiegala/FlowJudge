@@ -11,6 +11,28 @@ namespace FlowJudge.Workspaces.Domain.Integration.Model
 
         }
 
+        public void UseInstallation(
+            IntegrationAuthenticationValue installationId,
+            DateTimeOffset timestamp,
+            Guid issuer)
+        {
+            foreach (var ad in _authenticationData)
+            {
+                ad.Deactivate(timestamp.AddSeconds(-1));
+            }
+
+            var authenticationData = IntegrationAuthentication.Create(
+                integrationId: Id,
+                type: IntegrationAuthenticationType.InstallationId,
+                status: IntegrationAuthenticationStatus.Active,
+                value: installationId,
+                validTo: null,
+                createdAt: timestamp,
+                issuer);
+
+            _authenticationData.Add(authenticationData);
+        }
+
         public static GithubIntegration Load(
             Guid id,
             Guid aggregateId,

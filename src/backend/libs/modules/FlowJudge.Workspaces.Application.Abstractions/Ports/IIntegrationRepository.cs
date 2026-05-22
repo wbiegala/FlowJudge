@@ -11,5 +11,6 @@ namespace FlowJudge.Workspaces.Application.Abstractions.Ports
         Task AddIntegrationAsync(IntegrationRoot integration, CancellationToken ct = default);
         Task UpdateIntegrationAsync(IntegrationRoot integration, CancellationToken ct = default);
         Task<PagedList<IntegrationListItem>> GetIntegrationsAsync(WorkspaceId workspace, PageQuery pagination, CancellationToken ct = default);
+        Task<IntegrationProvider?> GetIntegrationProviderAsync(IntegrationId integrationId, CancellationToken ct = default);
     }
 }

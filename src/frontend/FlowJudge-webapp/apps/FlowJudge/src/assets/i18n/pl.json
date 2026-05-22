@@ -25,6 +25,7 @@
     }
   },
   "ERRORS": {
+    "HEADER": "Błąd",
     "GENERIC": "Wystąpił błąd."
   }
 }

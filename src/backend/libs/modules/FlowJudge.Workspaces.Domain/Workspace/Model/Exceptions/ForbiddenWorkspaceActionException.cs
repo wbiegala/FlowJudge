@@ -2,11 +2,11 @@
 
 namespace FlowJudge.Workspaces.Domain.Workspace.Model.Exceptions
 {
-    internal sealed class ForbiddenActionException : DomainException
+    internal sealed class ForbiddenWorkspaceActionException : DomainException
     {
         private const string ExceptionErrorCode = "workspace.insufficient_permissions";
 
-        public ForbiddenActionException()
+        public ForbiddenWorkspaceActionException()
             : base(Domain.WorkspacesBoundedContext.Name, nameof(WorkspaceRoot), ExceptionErrorCode)
         {
         }

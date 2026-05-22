@@ -11,8 +11,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.5" />
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.8" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.23.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="10.1.7" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="10.1.7" />
@@ -24,8 +24,10 @@
     <ProjectReference Include="..\..\libs\FlowJudge.Common.Cache\FlowJudge.Common.Cache.csproj" />
     <ProjectReference Include="..\..\libs\FlowJudge.Common.Http\FlowJudge.Common.Http.csproj" />
     <ProjectReference Include="..\..\libs\FlowJudge.Common.Messaging\FlowJudge.Common.Messaging.csproj" />
+    <ProjectReference Include="..\..\libs\FlowJudge.Common.Secrets\FlowJudge.Common.Secrets.csproj" />
     <ProjectReference Include="..\..\libs\FlowJudge.Common.Sql\FlowJudge.Common.Sql.csproj" />
     <ProjectReference Include="..\..\libs\FlowJudge.Common.Utils\FlowJudge.Common.Utils.csproj" />
+    <ProjectReference Include="..\..\libs\FlowJudge.GitHub.Client\FlowJudge.GitHub.Client.csproj" />
     <ProjectReference Include="..\..\libs\modules\FlowJudge.Users.Application.Abstractions\FlowJudge.Users.Application.Abstractions.csproj" />
     <ProjectReference Include="..\..\libs\modules\FlowJudge.Users.Application\FlowJudge.Users.Application.csproj" />
     <ProjectReference Include="..\..\libs\modules\FlowJudge.Users.Infrastructure\FlowJudge.Users.Infrastructure.csproj" />

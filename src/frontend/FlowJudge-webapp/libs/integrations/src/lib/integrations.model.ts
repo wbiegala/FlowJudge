@@ -6,10 +6,6 @@ export interface UserData {
   emailAddress: string;
 }
 
-export interface CreateIntegrationRequest {
-  name: string;
-}
-
 export interface GetIntegrationsResponseItem {
   id: string;
   name: string;

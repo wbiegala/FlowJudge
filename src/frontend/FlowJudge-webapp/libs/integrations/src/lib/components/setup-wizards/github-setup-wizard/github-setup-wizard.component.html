@@ -1,0 +1,36 @@
+<lib-view-header [title]="'INTEGRATIONS.SETUP-WIZARD.GITHUB.TITLE' | translate" [actions]="actions" (headerEvent)="onHeaderEvent($event)">
+  @if (isLoading()) {
+    <lib-loading></lib-loading>
+  } @else {
+
+    <lib-form-section [title]="'INTEGRATIONS.SETUP-WIZARD.GITHUB.FORMS.BASIC.SECTION_NAME' | translate">
+      <form [formGroup]="basicDataForm" class="basic-data-form">
+
+        <mat-form-field class="full-length-form-field">
+          <mat-label>{{ 'INTEGRATIONS.SETUP-WIZARD.GITHUB.FORMS.BASIC.FIELDS.NAME' | translate }}</mat-label>
+          <input matInput formControlName="name">
+          <mat-error libControlError [control]="basicDataForm.controls.name"></mat-error>
+      </mat-form-field>
+
+      </form>
+    </lib-form-section>
+
+    <lib-form-section [title]="'INTEGRATIONS.SETUP-WIZARD.GITHUB.FORMS.REPOSITORIES.SECTION_NAME' | translate">
+      @for (repository of repositoryData(); track repository.githubId) {
+        <div class="github-repository-config">
+          <div class="github-repository-config-name-section">
+            <div class="github-repository-config-name">{{ repository.name }}</div>
+            <div class="github-repository-config-fullname">{{ repository.fullName }}</div>
+          </div>
+          <div class="github-repository-config-config">
+            <mat-slide-toggle labelPosition="before" (change)="onEnabledChanged(repository.githubId, $event.checked)">
+              {{ 'INTEGRATIONS.SETUP-WIZARD.GITHUB.FORMS.REPOSITORIES.FIELDS.IS_TRACKING_ENABLED' | translate }}
+            </mat-slide-toggle>
+          </div>
+        </div>
+        <mat-divider></mat-divider>
+      }
+    </lib-form-section>
+
+  }
+</lib-view-header>
