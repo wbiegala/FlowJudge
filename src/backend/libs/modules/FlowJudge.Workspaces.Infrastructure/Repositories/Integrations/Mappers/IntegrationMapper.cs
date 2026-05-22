@@ -50,7 +50,7 @@ namespace FlowJudge.Workspaces.Infrastructure.Repositories.Integrations.Mappers
             var intrgrationModel = new IntegrationDbModel
             {
                 id = integration.Id,
-                aggregate_id = integration.Id,
+                aggregate_id = integration.AggregateId,
                 workspace_id = integration.WorkspaceId,
                 name = integration.Name,
                 provider = integration.Provider.ToString(),

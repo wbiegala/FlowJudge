@@ -1,8 +1,14 @@
-﻿using FlowJudge.Common.Utils.Pagination;
+using FlowJudge.Common.Utils.Pagination;
+using FlowJudge.GitHub.Client.Contract;
+using FlowJudge.GitHub.Client.Contract.SharedModels;
 using FlowJudge.Workspaces.Application.Abstractions.Commands;
 using FlowJudge.Workspaces.Application.Abstractions.Models;
 using FlowJudge.Workspaces.Application.Abstractions.Queries;
+using FlowJudge.Workspaces.Application.Abstractions.Services;
+using FlowJudge.Workspaces.Application.Commands.Internals;
+using FlowJudge.Workspaces.Application.Services.GitHubInstallation;
 using FlowJudge.Workspaces.Domain.Integration.Model;
+using static FlowJudge.Workspaces.Application.Commands.Internals.ConfigureGitHubInstallationIntegrationCommand;
 
 namespace FlowJudge.Workspaces.UnitTests.Application
 {
@@ -20,6 +26,34 @@ namespace FlowJudge.Workspaces.UnitTests.Application
             Guid issuerId,
             PageQuery pagination) =>
             new(workspaceId, issuerId, pagination);
+
+        public static CreateGitHubInstallationIntegrationCommand CreateGitHubInstallationIntegrationCommand(
+            Guid workspaceId,
+            Guid issuerId,
+            string name,
+            string gitHubInstallationId) =>
+            new()
+            {
+                WorkspaceId = workspaceId,
+                IssuerId = issuerId,
+                Name = name,
+                GitHubInstallationId = gitHubInstallationId
+            };
+
+        public static ConfigureGitHubInstallationIntegrationCommand ConfigureGitHubInstallationIntegrationCommand(
+            Guid integrationId,
+            Guid issuerId,
+            string name,
+            IntegrationStatus initialStatus,
+            IEnumerable<GitHubRepositoryInitialConfiguration> repositories) =>
+            new()
+            {
+                IntegrationId = integrationId,
+                IssuerId = issuerId,
+                Name = name,
+                InitialStatus = initialStatus,
+                Repositories = repositories
+            };
 
         public static GithubIntegration CreateGithubIntegration(
             Guid id,
@@ -68,6 +102,59 @@ namespace FlowJudge.Workspaces.UnitTests.Application
             {
                 PageSize = pageSize,
                 PageNumber = pageNumber
+            };
+
+        public static GitHubRepositoryInitialConfiguration CreateGitHubRepositoryInitialConfiguration(
+            int gitHubId,
+            string name,
+            string fullName,
+            bool trackingEnabled) =>
+            new()
+            {
+                GitHubId = gitHubId,
+                Name = name,
+                FullName = fullName,
+                TrackingEnabled = trackingEnabled
+            };
+
+        public static GitHubInstallationModel CreateGitHubInstallationModel(
+            Guid stateId,
+            Guid workspaceId,
+            Guid issuerId) =>
+            new()
+            {
+                StateId = stateId,
+                WorkspaceId = workspaceId,
+                IssuerId = issuerId
+            };
+
+        public static GitHubInstallationRepositoryConfiguration CreateGitHubInstallationRepositoryConfiguration(
+            int gitHubId,
+            bool enableTracking) =>
+            new()
+            {
+                GithubId = gitHubId,
+                EnableTracking = enableTracking
+            };
+
+        public static Repository CreateGitHubClientRepository(
+            int id,
+            string name,
+            string fullName) =>
+            new()
+            {
+                Id = id,
+                Name = name,
+                FullName = fullName
+            };
+
+        public static GetInstallationRepositoriesResponse CreateGitHubInstallationRepositoriesResponse(
+            int totalCount,
+            IEnumerable<Repository> repositories) =>
+            new()
+            {
+                TotalCount = totalCount,
+                Repositories = repositories
             };
     }
 }

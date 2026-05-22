@@ -4,7 +4,6 @@ using FlowJudge.Common.Sql.UnitOfWork;
 using FlowJudge.Workspaces.Application.Abstractions.Ports;
 using FlowJudge.Workspaces.Domain.Integration.Model;
 using FlowJudge.Workspaces.Domain.Integration.Services;
-using FlowJudge.Workspaces.Domain.Repository.Model;
 using FlowJudge.Workspaces.Domain.Workspace.Model;
 using FlowJudge.Workspaces.Domain.Workspace.Services;
 
@@ -45,22 +44,7 @@ namespace FlowJudge.Workspaces.Application.Commands.Internals
             var integrationRoot = _integrationFactory.CreateGithubIntegration(workspaceId, integrationName, command.IssuerId);
             integrationRoot.UseInstallation(IntegrationAuthenticationValue.Create(command.GitHubInstallationId), integrationRoot.CreatedAt, command.IssuerId);
 
-            if (command.InitialStatus == IntegrationStatus.Active)
-                integrationRoot.Activate();
-
             await _integrationRepository.AddIntegrationAsync(integrationRoot, cancellationToken);
-
-            foreach (var githubRepository in command.Repositories)
-            {
-                var repositoryRoot = RepositoryRoot.Create(
-                    workspaceId: command.WorkspaceId,
-                    integrationId: integrationRoot.AggregateId,
-                    externalId: githubRepository.GitHubId.ToString(),
-                    name: githubRepository.Name,
-                    fullname: githubRepository.FullName,
-                    trackingEnabled: githubRepository.TrackingEnabled);
-                await _repositoryRepository.AddRepositoryAsync(repositoryRoot, cancellationToken);
-            }
 
             return ApplicationResultFactory.Success(integrationRoot.AggregateId.Value);
         }

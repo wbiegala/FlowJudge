@@ -9,18 +9,18 @@ namespace FlowJudge.Workspaces.Application.Abstractions.Services
             Guid issuerId,
             CancellationToken ct);
 
-        Task<IResult<(Guid WorkspaceId, Guid InstallationStateId)>> ConfirmGitHubInstallationAsync(
+        Task<IResult<(Guid WorkspaceId, Guid IntegrationId)>> ConfirmGitHubInstallationAsync(
             Guid installationStateId,
             string installationId,
             string? setupAction,
             CancellationToken ct);
 
         Task<IResult<IEnumerable<GitHubInstallationRepository>>> GetRepositoriesForInstallationAsync(
-            Guid installationStateId,
+            Guid integrationId,
             CancellationToken ct);
 
         Task<IResult<Guid>> CommitGitHubInstallationAsync(
-            Guid installationStateId,
+            Guid integrationId,
             string name,
             IEnumerable<GitHubInstallationRepositoryConfiguration> initialRepositoriesConfiguration,
             Guid issuerId,

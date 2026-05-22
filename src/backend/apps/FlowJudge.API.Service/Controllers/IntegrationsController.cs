@@ -110,14 +110,14 @@ namespace FlowJudge.API.Service.Controllers
             }
 
             var redirectUrl = redirectGithubService.GetGitHubInstallationCallbackSuccessRedirectUrl(
-                result.Data!.WorkspaceId, result.Data!.InstallationStateId);
+                result.Data!.WorkspaceId, result.Data!.IntegrationId);
 
             return Redirect(redirectUrl);
         }
 
-        [HttpGet("github/{installationStateId:guid}/repositories")]
+        [HttpGet("github/{integrationId:guid}/repositories")]
         public async Task<IActionResult> GetGitHubInstallationRepositoriesAsync(
-            [FromRoute] Guid installationStateId,
+            [FromRoute] Guid integrationId,
             CancellationToken cancellationToken = default)
         {
             var workspaceId = this.HttpContext.GetWorkspaceId();
@@ -127,7 +127,7 @@ namespace FlowJudge.API.Service.Controllers
                     "Workspace context is missing",
                     System.Net.HttpStatusCode.BadRequest);
 
-            var result = await _githubInstallationService.GetRepositoriesForInstallationAsync(installationStateId, cancellationToken);
+            var result = await _githubInstallationService.GetRepositoriesForInstallationAsync(integrationId, cancellationToken);
             if (!result.IsSuccess)
                 return result.Error!.ToResponse();
 
@@ -141,9 +141,9 @@ namespace FlowJudge.API.Service.Controllers
             return Ok(response);
         }
 
-        [HttpPost("github/{installationStateId:guid}/commit")]
+        [HttpPost("github/{integrationId:guid}/commit")]
         public async Task<IActionResult> CommitGitHubInstallationAsync(
-            [FromRoute] Guid installationStateId,
+            [FromRoute] Guid integrationId,
             [FromBody] CommitGitHubIntegrationInstallationRequest request,
             CancellationToken cancellationToken = default)
         {
@@ -157,7 +157,7 @@ namespace FlowJudge.API.Service.Controllers
             var userContext = this.HttpContext.User.GetUserContext();
 
             var result = await _githubInstallationService.CommitGitHubInstallationAsync(
-                installationStateId,
+                integrationId,
                 request.Name,
                 request.RepositoriesConfiguration.Select(r => new GitHubInstallationRepositoryConfiguration
                 {

@@ -11,9 +11,9 @@ namespace FlowJudge.API.Service.Controllers.Redirects
             _uiBaseUrl = uiBaseUrl;
         }
 
-        public string GetGitHubInstallationCallbackSuccessRedirectUrl(Guid workspaceId, Guid installationStateId)
+        public string GetGitHubInstallationCallbackSuccessRedirectUrl(Guid workspaceId, Guid integrationId)
         {
-            var uri = UriBuilderExtensions.CombineUri(_uiBaseUrl, $"/w/{workspaceId}/integrations/setup/github/{installationStateId}");
+            var uri = UriBuilderExtensions.CombineUri(_uiBaseUrl, $"/w/{workspaceId}/integrations/setup/github/{integrationId}");
             return uri.ToString();
         }
     }

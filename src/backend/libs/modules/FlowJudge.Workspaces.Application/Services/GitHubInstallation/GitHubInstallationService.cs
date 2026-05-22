@@ -3,15 +3,13 @@ using FlowJudge.Common.Application.Mediator;
 using FlowJudge.Common.Cache;
 using FlowJudge.GitHub.Client;
 using FlowJudge.GitHub.Client.Clients;
-using FlowJudge.GitHub.Client.Contract.SharedModels;
 using FlowJudge.Workspaces.Application.Abstractions.Ports;
 using FlowJudge.Workspaces.Application.Abstractions.Services;
 using FlowJudge.Workspaces.Application.Commands.Internals;
-using FlowJudge.Workspaces.Application.Services.GitHubInstallation.Models;
 using FlowJudge.Workspaces.Domain.Integration.Model;
 using FlowJudge.Workspaces.Domain.Workspace.Model;
 using FlowJudge.Workspaces.Domain.Workspace.Services;
-using static FlowJudge.Workspaces.Application.Commands.Internals.CreateGitHubInstallationIntegrationCommand;
+using static FlowJudge.Workspaces.Application.Commands.Internals.ConfigureGitHubInstallationIntegrationCommand;
 using ClientRepositoryContract = FlowJudge.GitHub.Client.Contract.SharedModels.Repository;
 
 namespace FlowJudge.Workspaces.Application.Services.GitHubInstallation
@@ -22,17 +20,20 @@ namespace FlowJudge.Workspaces.Application.Services.GitHubInstallation
         private readonly IApplicationCache _store;
         private readonly IGitHubService _githubClientService;
         private readonly IWorkspaceRepository _workspaceRepository;
+        private readonly IIntegrationRepository _integrationRepository;
         private readonly IMediator _mediator;
 
         public GitHubInstallationService(
             IApplicationCache applicationCache,
             IGitHubService githubClientService,
             IWorkspaceRepository workspaceRepository,
+            IIntegrationRepository integrationRepository,
             IMediator mediator)
         {
             _store = applicationCache;
             _githubClientService = githubClientService;
             _workspaceRepository = workspaceRepository;
+            _integrationRepository = integrationRepository;
             _mediator = mediator;
         }
 
@@ -61,7 +62,7 @@ namespace FlowJudge.Workspaces.Application.Services.GitHubInstallation
             return ApplicationResultFactory.Success<(Guid InstallationStateId, string RedirectUrl)>(new (installationState.StateId, redirectUrl));
         }
 
-        public async Task<IResult<(Guid WorkspaceId, Guid InstallationStateId)>> ConfirmGitHubInstallationAsync(
+        public async Task<IResult<(Guid WorkspaceId, Guid IntegrationId)>> ConfirmGitHubInstallationAsync(
             Guid installationStateId,
             string installationId,
             string? setupAction,
@@ -69,45 +70,46 @@ namespace FlowJudge.Workspaces.Application.Services.GitHubInstallation
         {
             var installationState = await _store.GetObjectAsync<GitHubInstallationModel>(GetCacheKey(installationStateId), ct);
             if (installationState is null)
-                return ApplicationResultFactory.Failure<(Guid WorkspaceId, Guid InstallationStateId)>(
+                return ApplicationResultFactory.Failure<(Guid WorkspaceId, Guid IntegrationId)>(
                     $"Installation state id={installationStateId} not found",
                     ErrorCodeGenerator.NotFound("installation-state"));
 
-            installationState.InstallationId = installationId;
-            installationState.SetupAction = setupAction;
+            var command = new CreateGitHubInstallationIntegrationCommand
+            {
+                WorkspaceId = installationState.WorkspaceId,
+                IssuerId = installationState.IssuerId,
+                Name = IntegrationProvider.GitHub.ToString(),
+                GitHubInstallationId = installationId
+            };
 
-            await _store.SetObjectAsync(GetCacheKey(installationState.StateId), installationState, TimeSpan.FromMinutes(StoreTtlInMinutes), ct);
+            var result = await _mediator.SendCommandAsync<CreateGitHubInstallationIntegrationCommand, Guid>(command, ct);
+            if (!result.IsSuccess)
+                return ApplicationResultFactory.Failure<(Guid WorkspaceId, Guid IntegrationId)>(result.Error!);
 
-            return ApplicationResultFactory.Success<(Guid WorkspaceId, Guid InstallationStateId)>(
-                new (installationState.WorkspaceId, installationState.StateId));
+            await _store.RemoveAsync(GetCacheKey(installationState.StateId), ct);
+
+            return ApplicationResultFactory.Success<(Guid WorkspaceId, Guid IntegrationId)>(
+                new (installationState.WorkspaceId, result.Data));
         }
 
         public async Task<IResult<IEnumerable<GitHubInstallationRepository>>> GetRepositoriesForInstallationAsync(
-            Guid installationStateId,
+            Guid integrationId,
             CancellationToken ct)
         {
-            var installationState = await _store.GetObjectAsync<GitHubInstallationModel>(GetCacheKey(installationStateId), ct);
-            if (installationState is null)
+            var integration = await _integrationRepository.GetIntegrationByAggregateIdAsync(IntegrationId.Create(integrationId), ct);
+            if (integration is null)
                 return ApplicationResultFactory.Failure<IEnumerable<GitHubInstallationRepository>>(
-                    $"Installation state id={installationStateId} not found",
-                    ErrorCodeGenerator.NotFound("installation-state"));
+                    $"Integration id={integrationId} not found",
+                    ErrorCodeGenerator.NotFound("integration"));
 
-            if (string.IsNullOrWhiteSpace(installationState.InstallationId))
+            var installationId = GetInstallationId(integration);
+            if (string.IsNullOrWhiteSpace(installationId))
                 return ApplicationResultFactory.Failure<IEnumerable<GitHubInstallationRepository>>(
-                    $"Installation state id={installationStateId} has no GitHub installation id.",
-                    ErrorCodeGenerator.NotAcceptable("installation-state"));
+                    $"Integration id={integrationId} has no GitHub installation id.",
+                    ErrorCodeGenerator.NotAcceptable("integration"));
 
-            var repositories = await GetAllInstallationRepositoriesAsync(installationState.InstallationId, ct);
+            var repositories = await GetAllInstallationRepositoriesAsync(installationId, ct);
 
-            installationState.Repositories = repositories
-                .Select(r => new GitHubInstallationModel.GitHubRepository
-                {
-                    Id = r.Id,
-                    Name = r.Name,
-                    FullName = r.FullName,
-                }).ToArray();
-
-            await _store.SetObjectAsync(GetCacheKey(installationState.StateId), installationState, TimeSpan.FromMinutes(StoreTtlInMinutes), ct);
             var result = repositories.Select(r => new GitHubInstallationRepository
             {
                 Id = r.Id,
@@ -119,58 +121,67 @@ namespace FlowJudge.Workspaces.Application.Services.GitHubInstallation
         }
 
         public async Task<IResult<Guid>> CommitGitHubInstallationAsync(
-            Guid installationStateId,
+            Guid integrationId,
             string name,
             IEnumerable<GitHubInstallationRepositoryConfiguration> initialRepositoriesConfiguration,
             Guid issuerId,
             CancellationToken ct)
         {
-            var installationState = await _store.GetObjectAsync<GitHubInstallationModel>(GetCacheKey(installationStateId), ct);
-            if (installationState is null)
+            var integration = await _integrationRepository.GetIntegrationByAggregateIdAsync(IntegrationId.Create(integrationId), ct);
+            if (integration is null)
                 return ApplicationResultFactory.Failure<Guid>(
-                    $"Installation state id={installationStateId} not found",
-                    ErrorCodeGenerator.NotFound("installation-state"));
+                    $"Integration id={integrationId} not found",
+                    ErrorCodeGenerator.NotFound("integration"));
 
-            var canProcess = await VerifyPermissionsAsync(WorkspaceId.Create(installationState.WorkspaceId), issuerId, ct);
+            var canProcess = await VerifyPermissionsAsync(integration.WorkspaceId, issuerId, ct);
             if (!canProcess)
                 return ApplicationResultFactory.Failure<Guid>(
                     "Cannot connect integration.", ErrorCodeGenerator.Forbidden("workspace"));
 
-            var getStoredRepoData = (int repoId) => installationState.Repositories!.FirstOrDefault(r => r.Id == repoId);
-           
+            var installationId = GetInstallationId(integration);
+            if (string.IsNullOrWhiteSpace(installationId))
+                return ApplicationResultFactory.Failure<Guid>(
+                    $"Integration id={integrationId} has no GitHub installation id.",
+                    ErrorCodeGenerator.NotAcceptable("integration"));
 
-            var command = new CreateGitHubInstallationIntegrationCommand
+            var storedRepositories = (await GetAllInstallationRepositoriesAsync(installationId, ct)).ToDictionary(r => r.Id);
+            var requestedRepositories = initialRepositoriesConfiguration.ToArray();
+            var unknownRepository = requestedRepositories.FirstOrDefault(r => !storedRepositories.ContainsKey(r.GithubId));
+            if (unknownRepository is not null)
+                return ApplicationResultFactory.Failure<Guid>(
+                    $"Repository id={unknownRepository.GithubId} not found in integration id={integrationId}.",
+                    ErrorCodeGenerator.NotFound("integration-repository"));
+
+            var command = new ConfigureGitHubInstallationIntegrationCommand
             {
-                WorkspaceId = installationState.WorkspaceId,
+                IntegrationId = integration.AggregateId.Value,
                 IssuerId = issuerId,
                 Name = name,
-                GitHubInstallationId = installationState.InstallationId!,
-                InitialStatus = installationState.SetupAction switch
-                {
-                    "install" => IntegrationStatus.Active,
-                    _ => IntegrationStatus.Inactive
-                },
-                Repositories = initialRepositoriesConfiguration.Select(repo => new GitHubRepositoryInitialConfiguration
+                InitialStatus = IntegrationStatus.Active,
+                Repositories = requestedRepositories.Select(repo => new GitHubRepositoryInitialConfiguration
                 {
                     GitHubId = repo.GithubId,
-                    Name = getStoredRepoData(repo.GithubId).Name,
-                    FullName = getStoredRepoData(repo.GithubId).FullName,
+                    Name = storedRepositories[repo.GithubId].Name,
+                    FullName = storedRepositories[repo.GithubId].FullName,
                     TrackingEnabled = repo.EnableTracking
                 }).ToArray(),
             };
 
-            var result = await _mediator.SendCommandAsync<CreateGitHubInstallationIntegrationCommand, Guid>(command, ct);
-
-            if (result.IsSuccess)
-            {
-                await _store.RemoveAsync(GetCacheKey(installationStateId), ct);
-            }
-
-            return result;
+            return await _mediator.SendCommandAsync<ConfigureGitHubInstallationIntegrationCommand, Guid>(command, ct);
         }
 
 
         private static string GetCacheKey(Guid stateId) => $":github-installation-state:{stateId.ToString("N")}";
+
+        private static string? GetInstallationId(IntegrationRoot integration)
+        {
+            return integration.AuthenticationData
+                .Where(authentication =>
+                    authentication.Type == IntegrationAuthenticationType.InstallationId &&
+                    authentication.Status == IntegrationAuthenticationStatus.Active)
+                .Select(authentication => authentication.Value.Value)
+                .SingleOrDefault();
+        }
 
         private async Task<bool> VerifyPermissionsAsync(WorkspaceId workspaceId, Guid userId, CancellationToken ct)
         {

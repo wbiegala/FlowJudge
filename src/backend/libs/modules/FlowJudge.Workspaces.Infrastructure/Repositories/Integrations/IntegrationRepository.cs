@@ -160,7 +160,7 @@ WITH source AS (
     FROM jsonb_to_recordset(CAST(@AuthenticationData AS jsonb)) AS x
     (
          {nameof(IntegrationAuthenticationDbModel.id)} uuid
-        ,{nameof(IntegrationAuthenticationDbModel.integration_id)} uuid,
+        ,{nameof(IntegrationAuthenticationDbModel.integration_id)} uuid
         ,{nameof(IntegrationAuthenticationDbModel.type)} text
         ,{nameof(IntegrationAuthenticationDbModel.status)} text
         ,{nameof(IntegrationAuthenticationDbModel.value)} text

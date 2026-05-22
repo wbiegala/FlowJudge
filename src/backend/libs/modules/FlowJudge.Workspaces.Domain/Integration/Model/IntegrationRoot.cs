@@ -50,5 +50,10 @@ namespace FlowJudge.Workspaces.Domain.Integration.Model
 
             Status = IntegrationStatus.Inactive;
         }
+
+        public void Rename(IntegrationName name)
+        {
+            Name = name;
+        }
     }
 }
