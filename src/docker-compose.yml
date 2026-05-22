@@ -15,6 +15,14 @@ services:
     image: mcr.microsoft.com/azure-storage/azurite:latest
     container_name: flowjudge.storage
 
+  flowjudge.servicebus.db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: flowjudge.servicebus.db
+
+  flowjudge.servicebus:
+    image: mcr.microsoft.com/azure-messaging/servicebus-emulator:latest
+    container_name: flowjudge.servicebus
+
   flowjudge.smtp:
     image: axllent/mailpit
     container_name: flowjudge.smtp
