@@ -19,6 +19,7 @@
   </Folder>
   <Folder Name="/libs/contracts/">
     <Project Path="backend/libs/FlowJudge.API.Contracts/FlowJudge.API.Contracts.csproj" Id="7940a57f-3855-41c6-b778-21b0337855c7" />
+    <Project Path="backend/libs/FlowJudge.VCS.Contracts/FlowJudge.VCS.Contracts.csproj" Id="112dce13-e60a-4025-8c82-057851bb6a27" />
   </Folder>
   <Folder Name="/libs/integrations/">
     <Project Path="backend/libs/FlowJudge.GitHub.Client/FlowJudge.GitHub.Client.csproj" Id="c8b56c74-ddc1-4933-ad95-bcef3e0f185e" />

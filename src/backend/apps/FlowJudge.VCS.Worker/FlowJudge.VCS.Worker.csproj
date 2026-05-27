@@ -11,6 +11,7 @@
   </PropertyGroup>
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Azure.Messaging.ServiceBus" Version="7.20.1" />
     <!-- Application Insights isn't enabled by default. See https://aka.ms/AAt8mw4. -->
     <!-- <PackageReference Include="Microsoft.ApplicationInsights.WorkerService" Version="2.22.0" /> -->
     <!-- <PackageReference Include="Microsoft.Azure.Functions.Worker.ApplicationInsights" Version="2.0.0" /> -->
@@ -21,6 +22,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\libs\FlowJudge.GitHub.Webhooks\FlowJudge.GitHub.Webhooks.csproj" />
+    <ProjectReference Include="..\..\libs\FlowJudge.VCS.Contracts\FlowJudge.VCS.Contracts.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">
