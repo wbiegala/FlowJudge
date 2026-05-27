@@ -22,6 +22,7 @@
   </Folder>
   <Folder Name="/libs/integrations/">
     <Project Path="backend/libs/FlowJudge.GitHub.Client/FlowJudge.GitHub.Client.csproj" Id="c8b56c74-ddc1-4933-ad95-bcef3e0f185e" />
+    <Project Path="backend/libs/FlowJudge.GitHub.Webhooks/FlowJudge.GitHub.Webhooks.csproj" Id="e7365969-cb65-4e42-a217-4ad58c78e711" />
   </Folder>
   <Folder Name="/libs/modules/">
     <Project Path="backend/libs/modules/FlowJudge.Users.Application.Abstractions/FlowJudge.Users.Application.Abstractions.csproj" Id="28b230f1-e0a2-4b0e-afa9-20b4f8f30168" />
