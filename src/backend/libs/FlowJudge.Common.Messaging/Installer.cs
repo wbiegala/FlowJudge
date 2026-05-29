@@ -12,5 +12,26 @@ namespace FlowJudge.Common.Messaging
 
             return services;
         }
+
+        public static IServiceCollection AddAzureSerivceBus(
+            this IServiceCollection services,
+            Action<MessagingConfigurationWizard> configure)
+        {
+            var cfgBuilder = new MessagingConfigurationWizard();
+            configure(cfgBuilder);
+
+            var configuration = cfgBuilder.GetConfiguration();
+            services.AddSingleton(_ => configuration);
+
+            var consumersOptions = cfgBuilder.ConsumersOptions;
+
+            foreach (var options in consumersOptions)
+            {
+                options.Registration(services);
+                services.AddSingleton(options.Options);
+            }
+
+            return services;
+        }
     }
 }

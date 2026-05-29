@@ -14,9 +14,9 @@
       },
       "commandLineArgs": "--port 8081 --useHttps",
       "containerRunArguments": "--init",
-      "httpPort": 8080,
+      "httpPort": 20080,
       "useSSL": true,
-      "sslPort": 8081
+      "sslPort": 20443
     }
   }
 }

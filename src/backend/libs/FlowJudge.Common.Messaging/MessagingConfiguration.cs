@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace FlowJudge.Common.Messaging
+﻿namespace FlowJudge.Common.Messaging
 {
-    public sealed class MessagingConfiguration
+    internal sealed record MessagingConfiguration
     {
+        public required string ConnectionString { get; init; }
     }
 }

@@ -1,4 +1,5 @@
 using FlowJudge.API.Service.Auth;
+using FlowJudge.API.Service.Consumers;
 using FlowJudge.API.Service.Controllers.Redirects;
 using FlowJudge.API.Service.ErrorHandling;
 using FlowJudge.API.Service.Installers;
@@ -75,6 +76,7 @@ builder.Services.AddUsersInfrastructure();
 builder.Services.AddWorkspacesApplication();
 builder.Services.AddWorkspacesInfrastructure();
 
+builder.Services.AddConsumers();
 builder.Services.AddControllers();
 builder.Services.AddSingleton(ctx =>
 {

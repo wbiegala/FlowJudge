@@ -50,12 +50,12 @@ services:
       context: .
       dockerfile: backend/apps/FlowJudge.AI.Worker/Dockerfile
 
-  flowjudge.vcs.worker:
-    image: ${DOCKER_REGISTRY-}flowjudge-vcs-worker
-    container_name: flowjudge.vcs.worker
-    build:
-      context: .
-      dockerfile: backend/apps/FlowJudge.VCS.Worker/Dockerfile
+  # flowjudge.vcs.worker:
+  #   image: ${DOCKER_REGISTRY-}flowjudge-vcs-worker
+  #   container_name: flowjudge.vcs.worker
+  #   build:
+  #     context: .
+  #     dockerfile: backend/apps/FlowJudge.VCS.Worker/Dockerfile
 
   flowjudge.webapp:
     image: ${DOCKER_REGISTRY-}flowjudge-webapp

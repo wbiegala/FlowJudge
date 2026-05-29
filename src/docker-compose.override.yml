@@ -20,7 +20,9 @@ services:
       retries: 10
       start_period: 10s
     networks:
-      - flowjudge
+      flowjudge:
+        aliases:
+          - flowjudge-db
 
   flowjudge.db_init:
     image: postgres:18
@@ -123,7 +125,7 @@ services:
       KC_HOSTNAME_STRICT_HTTPS: "false"
       KC_PROXY: edge
       KC_DB: postgres
-      KC_DB_URL: jdbc:postgresql://flowjudge.db:5432/${AUTH_DB_NAME}
+      KC_DB_URL: jdbc:postgresql://flowjudge-db:5432/${AUTH_DB_NAME}
       KC_DB_USERNAME: ${AUTH_DB_USER}
       KC_DB_PASSWORD: ${AUTH_DB_PASSWORD}
       KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN_LOGIN}
@@ -132,7 +134,7 @@ services:
     ports:
       - "8080:8080"
     healthcheck:
-      test: ["CMD-SHELL", "curl -fsS http://localhost:8080/health/ready || exit 1"]
+      test: ["CMD-SHELL", "bash -ec \"exec 3<>/dev/tcp/127.0.0.1/9000; printf 'GET /health/ready HTTP/1.1\\r\\nHost: localhost\\r\\nConnection: close\\r\\n\\r\\n' >&3; grep -q '200 OK' <&3\""]
       interval: 5s
       timeout: 5s
       retries: 40
@@ -204,27 +206,27 @@ services:
     networks:
       - flowjudge
 
-  flowjudge.vcs.worker:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:8081;http://+:8080
-      - ASPNETCORE_HTTP_PORTS=8080
-      - ASPNETCORE_HTTPS_PORTS=8081
-      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/https-dev-cert.pfx
-      - ASPNETCORE_Kestrel__Certificates__Default__Password=${HTTPS_CERT_PASSWORD}
-      - AzureWebJobsStorage=${FLOWJUDGE_STORAGE_CONNECTION_STRING}
-      - AzureWebJobsServiceBus=${FLOWJUDGE_SERVICEBUS_CONNECTION_STRING}
-      - AzureWebJobsSecretStorageType=files
-    ports:
-      - "20080:8080"
-      - "20443:8081"
-    volumes:
-      - ./https-dev-cert.pfx:/https/https-dev-cert.pfx:ro
-    networks:
-      - flowjudge
-    secrets:
-      - source: VCS_WORKER_SECRETS
-        target: /azure-functions-host/Secrets/host.json
+  # flowjudge.vcs.worker:
+  #   environment:
+  #     - ASPNETCORE_ENVIRONMENT=Development
+  #     - ASPNETCORE_URLS=https://+:8081;http://+:8080
+  #     - ASPNETCORE_HTTP_PORTS=8080
+  #     - ASPNETCORE_HTTPS_PORTS=8081
+  #     - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/https-dev-cert.pfx
+  #     - ASPNETCORE_Kestrel__Certificates__Default__Password=${HTTPS_CERT_PASSWORD}
+  #     - AzureWebJobsStorage=${FLOWJUDGE_STORAGE_CONNECTION_STRING}
+  #     - AzureWebJobsServiceBus=${FLOWJUDGE_SERVICEBUS_CONNECTION_STRING}
+  #     - AzureWebJobsSecretStorageType=files
+  #   ports:
+  #     - "20080:8080"
+  #     - "20443:8081"
+  #   volumes:
+  #     - ./https-dev-cert.pfx:/https/https-dev-cert.pfx:ro
+  #   networks:
+  #     - flowjudge
+  #   secrets:
+  #     - source: VCS_WORKER_SECRETS
+  #       target: /azure-functions-host/Secrets/host.json
  
   flowjudge.webapp:
     ports:
