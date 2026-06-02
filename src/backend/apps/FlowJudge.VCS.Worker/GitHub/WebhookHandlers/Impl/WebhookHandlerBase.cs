@@ -1,14 +1,14 @@
-﻿using FlowJudge.VCS.Worker.EventPublishing;
+﻿using FlowJudge.Common.Messaging.Abstractions;
 
 namespace FlowJudge.VCS.Worker.GitHub.WebhookHandlers.Impl
 {
     internal abstract class WebhookHandlerBase
     {
-        protected readonly IEventPublisher _eventPublisher;
+        protected readonly IPublisher _publisher;
 
-        protected WebhookHandlerBase(IEventPublisher eventPublisher)
+        protected WebhookHandlerBase(IPublisher publisher)
         {
-            _eventPublisher = eventPublisher;
+            _publisher = publisher;
         }
     }
 }

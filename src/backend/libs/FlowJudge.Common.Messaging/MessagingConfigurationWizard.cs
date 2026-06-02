@@ -42,12 +42,18 @@ namespace FlowJudge.Common.Messaging
                 var options = new QueueConsumerOptions
                 {
                     QueueName = queueName,
+                    ConsumerType = typeof(TConsumer),
+                    MessageType = typeof(TMessage),
                     MaxConcurrentCalls = maxConcurrentCalls,
                     AutoCompleteMessages = autoCompleteMessages,
                     MaxAutoLockRenewalDurationSeconds = maxAutoLockRenewalDurationSeconds,
                 };
 
-                _consumerOptions.Add(new (options, services => services.AddScoped<IConsumer<TMessage>, TConsumer>()));
+                _consumerOptions.Add(new (options, services =>
+                {
+                    services.AddScoped<TConsumer>();
+                    services.AddScoped<IConsumer<TMessage>>(sp => sp.GetRequiredService<TConsumer>());
+                }));
             }
 
             public void AddConsumer<TConsumer, TMessage>(
@@ -63,11 +69,18 @@ namespace FlowJudge.Common.Messaging
                 {
                     TopicName = topicName,
                     SubscriptionName = subscriptionName,
+                    ConsumerType = typeof(TConsumer),
+                    MessageType = typeof(TMessage),
                     MaxConcurrentCalls = maxConcurrentCalls,
                     AutoCompleteMessages = autoCompleteMessages,
                     MaxAutoLockRenewalDurationSeconds = maxAutoLockRenewalDurationSeconds,
                 };
-                _consumerOptions.Add(new (options, services => services.AddScoped<IConsumer<TMessage>, TConsumer>()));
+
+                _consumerOptions.Add(new (options, services =>
+                {
+                    services.AddScoped<TConsumer>();
+                    services.AddScoped<IConsumer<TMessage>>(sp => sp.GetRequiredService<TConsumer>());
+                }));
             }
         }
     }

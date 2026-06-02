@@ -36,31 +36,48 @@ namespace FlowJudge.Common.Messaging.Consumption
                     ReceiveMode = ServiceBusReceiveMode.PeekLock
                 };
 
-                if (options is QueueConsumerOptions queueOptions)
-                    _processors.Add(_serviceBusClient.CreateProcessor(queueOptions.QueueName, processorOptions));
-                else if (options is SubscriptionConsumerOptions subsctiptionOptions)
-                    _processors.Add(_serviceBusClient.CreateProcessor(
-                        subsctiptionOptions.TopicName, subsctiptionOptions.SubscriptionName, processorOptions));
-            }
+                var processor = options switch
+                {
+                    QueueConsumerOptions queueOptions => _serviceBusClient.CreateProcessor(
+                        queueOptions.QueueName,
+                        processorOptions),
+                    SubscriptionConsumerOptions subsctiptionOptions => _serviceBusClient.CreateProcessor(
+                        subsctiptionOptions.TopicName,
+                        subsctiptionOptions.SubscriptionName,
+                        processorOptions),
+                    _ => throw new InvalidOperationException(
+                        $"Unsupported consumer options type '{options.GetType().FullName}'.")
+                };
 
-            foreach (var processor in _processors)
-            {
-                processor.ProcessMessageAsync += ProcessMessageAsync;
+                processor.ProcessMessageAsync += args => ProcessMessageAsync(args, options);
                 processor.ProcessErrorAsync += ProcessErrorAsync;
+
+                _processors.Add(processor);
             }
 
             var processorsStarter = _processors.Select(p => p.StartProcessingAsync(stoppingToken));
 
             await Task.WhenAll(processorsStarter);
+
+            try
+            {
+                await Task.Delay(Timeout.InfiniteTimeSpan, stoppingToken);
+            }
+            catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested)
+            {
+            }
         }
 
-        private async Task ProcessMessageAsync(ProcessMessageEventArgs args)
+        private async Task ProcessMessageAsync(ProcessMessageEventArgs args, ConsumerOptions options)
         {
             try
             {
-                await _dispatcher.DispatchAsync(args.Message, args.CancellationToken);
+                await _dispatcher.DispatchAsync(args.Message, options, args.CancellationToken);
 
-                await args.CompleteMessageAsync(args.Message, args.CancellationToken);
+                if (!options.AutoCompleteMessages)
+                {
+                    await args.CompleteMessageAsync(args.Message, args.CancellationToken);
+                }
             }
             catch (UnsupportedIntegrationEventException exception)
             {

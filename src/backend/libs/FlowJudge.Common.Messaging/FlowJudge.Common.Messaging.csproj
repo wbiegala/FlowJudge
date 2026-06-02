@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\FlowJudge.Common.Messaging.Abstractions\FlowJudge.Common.Messaging.Abstractions.csproj" />
     <ProjectReference Include="..\FlowJudge.Common.Sql\FlowJudge.Common.Sql.csproj" />
   </ItemGroup>
 

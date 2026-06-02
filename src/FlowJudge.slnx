@@ -12,6 +12,7 @@
     <Project Path="backend/libs/FlowJudge.Common.Cache/FlowJudge.Common.Cache.csproj" Id="4bd9172a-34e5-4907-a6aa-98efb54453ce" />
     <Project Path="backend/libs/FlowJudge.Common.Domain/FlowJudge.Common.Domain.csproj" Id="0687ecef-67ae-4926-b80d-7c303a63af27" />
     <Project Path="backend/libs/FlowJudge.Common.Http/FlowJudge.Common.Http.csproj" Id="21a433fb-a9e7-456d-9e0d-0aa7b27ab7ea" />
+    <Project Path="backend/libs/FlowJudge.Common.Messaging.Abstractions/FlowJudge.Common.Messaging.Abstractions.csproj" Id="791bd88c-3a41-4fd5-b252-23c341aaa2d1" />
     <Project Path="backend/libs/FlowJudge.Common.Messaging/FlowJudge.Common.Messaging.csproj" Id="7221443b-2e8c-4b4a-8992-6c02eb5bf03e" />
     <Project Path="backend/libs/FlowJudge.Common.Secrets/FlowJudge.Common.Secrets.csproj" Id="36b7c255-27e6-4c04-bb33-e65f89597703" />
     <Project Path="backend/libs/FlowJudge.Common.Sql/FlowJudge.Common.Sql.csproj" Id="419c32d9-ef5e-4bd5-97e0-e63ce23e43eb" />

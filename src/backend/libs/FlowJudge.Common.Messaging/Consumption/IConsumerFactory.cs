@@ -2,7 +2,6 @@
 {
     internal interface IConsumerFactory
     {
-        IConsumer<TMessage> GetConsumer<TMessage>()
-            where TMessage : class, IMessage;
+        object GetConsumer(ConsumerOptions options);
     }
 }

@@ -21,6 +21,7 @@
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.23.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\libs\FlowJudge.Common.Messaging\FlowJudge.Common.Messaging.csproj" />
     <ProjectReference Include="..\..\libs\FlowJudge.GitHub.Webhooks\FlowJudge.GitHub.Webhooks.csproj" />
     <ProjectReference Include="..\..\libs\FlowJudge.VCS.Contracts\FlowJudge.VCS.Contracts.csproj" />
   </ItemGroup>

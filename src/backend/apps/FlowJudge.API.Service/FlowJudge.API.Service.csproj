@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -30,12 +30,17 @@
     <ProjectReference Include="..\..\libs\FlowJudge.Common.Sql\FlowJudge.Common.Sql.csproj" />
     <ProjectReference Include="..\..\libs\FlowJudge.Common.Utils\FlowJudge.Common.Utils.csproj" />
     <ProjectReference Include="..\..\libs\FlowJudge.GitHub.Client\FlowJudge.GitHub.Client.csproj" />
+    <ProjectReference Include="..\..\libs\FlowJudge.VCS.Contracts\FlowJudge.VCS.Contracts.csproj" />
     <ProjectReference Include="..\..\libs\modules\FlowJudge.Users.Application.Abstractions\FlowJudge.Users.Application.Abstractions.csproj" />
     <ProjectReference Include="..\..\libs\modules\FlowJudge.Users.Application\FlowJudge.Users.Application.csproj" />
     <ProjectReference Include="..\..\libs\modules\FlowJudge.Users.Infrastructure\FlowJudge.Users.Infrastructure.csproj" />
     <ProjectReference Include="..\..\libs\modules\FlowJudge.Workspaces.Application.Abstractions\FlowJudge.Workspaces.Application.Abstractions.csproj" />
     <ProjectReference Include="..\..\libs\modules\FlowJudge.Workspaces.Application\FlowJudge.Workspaces.Application.csproj" />
     <ProjectReference Include="..\..\libs\modules\FlowJudge.Workspaces.Infrastructure\FlowJudge.Workspaces.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Consumers\" />
   </ItemGroup>
 
 </Project>

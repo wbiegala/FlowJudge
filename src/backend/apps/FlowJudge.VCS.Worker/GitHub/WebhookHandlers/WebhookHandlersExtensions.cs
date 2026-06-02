@@ -9,6 +9,7 @@ namespace FlowJudge.VCS.Worker.GitHub.WebhookHandlers
         public static IServiceCollection AddGitHubWebhookHandlers(this IServiceCollection services)
         {
             services.AddSingleton<IGitHubWebhookHandler, InstallationWebhookHandler>();
+            services.AddSingleton<IGitHubWebhookHandler, InstallationRepositoriesWebhookHandler>();
 
             return services;
         }

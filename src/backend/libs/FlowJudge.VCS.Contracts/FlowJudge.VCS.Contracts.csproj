@@ -10,4 +10,8 @@
     <Folder Include="API\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\FlowJudge.Common.Messaging.Abstractions\FlowJudge.Common.Messaging.Abstractions.csproj" />
+  </ItemGroup>
+
 </Project>
