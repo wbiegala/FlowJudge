@@ -16,7 +16,8 @@ namespace FlowJudge.Workspaces.Domain.Workspace.Services
                 { WorkspacesBoundedContext.Actions.CreateIntegration, WorkspaceRole.Administrator },
                 { WorkspacesBoundedContext.Actions.ConnectIntegration, WorkspaceRole.Administrator },
                 { WorkspacesBoundedContext.Actions.DisconnectIntegration, WorkspaceRole.Administrator },
-                { WorkspacesBoundedContext.Actions.DeactivateIntegration, WorkspaceRole.Administrator },
+                { WorkspacesBoundedContext.Actions.ActivateIntegration, WorkspaceRole.Administrator },
+                { WorkspacesBoundedContext.Actions.ConfigureIntegrationRepositories, WorkspaceRole.Administrator },
             };
     }
 }

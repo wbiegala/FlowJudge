@@ -103,6 +103,28 @@ namespace FlowJudge.Workspaces.Infrastructure.Repositories.Integrations
             return null;
         }
 
+        public async Task<(WorkspaceId WorkspaceId, IntegrationId IntegrationId)?> GetIntegrationIdByGitHubInstallationIdAsync(
+            string installationId,
+            CancellationToken ct = default)
+        {
+            await EnsureConnectionOpenAsync(ct);
+            var command = Command(GetIntegrationIdByGitHubInstallationIdSql, new { InstallationId = installationId }, ct);
+            var identity = await Connection.QuerySingleOrDefaultAsync<IntegrationIdentity>(command);
+
+            if (identity is null)
+                return null;
+
+            var workspaceId = WorkspaceId.Create(identity.WorkspaceId);
+            var integrationId = IntegrationId.Create(identity.IntegrationId);
+
+            return new(workspaceId, integrationId);
+        }
+
+        private sealed record IntegrationIdentity
+        {
+            public Guid WorkspaceId { get; init; }
+            public Guid IntegrationId { get; init; }
+        }
 
         private const string AddIntegrationSql = $@"
 INSERT INTO {Cfg.SchemaName}.{Cfg.IntegrationsTableName} (
@@ -257,5 +279,17 @@ OFFSET @Offset ROWS FETCH NEXT @Limit ROWS ONLY";
 SELECT {nameof(IntegrationDbModel.provider)}
 FROM {Cfg.SchemaName}.{Cfg.IntegrationsTableName}
 WHERE {nameof(IntegrationDbModel.aggregate_id)} = @AggregateId";
+
+        private const string GetIntegrationIdByGitHubInstallationIdSql = $@"
+SELECT
+     integ.{nameof(IntegrationDbModel.workspace_id)} as WorkspaceId
+    ,integ.{nameof(IntegrationDbModel.aggregate_id)} as IntegrationId
+FROM {Cfg.SchemaName}.{Cfg.IntegrationAuthenticationTableName} AS auth
+INNER JOIN {Cfg.SchemaName}.{Cfg.IntegrationsTableName} AS integ
+    ON auth.{nameof(IntegrationAuthenticationDbModel.integration_id)} = integ.{nameof(IntegrationDbModel.id)}
+WHERE integ.{nameof(IntegrationDbModel.provider)} = 'GitHub'
+    AND auth.{nameof(IntegrationAuthenticationDbModel.type)} = 'InstallationId'
+    AND auth.{nameof(IntegrationAuthenticationDbModel.value)} = @InstallationId
+";
     }
 }

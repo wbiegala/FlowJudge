@@ -10,5 +10,6 @@
         public required string name { get; init; }
         public string? full_name { get; init; }
         public bool is_tracking { get; init; }
+        public required string status { get; init; }
     }
 }

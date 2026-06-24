@@ -1,4 +1,4 @@
-﻿namespace FlowJudge.Workspaces.Application.Services.GitHubInstallation
+﻿namespace FlowJudge.Workspaces.Application.Services.GitHub
 {
     internal sealed class GitHubInstallationModel
     {

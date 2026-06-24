@@ -7,7 +7,7 @@ using FlowJudge.Workspaces.Domain.Integration.Services;
 using FlowJudge.Workspaces.Domain.Workspace.Model;
 using FlowJudge.Workspaces.Domain.Workspace.Services;
 
-namespace FlowJudge.Workspaces.Application.Commands.Internals
+namespace FlowJudge.Workspaces.Application.Commands.GitHub
 {
     internal sealed class CreateGitHubInstallationIntegrationCommandHandler
         : TransactionalCommandHandler<CreateGitHubInstallationIntegrationCommand, Guid>

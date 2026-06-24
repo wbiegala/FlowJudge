@@ -2,8 +2,8 @@
 
 namespace FlowJudge.Workspaces.Application.Abstractions.Commands
 {
-    public sealed record UpdateWorkspaceCommand(
+    public sealed record ActivateIntegrationCommand(
         Guid WorkspaceId,
-        string Name,
+        Guid IntegrationId,
         Guid IssuerId) : ICommand;
 }

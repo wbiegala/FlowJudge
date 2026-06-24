@@ -39,7 +39,8 @@ namespace FlowJudge.Common.Messaging.Publishing
                 publishSubject,
                 subject => _serviceBusClient.CreateSender(subject));
 
-            var body = BinaryData.FromObjectAsJson(message, _jsonSerializerOptions);
+
+            var body = SerializeMessage(message);
 
             var messageTypeName = message.GetType().Name;
             var messageIdString = message.MessageId.ToString("N");
@@ -66,6 +67,14 @@ namespace FlowJudge.Common.Messaging.Publishing
                 _logger.LogError(ex, ex.Message);
                 throw new PublishMessageException(message, publishSubject, ex.Message);
             }
+        }
+
+        private BinaryData SerializeMessage(IMessage message)
+        {
+            var messageType = message.GetType();
+            var serializedMessage = JsonSerializer.Serialize(message, messageType, _jsonSerializerOptions);
+
+            return BinaryData.FromString(serializedMessage);
         }
 
         public async ValueTask DisposeAsync()

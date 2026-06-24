@@ -5,10 +5,10 @@ using FlowJudge.Workspaces.Application.Abstractions.Commands;
 using FlowJudge.Workspaces.Application.Abstractions.Models;
 using FlowJudge.Workspaces.Application.Abstractions.Queries;
 using FlowJudge.Workspaces.Application.Abstractions.Services;
-using FlowJudge.Workspaces.Application.Commands.Internals;
-using FlowJudge.Workspaces.Application.Services.GitHubInstallation;
+using FlowJudge.Workspaces.Application.Commands.GitHub;
+using FlowJudge.Workspaces.Application.Services.GitHub;
 using FlowJudge.Workspaces.Domain.Integration.Model;
-using static FlowJudge.Workspaces.Application.Commands.Internals.ConfigureGitHubInstallationIntegrationCommand;
+using static FlowJudge.Workspaces.Application.Commands.GitHub.ConfigureGitHubInstallationIntegrationCommand;
 
 namespace FlowJudge.Workspaces.UnitTests.Application
 {

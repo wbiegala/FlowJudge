@@ -10,7 +10,8 @@
             CreateIntegration,
             ConnectIntegration,
             DisconnectIntegration,
-            DeactivateIntegration,
+            ActivateIntegration,
+            ConfigureIntegrationRepositories,
         }
     }
 }

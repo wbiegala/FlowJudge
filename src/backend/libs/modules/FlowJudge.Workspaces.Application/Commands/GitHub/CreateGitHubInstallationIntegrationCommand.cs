@@ -1,6 +1,6 @@
 ﻿using FlowJudge.Common.Application.Mediator;
 
-namespace FlowJudge.Workspaces.Application.Commands.Internals
+namespace FlowJudge.Workspaces.Application.Commands.GitHub
 {
     internal sealed record CreateGitHubInstallationIntegrationCommand : ICommand<Guid>
     {
