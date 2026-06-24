@@ -78,6 +78,10 @@ namespace FlowJudge.GitHub.Client.Auth
 
             var securityKey = new RsaSecurityKey(rsa)
             {
+                CryptoProviderFactory = new CryptoProviderFactory
+                {
+                    CacheSignatureProviders = false
+                },
                 KeyId = _configuration.InstallationTokenAuthConfiguration.ApplicationId
             };
 
