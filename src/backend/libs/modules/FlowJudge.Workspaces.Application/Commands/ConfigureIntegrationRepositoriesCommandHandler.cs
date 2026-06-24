@@ -37,18 +37,25 @@ namespace FlowJudge.Workspaces.Application.Commands
             ConfigureIntegrationRepositoriesCommand command,
             CancellationToken cancellationToken = default)
         {
-            var workspaceId = WorkspaceId.Create(command.WorkspaceId);
-            var canProcess = await VerifyPermissionsAsync(workspaceId, command.IssuerId, cancellationToken);
-            if (!canProcess)
-                return ApplicationResultFactory.Failure<Guid>("Cannot configure integration.",
-                    ErrorCodeGenerator.Forbidden("integration"));
-
             var integrationId = IntegrationId.Create(command.IntegrationId);
             var integration = await _integrationRepository.GetIntegrationByAggregateIdAsync(integrationId, cancellationToken);
 
             if (integration is null)
                 return ApplicationResultFactory.Failure<Guid>("Integration not found.",
                     ErrorCodeGenerator.NotFound("integration"));
+
+            if (integration.WorkspaceId != command.WorkspaceId)
+                return ApplicationResultFactory.Failure("Integration does not belong to workspace.",
+                    ErrorCodeGenerator.NotFound("integration"));
+
+            var canProcess = await VerifyPermissionsAsync(integration.WorkspaceId, command.IssuerId, cancellationToken);
+            if (!canProcess)
+                return ApplicationResultFactory.Failure<Guid>("Cannot configure integration.",
+                    ErrorCodeGenerator.Forbidden("integration"));
+
+            if (command.Repositories.Any(repo => repo.WorkspaceId != command.WorkspaceId || repo.IntegrationId != command.IntegrationId))
+                return ApplicationResultFactory.Failure("Repository configuration does not belong to integration.",
+                    ErrorCodeGenerator.Forbidden("integration"));
 
             var storedRepositories = await _repositoryRepository.GetRepositoriesByIntegrationAsync(integrationId, cancellationToken);
             var repositories = storedRepositories is null ? new List<RepositoryRoot>() : storedRepositories.ToList();
