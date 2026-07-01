@@ -1,7 +1,7 @@
 using FlowJudge.Common.Application;
 using FlowJudge.Common.Sql.UnitOfWork;
 using FlowJudge.Workspaces.Application.Abstractions.Ports;
-using FlowJudge.Workspaces.Application.Commands.Internals;
+using FlowJudge.Workspaces.Application.Commands.GitHub;
 using FlowJudge.Workspaces.Domain.Integration.Model;
 using FlowJudge.Workspaces.Domain.Integration.Services;
 using FlowJudge.Workspaces.Domain.Workspace.Model;

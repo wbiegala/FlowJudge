@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="API\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FlowJudge.Common.Messaging.Abstractions\FlowJudge.Common.Messaging.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>

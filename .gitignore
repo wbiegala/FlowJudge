@@ -71,6 +71,7 @@ logs/
 secrets.json
 appsettings.Development.json
 appsettings.Local.json
+src/secrets/*
 
 ############################################################
 # Angular / Node

@@ -20,7 +20,9 @@ services:
       retries: 10
       start_period: 10s
     networks:
-      - flowjudge
+      flowjudge:
+        aliases:
+          - flowjudge-db
 
   flowjudge.db_init:
     image: postgres:18
@@ -74,6 +76,34 @@ services:
     networks:
       - flowjudge
 
+  flowjudge.servicebus.db:
+    environment:
+      ACCEPT_EULA: ${SERVICEBUS_ACCEPT_EULA:-N}
+      MSSQL_SA_PASSWORD: ${SERVICEBUS_MSSQL_SA_PASSWORD}
+    networks:
+      flowjudge:
+        aliases:
+          - servicebus-mssql
+
+  flowjudge.servicebus:
+    pull_policy: always
+    depends_on:
+      - flowjudge.servicebus.db
+    environment:
+      SQL_SERVER: servicebus-mssql
+      MSSQL_SA_PASSWORD: ${SERVICEBUS_MSSQL_SA_PASSWORD}
+      ACCEPT_EULA: ${SERVICEBUS_ACCEPT_EULA:-N}
+      EMULATOR_HTTP_PORT: ${SERVICEBUS_EMULATOR_HTTP_PORT:-5300}
+    ports:
+      - "5672:5672"
+      - "${SERVICEBUS_EMULATOR_HTTP_PORT:-5300}:${SERVICEBUS_EMULATOR_HTTP_PORT:-5300}"
+    volumes:
+      - ./scripts/servicebus-emulator/Config.json:/ServiceBus_Emulator/ConfigFiles/Config.json:ro
+    networks:
+      flowjudge:
+        aliases:
+          - servicebus-emulator
+
   flowjudge.smtp:
     restart: unless-stopped
     ports:
@@ -95,7 +125,7 @@ services:
       KC_HOSTNAME_STRICT_HTTPS: "false"
       KC_PROXY: edge
       KC_DB: postgres
-      KC_DB_URL: jdbc:postgresql://flowjudge.db:5432/${AUTH_DB_NAME}
+      KC_DB_URL: jdbc:postgresql://flowjudge-db:5432/${AUTH_DB_NAME}
       KC_DB_USERNAME: ${AUTH_DB_USER}
       KC_DB_PASSWORD: ${AUTH_DB_PASSWORD}
       KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN_LOGIN}
@@ -104,7 +134,7 @@ services:
     ports:
       - "8080:8080"
     healthcheck:
-      test: ["CMD-SHELL", "curl -fsS http://localhost:8080/health/ready || exit 1"]
+      test: ["CMD-SHELL", "bash -ec \"exec 3<>/dev/tcp/127.0.0.1/9000; printf 'GET /health/ready HTTP/1.1\\r\\nHost: localhost\\r\\nConnection: close\\r\\n\\r\\n' >&3; grep -q '200 OK' <&3\""]
       interval: 5s
       timeout: 5s
       retries: 40
@@ -118,6 +148,7 @@ services:
       - ASPNETCORE_HTTPS_PORTS=8081
       - ConnectionStrings__Postgres=Host=flowjudge.db;Port=5432;Database=${FLOWJUDGE_DB_NAME};Username=${FLOWJUDGE_DB_USER};Password=${FLOWJUDGE_DB_PASSWORD};SSL Mode=Disable;
       - ConnectionStrings__Redis=${FLOWJUDGE_REDIS_CONNECTION_STRING}
+      - ConnectionStrings__ServiceBus=${FLOWJUDGE_SERVICEBUS_CONNECTION_STRING}
       - CorsAllowedOrigins=${ALLOWED_ORIGINS}
       - UiRedirectBaseUrl=https://localhost:4200
       - Auth__Keycloak__BaseUrl=${AUTH_BASE_URL}
@@ -151,6 +182,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
       - ASPNETCORE_HTTPS_PORTS=8081
+      - ConnectionStrings__ServiceBus=${FLOWJUDGE_SERVICEBUS_CONNECTION_STRING}
     ports:
       - "8080"
       - "8081"
@@ -165,6 +197,7 @@ services:
       - ASPNETCORE_HTTP_PORTS=8080
       - ASPNETCORE_HTTPS_PORTS=8081
       - AzureWebJobsStorage=${FLOWJUDGE_STORAGE_CONNECTION_STRING}
+      - AzureWebJobsServiceBus=${FLOWJUDGE_SERVICEBUS_CONNECTION_STRING}
     ports:
       - "8080"
       - "8081"
@@ -173,19 +206,27 @@ services:
     networks:
       - flowjudge
 
-  flowjudge.vcs.worker:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=8080
-      - ASPNETCORE_HTTPS_PORTS=8081
-      - AzureWebJobsStorage=${FLOWJUDGE_STORAGE_CONNECTION_STRING}
-    ports:
-      - "8080"
-      - "8081"
-    volumes:
-      - ./https-dev-cert.pfx:/https/https-dev-cert.pfx:ro
-    networks:
-      - flowjudge
+  # flowjudge.vcs.worker:
+  #   environment:
+  #     - ASPNETCORE_ENVIRONMENT=Development
+  #     - ASPNETCORE_URLS=https://+:8081;http://+:8080
+  #     - ASPNETCORE_HTTP_PORTS=8080
+  #     - ASPNETCORE_HTTPS_PORTS=8081
+  #     - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/https-dev-cert.pfx
+  #     - ASPNETCORE_Kestrel__Certificates__Default__Password=${HTTPS_CERT_PASSWORD}
+  #     - AzureWebJobsStorage=${FLOWJUDGE_STORAGE_CONNECTION_STRING}
+  #     - AzureWebJobsServiceBus=${FLOWJUDGE_SERVICEBUS_CONNECTION_STRING}
+  #     - AzureWebJobsSecretStorageType=files
+  #   ports:
+  #     - "20080:8080"
+  #     - "20443:8081"
+  #   volumes:
+  #     - ./https-dev-cert.pfx:/https/https-dev-cert.pfx:ro
+  #   networks:
+  #     - flowjudge
+  #   secrets:
+  #     - source: VCS_WORKER_SECRETS
+  #       target: /azure-functions-host/Secrets/host.json
  
   flowjudge.webapp:
     ports:
@@ -208,3 +249,5 @@ networks:
 secrets:
   GITHUB_APP_PRIVATE_KEY:
     file: ./secrets/github.private-key.pem
+  VCS_WORKER_SECRETS:
+    file: ./secrets/FlowJudge.VCS.Worker.host.json

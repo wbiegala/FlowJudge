@@ -2,10 +2,8 @@
 
 namespace FlowJudge.Workspaces.Application.Abstractions.Commands
 {
-    public sealed record UpdateWorkspaceCommand : ICommand
-    {
-        public required Guid WorkspaceId { get; init; }
-        public required string Name { get; init; }
-        public required Guid IssuerId { get; init; }
-    }
+    public sealed record UpdateWorkspaceCommand(
+        Guid WorkspaceId,
+        string Name,
+        Guid IssuerId) : ICommand;
 }

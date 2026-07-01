@@ -18,7 +18,48 @@ namespace FlowJudge.Workspaces.Domain.Repository.Model
         public RepositoryName Name { get; private set; }
         public RepositoryFullName? FullName { get; private set; }
         public bool TrackingEnabled { get; private set; }
+        public RepositoryStatus Status { get; private set; }
 
+
+        public void ChangeName(string repositoryName)
+        {
+            if (Name != repositoryName)
+                Name = RepositoryName.Create(repositoryName);
+        }
+
+        public void ChangeFullName(string? repositoryFullName)
+        {
+            if (string.IsNullOrWhiteSpace(repositoryFullName))
+                FullName = null;
+            else if (FullName is null || FullName != repositoryFullName)
+                FullName = RepositoryFullName.Create(repositoryFullName);
+        }
+
+        public void EnableTracking()
+        {
+            if (TrackingEnabled)
+                return;
+
+            TrackingEnabled = true;
+        }
+
+        public void DisableTracking()
+        {
+            if (!TrackingEnabled)
+                return;
+
+            TrackingEnabled = false;
+        }
+
+        public void Deactivate()
+        {
+            Status = RepositoryStatus.Deleted;
+        }
+
+        public void Reactivate()
+        {
+            Status = RepositoryStatus.Active;
+        }
 
         public static RepositoryRoot Create(
             Guid workspaceId,
@@ -38,7 +79,8 @@ namespace FlowJudge.Workspaces.Domain.Repository.Model
                 FullName = string.IsNullOrWhiteSpace(fullname)
                     ? null
                     : RepositoryFullName.Create(fullname),
-                TrackingEnabled = trackingEnabled
+                TrackingEnabled = trackingEnabled,
+                Status = RepositoryStatus.Active
             };
         }
 
@@ -50,7 +92,8 @@ namespace FlowJudge.Workspaces.Domain.Repository.Model
             string externalId,
             string name,
             string? fullname,
-            bool trackingEnabled)
+            bool trackingEnabled,
+            string status)
         {
             return new RepositoryRoot
             {
@@ -63,7 +106,8 @@ namespace FlowJudge.Workspaces.Domain.Repository.Model
                 FullName = string.IsNullOrWhiteSpace(fullname)
                     ? null
                     : RepositoryFullName.Create(fullname),
-                TrackingEnabled = trackingEnabled
+                TrackingEnabled = trackingEnabled,
+                Status = Enum.Parse<RepositoryStatus>(status)
             };
         }
     }

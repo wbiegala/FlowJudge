@@ -5,10 +5,11 @@ using FlowJudge.Workspaces.Application.Abstractions.Commands;
 using FlowJudge.Workspaces.Application.Abstractions.Models;
 using FlowJudge.Workspaces.Application.Abstractions.Queries;
 using FlowJudge.Workspaces.Application.Abstractions.Services;
-using FlowJudge.Workspaces.Application.Commands.Internals;
-using FlowJudge.Workspaces.Application.Services.GitHubInstallation;
+using FlowJudge.Workspaces.Application.Commands.GitHub;
+using FlowJudge.Workspaces.Application.Services.GitHub;
 using FlowJudge.Workspaces.Domain.Integration.Model;
-using static FlowJudge.Workspaces.Application.Commands.Internals.ConfigureGitHubInstallationIntegrationCommand;
+using FlowJudge.Workspaces.Domain.Repository.Model;
+using static FlowJudge.Workspaces.Application.Commands.GitHub.ConfigureGitHubInstallationIntegrationCommand;
 
 namespace FlowJudge.Workspaces.UnitTests.Application
 {
@@ -55,6 +56,13 @@ namespace FlowJudge.Workspaces.UnitTests.Application
                 Repositories = repositories
             };
 
+        public static ConfigureIntegrationRepositoriesCommand ConfigureIntegrationRepositoriesCommand(
+            Guid workspaceId,
+            Guid integrationId,
+            Guid issuerId,
+            IReadOnlyCollection<RepositoryConfiguration> repositories) =>
+            new(workspaceId, integrationId, issuerId, repositories);
+
         public static GithubIntegration CreateGithubIntegration(
             Guid id,
             Guid aggregateId,
@@ -72,6 +80,44 @@ namespace FlowJudge.Workspaces.UnitTests.Application
                 Enumerable.Empty<IntegrationAuthentication>(),
                 createdAt,
                 createdBy);
+
+        public static RepositoryRoot CreateRepository(
+            Guid id,
+            Guid aggregateId,
+            Guid workspaceId,
+            Guid integrationId,
+            string externalId,
+            string name,
+            string? fullName,
+            bool trackingEnabled,
+            RepositoryStatus status = RepositoryStatus.Active) =>
+            RepositoryRoot.Load(
+                id,
+                aggregateId,
+                workspaceId,
+                integrationId,
+                externalId,
+                name,
+                fullName,
+                trackingEnabled,
+                status.ToString());
+
+        public static RepositoryConfiguration CreateRepositoryConfiguration(
+            Guid workspaceId,
+            Guid integrationId,
+            string externalId,
+            string name,
+            string? fullName,
+            bool? trackingEnabled) =>
+            new()
+            {
+                WorkspaceId = workspaceId,
+                IntegrationId = integrationId,
+                ExternalId = externalId,
+                Name = name,
+                FullName = fullName,
+                TrackingEnabled = trackingEnabled
+            };
 
         public static IntegrationListItem CreateIntegrationListItem(
             Guid id,

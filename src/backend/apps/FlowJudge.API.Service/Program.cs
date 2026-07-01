@@ -16,6 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.InstallSecrets();
 builder.InstallIntegrations();
+builder.InstallServiceBus();
 
 var dbConnectionString = builder.Configuration.GetConnectionString("Postgres");
 var redisConnectionString = builder.Configuration.GetConnectionString("Redis");
@@ -32,6 +33,7 @@ builder.Services.AddPostgresDatabase(cfg =>
     cfg.WithDatabaseMigrationsFromAssembly(typeof(FlowJudge.Users.Infrastructure.Installer).Assembly);
     cfg.WithDatabaseMigrationsFromAssembly(typeof(FlowJudge.Workspaces.Infrastructure.Installer).Assembly);
 });
+
 
 builder.Services.AddCors(options =>
 {

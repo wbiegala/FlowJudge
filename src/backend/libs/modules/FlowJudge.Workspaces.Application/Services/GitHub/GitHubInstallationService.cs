@@ -3,16 +3,16 @@ using FlowJudge.Common.Application.Mediator;
 using FlowJudge.Common.Cache;
 using FlowJudge.GitHub.Client;
 using FlowJudge.GitHub.Client.Clients;
+using FlowJudge.GitHub.Client.Extensions;
 using FlowJudge.Workspaces.Application.Abstractions.Ports;
 using FlowJudge.Workspaces.Application.Abstractions.Services;
-using FlowJudge.Workspaces.Application.Commands.Internals;
+using FlowJudge.Workspaces.Application.Commands.GitHub;
 using FlowJudge.Workspaces.Domain.Integration.Model;
 using FlowJudge.Workspaces.Domain.Workspace.Model;
 using FlowJudge.Workspaces.Domain.Workspace.Services;
-using static FlowJudge.Workspaces.Application.Commands.Internals.ConfigureGitHubInstallationIntegrationCommand;
-using ClientRepositoryContract = FlowJudge.GitHub.Client.Contract.SharedModels.Repository;
+using static FlowJudge.Workspaces.Application.Commands.GitHub.ConfigureGitHubInstallationIntegrationCommand;
 
-namespace FlowJudge.Workspaces.Application.Services.GitHubInstallation
+namespace FlowJudge.Workspaces.Application.Services.GitHub
 {
     internal sealed class GitHubInstallationService : IGitHubInstallationService
     {
@@ -108,7 +108,8 @@ namespace FlowJudge.Workspaces.Application.Services.GitHubInstallation
                     $"Integration id={integrationId} has no GitHub installation id.",
                     ErrorCodeGenerator.NotAcceptable("integration"));
 
-            var repositories = await GetAllInstallationRepositoriesAsync(installationId, ct);
+            var client = _githubClientService.GetClient<IRepositoryClient>();
+            var repositories = await client.GetAllInstallationRepositoriesAsync(installationId, ct);
 
             var result = repositories.Select(r => new GitHubInstallationRepository
             {
@@ -144,7 +145,8 @@ namespace FlowJudge.Workspaces.Application.Services.GitHubInstallation
                     $"Integration id={integrationId} has no GitHub installation id.",
                     ErrorCodeGenerator.NotAcceptable("integration"));
 
-            var storedRepositories = (await GetAllInstallationRepositoriesAsync(installationId, ct)).ToDictionary(r => r.Id);
+            var client = _githubClientService.GetClient<IRepositoryClient>();
+            var storedRepositories = (await client.GetAllInstallationRepositoriesAsync(installationId, ct)).ToDictionary(r => r.Id);
             var requestedRepositories = initialRepositoriesConfiguration.ToArray();
             var unknownRepository = requestedRepositories.FirstOrDefault(r => !storedRepositories.ContainsKey(r.GithubId));
             if (unknownRepository is not null)
@@ -191,33 +193,6 @@ namespace FlowJudge.Workspaces.Application.Services.GitHubInstallation
                 return false;
 
             return WorkspaceRolePermissionsService.CanToAction(role.Value, Domain.WorkspacesBoundedContext.Actions.ConnectIntegration);
-        }
-
-        private async Task<IEnumerable<ClientRepositoryContract>> GetAllInstallationRepositoriesAsync(
-            string installationId,
-            CancellationToken ct)
-        {
-            const int pageSize = 100;
-         
-            var client = _githubClientService.GetClient<IRepositoryClient>();
-            var firstPage = await client.GetInstallationRepositoriesAsync(installationId, pageSize, 1, ct);
-
-            if (firstPage.TotalCount <= pageSize)
-                return firstPage.Repositories;
-
-            var result = new List<ClientRepositoryContract>();
-            result.AddRange(firstPage.Repositories);
-
-            var totalCount = firstPage.TotalCount;
-            var pagesCount = (int)Math.Ceiling(decimal.Divide(totalCount, pageSize));
-
-            for (var currentPage = 2; currentPage <= pagesCount; currentPage++)
-            {
-                var reposPage = await client.GetInstallationRepositoriesAsync(installationId, pageSize, currentPage, ct);
-                result.AddRange(reposPage.Repositories);
-            }
-
-            return result;
         }
     }
 }

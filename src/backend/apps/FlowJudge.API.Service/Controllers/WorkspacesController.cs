@@ -11,6 +11,7 @@ using FlowJudge.Users.Application.Models;
 using FlowJudge.Workspaces.Application.Abstractions.Commands;
 using FlowJudge.Workspaces.Application.Abstractions.Models;
 using FlowJudge.Workspaces.Application.Abstractions.Queries;
+using FlowJudge.Workspaces.Domain.Workspace.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -110,12 +111,11 @@ namespace FlowJudge.API.Service.Controllers
             //TODO: validation
 
             var userContext = this.HttpContext.User.GetUserContext();
-            var command = new UpdateWorkspaceCommand
-            {
-                WorkspaceId = id,
-                Name = request.Name,
-                IssuerId = userContext.Id
-            };
+            var command = new UpdateWorkspaceCommand(
+                WorkspaceId: id,
+                Name: request.Name,
+                IssuerId: userContext.Id
+            );
 
             var result = await _mediator.SendCommandAsync<UpdateWorkspaceCommand>(command, ct);
             if (!result.IsSuccess)

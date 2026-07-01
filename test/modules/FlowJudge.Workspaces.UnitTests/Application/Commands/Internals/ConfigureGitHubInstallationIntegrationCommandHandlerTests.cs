@@ -1,11 +1,11 @@
 ﻿using FlowJudge.Common.Sql.UnitOfWork;
 using FlowJudge.Common.Application;
 using FlowJudge.Workspaces.Application.Abstractions.Ports;
-using FlowJudge.Workspaces.Application.Commands.Internals;
 using FlowJudge.Workspaces.Domain.Integration.Model;
 using FlowJudge.Workspaces.Domain.Repository.Model;
 using FlowJudge.Workspaces.Domain.Workspace.Model;
 using Moq;
+using FlowJudge.Workspaces.Application.Commands.GitHub;
 
 namespace FlowJudge.Workspaces.UnitTests.Application.Commands.Internals
 {

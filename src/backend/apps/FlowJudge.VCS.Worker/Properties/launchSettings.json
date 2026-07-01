@@ -2,14 +2,21 @@
   "profiles": {
     "FlowJudge.VCS.Worker": {
       "commandName": "Project",
-      "commandLineArgs": "--port 7212"
+      "commandLineArgs": "--port 7212 --useHttps"
     },
     "Container (Dockerfile)": {
       "commandName": "Docker",
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
+      "environmentVariables": {
+        "ASPNETCORE_URLS": "https://+:8081;http://+:8080",
+        "ASPNETCORE_HTTPS_PORTS": "8081",
+        "ASPNETCORE_HTTP_PORTS": "8080"
+      },
+      "commandLineArgs": "--port 8081 --useHttps",
       "containerRunArguments": "--init",
-      "httpPort": 34959,
-      "useSSL": false
+      "httpPort": 20080,
+      "useSSL": true,
+      "sslPort": 20443
     }
   }
 }

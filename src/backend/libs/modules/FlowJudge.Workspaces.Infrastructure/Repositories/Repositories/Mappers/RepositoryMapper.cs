@@ -16,8 +16,23 @@ namespace FlowJudge.Workspaces.Infrastructure.Repositories.Repositories.Mappers
                 vcs_external_id = repository.ExternalId,
                 name = repository.Name,
                 full_name = repository.FullName is null ? null : repository.FullName.Value,
-                is_tracking = repository.TrackingEnabled
+                is_tracking = repository.TrackingEnabled,
+                status = repository.Status.ToString(),
             };
+        }
+
+        public static RepositoryRoot ToDomain(this RepositoryDbModel model)
+        {
+            return RepositoryRoot.Load(
+                model.id,
+                model.aggregate_id,
+                model.workspace_id,
+                model.integration_id,
+                model.vcs_external_id,
+                model.name,
+                model.full_name,
+                model.is_tracking,
+                model.status);
         }
     }
 }
