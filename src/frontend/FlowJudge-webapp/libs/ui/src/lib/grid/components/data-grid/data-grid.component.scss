@@ -21,3 +21,19 @@
 .data-grid-empty-message {
   font-size: large;
 }
+
+.data-grid-cell-two-lines {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: baseline;
+}
+
+.data-grid-cell-two-lines-first {
+
+}
+
+.data-grid-cell-two-lines-second {
+  font-size: small;
+  color: gray;
+}

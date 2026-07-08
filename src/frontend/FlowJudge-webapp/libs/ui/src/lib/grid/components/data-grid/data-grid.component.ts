@@ -7,7 +7,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslatePipe } from '@ngx-translate/core';
-import { DataGridAction, DataGridActionEvent, DataGridColumn, DataGridRow, DataGridRowAction, DataGridRowActionEvent, EmptyGridBehavior } from '../../data-grid.model';
+import { DataGridAction, DataGridActionEvent, DataGridColumn, DataGridRow, DataGridRowAction, DataGridRowActionEvent, EmptyGridBehavior, IconCell, TwoLinesCell } from '../../data-grid.model';
 import { LoadingComponent } from '../../../progress/components/loading.component';
 import { ViewportService } from '../../../viewport/viewport.service';
 
@@ -67,4 +67,22 @@ export class DataGridComponent<TRow extends DataGridRow> {
 
     this.gridRowActionEvent.emit(event);
   }
+
+  isTwoLinesCell(value: unknown): value is TwoLinesCell {
+    return (
+      typeof value === 'object' &&
+      value !== null &&
+      'firstLine' in value &&
+      'secondLine' in value
+    );
+}
+
+isIconCell(value: unknown): value is IconCell {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    'icon' in value &&
+    'valueTranslationKey' in value
+  );
+}
 }

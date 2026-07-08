@@ -65,6 +65,33 @@ namespace FlowJudge.API.Service.Controllers
             return Ok(result.Data!.ToPagedResult(item => item.ToResponseItem(getCreatorDataFunc)));
         }
 
+        [HttpGet("{id:guid}")]
+        public async Task<IActionResult> GetIntegrationDetailsAsync(
+            [FromRoute] Guid id,
+            CancellationToken cancellationToken = default)
+        {
+            var workspaceId = this.HttpContext.GetWorkspaceId();
+            if (!workspaceId.HasValue)
+                return ApplicationErrorMapper.ErrorResponse(
+                    ErrorCodeGenerator.NotAcceptable("integration"),
+                    "Workspace context is missing",
+                    System.Net.HttpStatusCode.BadRequest);
+            var userContext = this.HttpContext.User.GetUserContext();
+
+            var query = new GetIntrgrationDetailsQuery(id, workspaceId.Value, userContext.Id);
+            var result = await _mediator.SendQueryAsync<GetIntrgrationDetailsQuery, IntegrationData>(query, cancellationToken);
+
+            if (!result.IsSuccess)
+                return result.Error!.ToResponse();
+
+            var creatorDataResult = await _mediator.SendQueryAsync<GetUserDataQuery, UserData>(new GetUserDataQuery(result.Data!.CreatedBy), cancellationToken);
+            if (!creatorDataResult.IsSuccess)
+                return creatorDataResult.Error!.ToResponse();
+
+            return Ok(result.Data!.ToResponse(() => creatorDataResult.Data!));
+        }
+
+
         #region GITHUB
 
         [HttpPost("github/install")]
