@@ -15,7 +15,8 @@ import {
   TwoLinesCell,
   ViewHeaderAction,
   ViewHeaderComponent,
-  ViewHeaderEvent } from '@flow-judge-webapp/ui';
+  ViewHeaderEvent,
+  ViewHeaderIcon} from '@flow-judge-webapp/ui';
 import { TranslatePipe } from '@ngx-translate/core';
 import { NgxsFormDirective } from '@ngxs/form-plugin';
 import { IntegrationDetailsState } from '../../store/integration-details/integration-details.state';
@@ -23,6 +24,8 @@ import { Store } from '@ngxs/store';
 import { WorkspaceNavigationService } from '@flow-judge-webapp/workspaces';
 import { IntegrationRepositoryDetails } from '../../models/integration-details.model';
 import { DisableTrackingForRepository, EnableTrackingForRepository } from '../../store/integration-details/integration-details.actions';
+import { MatIcon } from "@angular/material/icon";
+import { MatTooltip } from "@angular/material/tooltip";
 
 @Component({
   selector: 'lib-integration-details-component',
@@ -35,7 +38,10 @@ import { DisableTrackingForRepository, EnableTrackingForRepository } from '../..
     TranslatePipe,
     NgxsFormDirective,
     MatInputModule,
-    MatFormFieldModule ],
+    MatFormFieldModule,
+    MatIcon,
+    MatTooltip
+],
   templateUrl: './integration-details.component.html',
   styleUrl: './integration-details.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -47,6 +53,12 @@ export class IntegrationDetailsComponent {
   viewMode = this.#store.selectSignal(IntegrationDetailsState.viewMode);
   viewModeKey = computed(() => getViewModeTranslationKey(this.viewMode()));
   repositories = this.#store.selectSignal(IntegrationDetailsState.repositories);
+
+  titleIcon: ViewHeaderIcon = {
+    icon: 'github',
+    isSvgIcon: true,
+    tooltipTranslationKey: 'GitHub'
+  }
 
   basicDataForm = new FormGroup({
     name: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.maxLength(128)] }),

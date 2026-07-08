@@ -1,4 +1,5 @@
 <lib-view-header
+  [icon]="titleIcon"
   [title]="`${'INTEGRATIONS.DETAILS.TITLE' | translate} - ${(viewModeKey() | translate).toLowerCase()}`"
   [actions]="actions"
   (headerEvent)="handleActionEvent($event)">
