@@ -63,6 +63,23 @@ namespace FlowJudge.Workspaces.UnitTests.Application
             IReadOnlyCollection<RepositoryConfiguration> repositories) =>
             new(workspaceId, integrationId, issuerId, repositories);
 
+        public static UpdateIntegrationCommand UpdateIntegrationCommand(
+            Guid workspaceId,
+            Guid integrationId,
+            Guid issuerId,
+            string name,
+            IntegrationStatus status,
+            IReadOnlyCollection<UpdateIntegrationCommand.RepositoryTrackingSettings> trackingSettings) =>
+            new()
+            {
+                WorkspaceId = workspaceId,
+                IntegrationId = integrationId,
+                IssuerId = issuerId,
+                Name = name,
+                Status = status,
+                TrackingSettings = trackingSettings
+            };
+
         public static GithubIntegration CreateGithubIntegration(
             Guid id,
             Guid aggregateId,

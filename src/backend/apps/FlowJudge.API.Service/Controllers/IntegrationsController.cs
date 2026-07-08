@@ -1,4 +1,5 @@
 ﻿using FlowJudge.API.Contracts;
+using FlowJudge.API.Contracts.Integrations;
 using FlowJudge.API.Contracts.Integrations.GitHub;
 using FlowJudge.API.Service.Controllers.Mappers;
 using FlowJudge.API.Service.Controllers.Redirects;
@@ -10,9 +11,11 @@ using FlowJudge.Common.Http.Extensions;
 using FlowJudge.Common.Utils.Pagination;
 using FlowJudge.Users.Application.Abstractions.Queries;
 using FlowJudge.Users.Application.Models;
+using FlowJudge.Workspaces.Application.Abstractions.Commands;
 using FlowJudge.Workspaces.Application.Abstractions.Models;
 using FlowJudge.Workspaces.Application.Abstractions.Queries;
 using FlowJudge.Workspaces.Application.Abstractions.Services;
+using FlowJudge.Workspaces.Domain.Integration.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -91,6 +94,43 @@ namespace FlowJudge.API.Service.Controllers
             return Ok(result.Data!.ToResponse(() => creatorDataResult.Data!));
         }
 
+        [HttpPut("{id:guid}")]
+        public async Task<IActionResult> UpdateIntegrationAsync(
+            [FromRoute] Guid id,
+            [FromBody] UpdateIntegrationRequest request,
+            CancellationToken cancellationToken = default)
+        {
+            var workspaceId = this.HttpContext.GetWorkspaceId();
+            if (!workspaceId.HasValue)
+                return ApplicationErrorMapper.ErrorResponse(
+                    ErrorCodeGenerator.NotAcceptable("integration"),
+                    "Workspace context is missing",
+                    System.Net.HttpStatusCode.BadRequest);
+            var userContext = this.HttpContext.User.GetUserContext();
+
+            var command = new UpdateIntegrationCommand
+            {
+                IntegrationId = id,
+                WorkspaceId = workspaceId.Value,
+                IssuerId = userContext.Id,
+                Name = request.Name,
+                Status = Enum.Parse<IntegrationStatus>(request.Status, ignoreCase: true),
+                TrackingSettings = request.RepositoriesTrackingSettings
+                    .Select(r => new UpdateIntegrationCommand.RepositoryTrackingSettings
+                    {
+                        RepositoryId = r.RepositoryId,
+                        TrackingEnabled = r.TrackingEnabled
+                    })
+                    .ToList()
+            };
+
+            var result = await _mediator.SendCommandAsync(command, cancellationToken);
+
+            if (!result.IsSuccess)
+                return result.Error!.ToResponse();
+
+            return Ok();
+        }
 
         #region GITHUB
 
