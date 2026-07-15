@@ -1,5 +1,7 @@
-﻿using FlowJudge.Workspaces.Domain.Repository.Model;
+﻿using FlowJudge.Workspaces.Application.Abstractions.Models;
+using FlowJudge.Workspaces.Domain.Repository.Model;
 using FlowJudge.Workspaces.Infrastructure.Repositories.Repositories.DbModels;
+using System.Net.NetworkInformation;
 
 namespace FlowJudge.Workspaces.Infrastructure.Repositories.Repositories.Mappers
 {
@@ -33,6 +35,19 @@ namespace FlowJudge.Workspaces.Infrastructure.Repositories.Repositories.Mappers
                 model.full_name,
                 model.is_tracking,
                 model.status);
+        }
+
+        public static RepositoryListItem ToListItem(this RepositoryDbModel model)
+        {
+            return new RepositoryListItem
+            {
+                Id = model.id,
+                IntegrationId = model.integration_id,
+                Name = model.name,
+                FullName = model.full_name,
+                TrackingEnabled = model.is_tracking,
+                Status = Enum.Parse<RepositoryStatus>(model.status)
+            };
         }
     }
 }

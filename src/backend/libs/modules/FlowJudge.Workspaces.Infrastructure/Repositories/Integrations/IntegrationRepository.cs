@@ -266,6 +266,7 @@ WHERE {nameof(IntegrationDbModel.workspace_id)} = @WorkspaceId";
         private const string GetIntegrationsByWorkspaceIdSql = $@"
 SELECT 
      {nameof(IntegrationListItemDbModel.aggregate_id)}
+    ,{nameof(IntegrationListItemDbModel.workspaceId)}
     ,{nameof(IntegrationListItemDbModel.name)}
     ,{nameof(IntegrationListItemDbModel.provider)}
     ,{nameof(IntegrationListItemDbModel.status)}
