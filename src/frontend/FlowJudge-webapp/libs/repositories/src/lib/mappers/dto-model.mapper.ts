@@ -33,8 +33,8 @@ function mapIntegrationStatus(value: IntegrationStatus): EnumValue<IntegrationSt
 
 function mapStatus(value: RepositoryStatus): EnumValue<RepositoryStatus> {
   const translationKey = match(value)
-    .with('Active', () => '')
-    .with('Deleted', () => '')
+    .with('Active', () => 'REPOSITORIES.MODEL.STATUS.ACTIVE')
+    .with('Deleted', () => 'REPOSITORIES.MODEL.STATUS.DELETED')
     .exhaustive();
 
     return { value, translationKey };

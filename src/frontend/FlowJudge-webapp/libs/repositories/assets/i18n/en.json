@@ -5,11 +5,25 @@
         "ACTIVE": "Active",
         "DELETED": "Deleted"
       },
-      "INTEGRATIONS_STATUS": {
+      "INTEGRATION_STATUS": {
         "INACTIVE": "Inactive",
         "ACTIVE": "Active",
         "DELETED": "Deleted"
       }
+    },
+    "GRID": {
+      "TITLE": "Repositories",
+      "COLUMNS": {
+        "NAME": "Name",
+        "INTEGRATION": "Integration",
+        "TRACKING_ENABLED": "Tracking",
+        "STATUS": "Status"
+      },
+      "TRACKING": {
+        "ENABLED": "Tracking enabled",
+        "DISABLED": "Tracking disabled"
+      },
+      "ON_EMPTY": "No repositories yet."
     }
   }
 }

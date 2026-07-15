@@ -3,7 +3,7 @@
     internal sealed record IntegrationListItemDbModel
     {
         public Guid aggregate_id { get; init; }
-        public Guid workspaceId { get; init; }
+        public Guid workspace_id { get; init; }
         public required string name { get; init; }
         public required string provider { get; init; }
         public required string status { get; init; }

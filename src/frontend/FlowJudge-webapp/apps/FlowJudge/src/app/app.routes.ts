@@ -31,6 +31,10 @@ export const appRoutes: Route[] = [
         canActivateChild: [authenticatedGuard],
         children: [
           {
+            path: 'repositories',
+            loadChildren: () => import('@flow-judge-webapp/repositories').then(m => m.repositoriesRoutes),
+          },
+          {
             path: '',
             loadComponent: () => import('./home-page/home-page.component').then(m => m.HomePageComponent),
           },

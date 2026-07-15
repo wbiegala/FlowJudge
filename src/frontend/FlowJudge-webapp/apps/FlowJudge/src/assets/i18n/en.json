@@ -1,6 +1,10 @@
 {
   "MAIN_MENU": {
     "BUTTONS": {
+      "REPOSITORIES": {
+        "NAME": "Repositories",
+        "TOOLTIP": "View repositories"
+      },
       "INTEGRATIONS": {
         "NAME": "Integrations",
         "TOOLTIP": ""

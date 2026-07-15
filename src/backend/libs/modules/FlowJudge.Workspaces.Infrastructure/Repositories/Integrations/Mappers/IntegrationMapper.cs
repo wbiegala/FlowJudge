@@ -11,7 +11,7 @@ namespace FlowJudge.Workspaces.Infrastructure.Repositories.Integrations.Mappers
             return new IntegrationListItem
             {
                 Id = dbModel.aggregate_id,
-                WorkspaceId = dbModel.workspaceId,
+                WorkspaceId = dbModel.workspace_id,
                 Name = dbModel.name,
                 Provider = Enum.Parse<IntegrationProvider>(dbModel.provider),
                 Status = Enum.Parse<IntegrationStatus>(dbModel.status),

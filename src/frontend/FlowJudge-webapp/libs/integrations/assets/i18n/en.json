@@ -49,7 +49,7 @@
           "GRID": {
             "COLUMNS": {
               "NAME": "Name",
-              "IS_TRACKING": "Tracking enabled"
+              "IS_TRACKING": "Tracking"
             },
             "ACTIONS": {
               "ENABLE_TRACKING": "Enable tracking",

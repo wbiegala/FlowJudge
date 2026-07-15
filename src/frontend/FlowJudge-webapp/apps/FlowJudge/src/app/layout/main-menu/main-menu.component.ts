@@ -18,10 +18,18 @@ import { Navigate } from '@ngxs/router-plugin';
 export class MainMenuComponent {
   #store = inject(Store);
   #isWorkspaceContext = this.#store.selectSignal(WorkspaceContextState.isWorkspaceContext);
-  #workspaceContextId = this.#store.selectSignal(WorkspaceContextState.workspaceContextId);
   #workspaceNavigationService = inject(WorkspaceNavigationService);
 
   readonly items: Array<MainMenuItem> = [
+    {
+      name: 'repositories',
+      nameTranslationKey: 'MAIN_MENU.BUTTONS.REPOSITORIES.NAME',
+      tooltipTranslationKey: 'MAIN_MENU.BUTTONS.REPOSITORIES.TOOLTIP',
+      icon: 'source',
+      canDisplay: () => this.#isWorkspaceContext(),
+      canClick: () => true,
+      action: () => this.#workspaceNavigationService.navigate(['repositories'])
+    },
     {
       name: 'integrations',
       nameTranslationKey: 'MAIN_MENU.BUTTONS.INTEGRATIONS.NAME',

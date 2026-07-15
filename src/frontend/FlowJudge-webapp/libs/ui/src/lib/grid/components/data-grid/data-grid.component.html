@@ -24,8 +24,18 @@
 
     @for (column of gridColumns(); track column.id) {
       <ng-container [matColumnDef]="column.id">
-        <th mat-header-cell *matHeaderCellDef>{{ column.headerTranslationKey | translate }}</th>
-        <td mat-cell *matCellDef="let row">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          [class.data-grid-column-center]="column.textAlign === 'center'"
+          [class.data-grid-column-right]="column.textAlign === 'right'">
+          {{ column.headerTranslationKey | translate }}
+        </th>
+        <td
+          mat-cell
+          *matCellDef="let row"
+          [class.data-grid-column-center]="column.textAlign === 'center'"
+          [class.data-grid-column-right]="column.textAlign === 'right'">
           @let cellValue = column.cell(row);
 
           @if(isTwoLinesCell(cellValue)) {
@@ -34,7 +44,16 @@
               <span class="data-grid-cell-two-lines-second">{{ cellValue.secondLine }}</span>
             </div>
           } @else if (isIconCell(cellValue)) {
-            <mat-icon [matTooltip]="cellValue.valueTranslationKey | translate">{{ cellValue.icon }}</mat-icon>
+            <div class="data-grid-cell-icon" [class.data-grid-cell-icon-with-text]="!!cellValue.text">
+              @if (cellValue.isSvgIcon) {
+                <mat-icon [svgIcon]="cellValue.icon" [matTooltip]="cellValue.valueTranslationKey | translate"></mat-icon>
+              } @else {
+                <mat-icon [matTooltip]="cellValue.valueTranslationKey | translate">{{ cellValue.icon }}</mat-icon>
+              }
+              @if (cellValue.text) {
+                <span>{{ cellValue.text }}</span>
+              }
+            </div>
           } @else {
             {{ cellValue }}
           }
