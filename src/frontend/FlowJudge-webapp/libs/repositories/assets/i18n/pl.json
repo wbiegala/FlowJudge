@@ -1,5 +1,15 @@
 {
   "REPOSITORIES": {
-
+    "MODEL": {
+      "STATUS": {
+        "ACTIVE": "Aktywne",
+        "DELETED": "Usunięte"
+      },
+      "INTEGRATIONS_STATUS": {
+        "INACTIVE": "Nieaktywowana",
+        "ACTIVE": "Aktywna",
+        "DELETED": "Usunięta"
+      }
+    }
   }
 }
