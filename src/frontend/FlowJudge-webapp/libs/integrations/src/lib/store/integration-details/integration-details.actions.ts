@@ -12,3 +12,7 @@ export class DisableTrackingForRepository {
   static readonly type = '[Integration] Disables tracking for repository';
   constructor(public repositoryId: string) {}
 }
+
+export class SaveIntegration {
+  static readonly type = '[Integration] Saves integration';
+}

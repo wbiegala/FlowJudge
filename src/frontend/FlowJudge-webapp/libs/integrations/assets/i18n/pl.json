@@ -63,8 +63,11 @@
         }
       },
       "ACTIONS": {
-        "SAVE": "Save",
-        "EXIT": "Exit"
+        "SAVE": "Zapisz",
+        "EXIT": "Opuść"
+      },
+      "RESULTS": {
+        "SAVE_SUCCESS": "Zapisano integrację."
       }
     },
     "SETUP-WIZARD": {

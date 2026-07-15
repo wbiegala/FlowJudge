@@ -34,3 +34,14 @@ export interface GetRepositoriesResponseItem {
   trackingEnabled: boolean;
   status: 'Active' | 'Deleted';
 }
+
+export interface UpdateIntegrationRequest {
+  name: string;
+  status: IntegrationStatus;
+  repositoriesTrackingSettings: Array<RepositoriesTrackingSettings>;
+}
+
+export interface RepositoriesTrackingSettings {
+  repositoryId: string;
+  trackingEnabled: boolean;
+}

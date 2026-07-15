@@ -83,8 +83,8 @@ namespace FlowJudge.Workspaces.Infrastructure.Repositories.Integrations
 
             return new PagedList<IntegrationListItem>(
                 integrationListItems.Select(i => i.ToModel()).ToList(),
-                pagination.PageNumber,
                 pagination.PageSize,
+                pagination.PageNumber,              
                 totalCount);
         }
 

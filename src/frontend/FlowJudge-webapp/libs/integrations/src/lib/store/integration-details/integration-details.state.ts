@@ -3,12 +3,14 @@ import { NotificationService, ProgressService, ViewMode } from '@flow-judge-weba
 import { Action, Selector, State, StateContext, StateToken, Store } from '@ngxs/store';
 import { IntegrationDetails } from '../../models/integration-details.model';
 import { IntegrationsService } from '../../integrations.service';
-import { DisableTrackingForRepository, EnableTrackingForRepository, InitializeEditIntegration } from './integration-details.actions';
+import { DisableTrackingForRepository, EnableTrackingForRepository, InitializeEditIntegration, SaveIntegration } from './integration-details.actions';
 import { AuthenticationState } from '@flow-judge-webapp/auth';
 import { tap } from 'rxjs';
 import { produce } from 'immer';
 import { MapToModel } from '../../mappers/dto-model.mapper';
 import { WorkspaceContextState } from '@flow-judge-webapp/workspaces';
+import { UpdateIntegrationRequest } from '../../integrations.model';
+import { MapToUpdateRequest } from '../../mappers/model-dto.mapper';
 
 export interface BasicFormModel {
   name: string;
@@ -102,5 +104,27 @@ export class IntegrationDetailsState {
 
       repository.trackingEnabled = false;
     }))
+  }
+
+  @Action(SaveIntegration)
+  saveIntegration(ctx: StateContext<IntegrationDetailsStateModel>) {
+    let state = ctx.getState();
+    if (state.viewMode === 'Preview') {
+      return;
+    }
+
+    if (state.viewMode === 'Edit' && (state.model === null || state.model.id === null )) {
+      return;
+    }
+
+    ctx.setState(produce(ctx.getState(), draft => {
+      draft.model!.name = draft.basicForm.model.name;
+    }));
+
+    state = ctx.getState();
+
+    return this.#progressService.runInProgressBar(() => this.#integrationsService.updateIntegration(state.model!.id, MapToUpdateRequest(state.model!))).pipe(
+      tap(() => this.#notificationService.showSuccess('INTEGRATIONS.DETAILS.RESULTS.SAVE_SUCCESS')),
+    )
   }
 }

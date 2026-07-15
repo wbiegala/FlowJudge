@@ -23,7 +23,7 @@ import { IntegrationDetailsState } from '../../store/integration-details/integra
 import { Store } from '@ngxs/store';
 import { WorkspaceNavigationService } from '@flow-judge-webapp/workspaces';
 import { IntegrationRepositoryDetails } from '../../models/integration-details.model';
-import { DisableTrackingForRepository, EnableTrackingForRepository } from '../../store/integration-details/integration-details.actions';
+import { DisableTrackingForRepository, EnableTrackingForRepository, SaveIntegration } from '../../store/integration-details/integration-details.actions';
 import { MatIcon } from "@angular/material/icon";
 import { MatTooltip } from "@angular/material/tooltip";
 
@@ -81,9 +81,21 @@ export class IntegrationDetailsComponent {
 
   handleActionEvent(event: ViewHeaderEvent) {
     switch (event.actionName) {
-      case 'save': console.log('save'); break;
+      case 'save': this.#handleSaveAction(); break;
       case 'exit': this.#handleExitAction(); break;
     }
+  }
+
+  #handleSaveAction() {
+    this.basicDataForm.markAllAsTouched();
+    this.basicDataForm.updateValueAndValidity({ emitEvent: true });
+    this.#cdr.markForCheck();
+
+    if (this.basicDataForm.invalid) {
+      return;
+    }
+
+    this.#store.dispatch(new SaveIntegration());
   }
 
   #handleExitAction() {
@@ -159,4 +171,6 @@ export class IntegrationDetailsComponent {
   #goToRepository(id: string) {
     console.log('go to repository ' + id);
   }
+
+
 }
