@@ -1,0 +1,15 @@
+<lib-view-header [title]="title | translate">
+  <lib-data-grid
+    [isLoading]="isLoading()"
+    [gridColumns]="gridColumns"
+    [rows]="items()"
+    [emptyGridBehavior]="emptyGridBehavior">
+  </lib-data-grid>
+
+  <lib-pagination
+    [pageSize]="pageSize()"
+    [totalCount]="totalCount()"
+    [itemsCount]="items().length"
+    (paginationEvent)="handlePaginationEvent($event)">
+  </lib-pagination>
+</lib-view-header>

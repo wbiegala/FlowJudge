@@ -1,0 +1,29 @@
+{
+  "REPOSITORIES": {
+    "MODEL": {
+      "STATUS": {
+        "ACTIVE": "Aktywne",
+        "DELETED": "Usunięte"
+      },
+      "INTEGRATION_STATUS": {
+        "INACTIVE": "Nieaktywowana",
+        "ACTIVE": "Aktywna",
+        "DELETED": "Usunięta"
+      }
+    },
+    "GRID": {
+      "TITLE": "Repozytoria",
+      "COLUMNS": {
+        "NAME": "Nazwa",
+        "INTEGRATION": "Integracja",
+        "TRACKING_ENABLED": "Śledzenie",
+        "STATUS": "Status"
+      },
+      "TRACKING": {
+        "ENABLED": "Śledzenie włączone",
+        "DISABLED": "Śledzenie wyłączone"
+      },
+      "ON_EMPTY": "Brak repozytoriów."
+    }
+  }
+}

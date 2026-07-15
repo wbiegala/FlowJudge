@@ -12,6 +12,8 @@ export type DataGridCellValue =
   | null
   | undefined;
 
+export type DataGridColumnTextAlign = 'left' | 'center' | 'right';
+
 export interface DataGridColumn<TRow extends DataGridRow> {
   id: string;
   name: string;
@@ -19,6 +21,7 @@ export interface DataGridColumn<TRow extends DataGridRow> {
   cell: (row: TRow) => DataGridCellValue;
   isVisible: boolean;
   isSortable: boolean;
+  textAlign?: DataGridColumnTextAlign;
 }
 
 export interface TwoLinesCell {
@@ -29,6 +32,8 @@ export interface TwoLinesCell {
 export interface IconCell {
   icon: string;
   valueTranslationKey: string;
+  isSvgIcon?: boolean;
+  text?: string;
 }
 
 export interface DataGridAction {

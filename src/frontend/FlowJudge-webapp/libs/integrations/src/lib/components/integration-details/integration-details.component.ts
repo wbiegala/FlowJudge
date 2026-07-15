@@ -122,7 +122,8 @@ export class IntegrationDetailsComponent {
         } satisfies IconCell
       ),
       isVisible: true,
-      isSortable: true
+      isSortable: true,
+      textAlign: 'center'
     }
   ];
 
@@ -130,13 +131,13 @@ export class IntegrationDetailsComponent {
     {
       name: 'disableTracking',
       nameTranslationKey: 'INTEGRATIONS.DETAILS.FORMS.REPOSITORIES.GRID.ACTIONS.DISABLE_TRACKING',
-      icon: 'keep_off',
+      icon: 'block',
       canExecute: row => this.viewMode() === 'Edit' && row.trackingEnabled
     },
     {
       name: 'enableTracking',
       nameTranslationKey: 'INTEGRATIONS.DETAILS.FORMS.REPOSITORIES.GRID.ACTIONS.ENABLE_TRACKING',
-      icon: 'keep',
+      icon: 'check_circle',
       canExecute: row => this.viewMode() === 'Edit' &&  !row.trackingEnabled
     },
     {

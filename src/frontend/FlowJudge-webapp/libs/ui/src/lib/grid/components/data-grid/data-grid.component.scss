@@ -37,3 +37,29 @@
   font-size: small;
   color: gray;
 }
+
+.data-grid-column-center {
+  text-align: center;
+
+  .data-grid-cell-two-lines {
+    align-items: center;
+  }
+}
+
+.data-grid-column-right {
+  text-align: right;
+
+  .data-grid-cell-two-lines {
+    align-items: end;
+  }
+}
+
+.data-grid-cell-icon {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+}
+
+.data-grid-cell-icon-with-text {
+  gap: 10px;
+}

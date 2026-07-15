@@ -49,7 +49,7 @@
           "GRID": {
             "COLUMNS": {
               "NAME": "Nazwa",
-              "IS_TRACKING": "Włączone śledzenie"
+              "IS_TRACKING": "Śledzenie"
             },
             "ACTIONS": {
               "ENABLE_TRACKING": "Włącz śledzenie",
