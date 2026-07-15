@@ -1,7 +1,8 @@
 import { HttpBackend, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { bootstrapApplication } from '@angular/platform-browser';
-import { InjectionToken, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
+import { inject, InjectionToken, provideAppInitializer, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
 import { provideRouter, withRouterConfig } from '@angular/router';
+import { DomSanitizer } from '@angular/platform-browser';
 import { TranslateLoader, provideTranslateService } from '@ngx-translate/core';
 import { MultiTranslateHttpLoader } from 'ngx-translate-multi-http-loader';
 import { provideStore } from '@ngxs/store';
@@ -19,6 +20,7 @@ import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { provideValidationErrors } from '@flow-judge-webapp/ui';
 import { LegalErrorHandler } from './app/utils/legal-error-handler';
 import { workspaceContextInterceptor, WorkspaceContextState } from '@flow-judge-webapp/workspaces';
+import { MatIconRegistry } from '@angular/material/icon';
 
 
 fetch(environment.configUrl, { cache: 'no-store' })
@@ -43,6 +45,7 @@ fetch(environment.configUrl, { cache: 'no-store' })
         provideAnimations(),
         provideBrowserGlobalErrorListeners(),
         provideZonelessChangeDetection(),
+        provideSvgIcons(),
         provideStore([
           AuthenticationState,
           WorkspaceContextState,
@@ -97,4 +100,16 @@ fetch(environment.configUrl, { cache: 'no-store' })
     return [
       provideValidationErrors()
     ];
+  }
+
+  export function provideSvgIcons() {
+    return provideAppInitializer(() => {
+      const iconRegistry = inject(MatIconRegistry);
+      const sanitizer = inject(DomSanitizer);
+
+      iconRegistry.addSvgIcon(
+        'github',
+        sanitizer.bypassSecurityTrustResourceUrl('assets/icons/github.svg'),
+      );
+    });
   }

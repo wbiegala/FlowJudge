@@ -5,6 +5,10 @@
         "INACTIVE": "Inactive",
         "ACTIVE": "Active",
         "DELETED": "Deleted"
+      },
+      "REPOSITORY_STATUS": {
+        "ACTIVE": "Active",
+        "DELETED": "Deleted"
       }
     },
     "GRID": {
@@ -32,13 +36,38 @@
       }
     },
     "DETAILS": {
+      "TITLE": "Integration",
       "FORMS": {
         "BASIC": {
           "SECTION_NAME": "Basic data",
           "FIELDS": {
             "NAME": "Name"
           }
+        },
+        "REPOSITORIES": {
+          "SECTION_NAME": "Repositories",
+          "GRID": {
+            "COLUMNS": {
+              "NAME": "Name",
+              "IS_TRACKING": "Tracking enabled"
+            },
+            "ACTIONS": {
+              "ENABLE_TRACKING": "Enable tracking",
+              "DISABLE_TRACKING": "Disable tracking",
+              "GO_TO": "Go to repository"
+            },
+            "EMPTY_MESSAGE": "No active repositories yet.",
+            "ENABLED": "Enabled",
+            "DISABLED": "Disabled"
+          }
         }
+      },
+      "ACTIONS": {
+        "SAVE": "Save",
+        "EXIT": "Exit"
+      },
+      "RESULTS": {
+        "SAVE_SUCCESS": "Integration saved."
       }
     },
     "SETUP-WIZARD": {

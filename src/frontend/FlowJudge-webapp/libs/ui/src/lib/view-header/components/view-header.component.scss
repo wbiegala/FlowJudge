@@ -13,6 +13,14 @@
   color: var(--mat-sys-primary);
 }
 
+.view-header-container-title-icon {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: start;
+  column-gap: 10px;
+}
+
 .view-header-container-actions {
   display: flex;
   column-gap: 10px;

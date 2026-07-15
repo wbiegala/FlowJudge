@@ -14,3 +14,34 @@ export interface GetIntegrationsResponseItem {
   createdAt: Date;
   createdBy: UserData;
 }
+
+export interface GetIntegrationDetailsResponse {
+  id: string;
+  workspaceId: string;
+  name: string;
+  provider: IntegrationProvider;
+  status: IntegrationStatus;
+  createdAt: Date;
+  createdBy: UserData;
+  repositories: Array<GetRepositoriesResponseItem>;
+}
+
+export interface GetRepositoriesResponseItem {
+  id: string;
+  workspaceId: string;
+  name: string;
+  fullName?: string;
+  trackingEnabled: boolean;
+  status: 'Active' | 'Deleted';
+}
+
+export interface UpdateIntegrationRequest {
+  name: string;
+  status: IntegrationStatus;
+  repositoriesTrackingSettings: Array<RepositoriesTrackingSettings>;
+}
+
+export interface RepositoriesTrackingSettings {
+  repositoryId: string;
+  trackingEnabled: boolean;
+}

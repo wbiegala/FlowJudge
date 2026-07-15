@@ -2,13 +2,33 @@ export interface DataGridRow {
   id: string;
 }
 
+export type DataGridCellValue =
+  | string
+  | number
+  | Date
+  | boolean
+  | TwoLinesCell
+  | IconCell
+  | null
+  | undefined;
+
 export interface DataGridColumn<TRow extends DataGridRow> {
   id: string;
   name: string;
   headerTranslationKey: string;
-  cell: (row: TRow) => string | number | Date | boolean | null | undefined;
+  cell: (row: TRow) => DataGridCellValue;
   isVisible: boolean;
   isSortable: boolean;
+}
+
+export interface TwoLinesCell {
+  firstLine: string;
+  secondLine: string;
+}
+
+export interface IconCell {
+  icon: string;
+  valueTranslationKey: string;
 }
 
 export interface DataGridAction {

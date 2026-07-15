@@ -5,6 +5,10 @@
         "INACTIVE": "Nieaktywowana",
         "ACTIVE": "Aktywna",
         "DELETED": "Usunięta"
+      },
+      "REPOSITORY_STATUS": {
+        "ACTIVE": "Aktywne",
+        "DELETED": "Usunięte"
       }
     },
     "GRID": {
@@ -32,13 +36,38 @@
       }
     },
     "DETAILS": {
+      "TITLE": "Integracja",
       "FORMS": {
         "BASIC": {
-          "SECTION_NAME": "Basic data",
+          "SECTION_NAME": "Dane podstawowe",
           "FIELDS": {
-            "NAME": "Name"
+            "NAME": "Nazwa"
+          }
+        },
+        "REPOSITORIES": {
+          "SECTION_NAME": "Repozytoria",
+          "GRID": {
+            "COLUMNS": {
+              "NAME": "Nazwa",
+              "IS_TRACKING": "Włączone śledzenie"
+            },
+            "ACTIONS": {
+              "ENABLE_TRACKING": "Włącz śledzenie",
+              "DISABLE_TRACKING": "Wyłącz śledzenie",
+              "GO_TO": "Przejdź to repozytorium"
+            },
+            "EMPTY_MESSAGE": "Brak aktywnych repozutoriów.",
+            "ENABLED": "Włączone",
+            "DISABLED": "Wyłączone"
           }
         }
+      },
+      "ACTIONS": {
+        "SAVE": "Zapisz",
+        "EXIT": "Opuść"
+      },
+      "RESULTS": {
+        "SAVE_SUCCESS": "Zapisano integrację."
       }
     },
     "SETUP-WIZARD": {

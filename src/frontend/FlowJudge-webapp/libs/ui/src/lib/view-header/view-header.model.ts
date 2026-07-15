@@ -8,3 +8,9 @@ export interface ViewHeaderAction {
 export interface ViewHeaderEvent {
   actionName: string;
 }
+
+export interface ViewHeaderIcon {
+  icon: string;
+  isSvgIcon: boolean;
+  tooltipTranslationKey: string;
+}

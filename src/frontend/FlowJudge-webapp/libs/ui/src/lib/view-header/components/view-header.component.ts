@@ -2,10 +2,8 @@ import { ChangeDetectionStrategy, Component, input, output } from '@angular/core
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { ViewHeaderAction, ViewHeaderEvent } from '../view-header.model';
+import { ViewHeaderAction, ViewHeaderEvent, ViewHeaderIcon } from '../view-header.model';
 import { TranslatePipe } from '@ngx-translate/core';
-
-
 
 @Component({
   selector: 'lib-view-header',
@@ -16,6 +14,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 })
 export class ViewHeaderComponent {
   title = input.required<string>();
+  icon = input<ViewHeaderIcon>();
   actions = input<Array<ViewHeaderAction>>([]);
   headerEvent = output<ViewHeaderEvent>();
 

@@ -1,12 +1,14 @@
 import { ChangeDetectionStrategy, Component, effect, inject } from '@angular/core';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Store } from '@ngxs/store';
-import { DataGridAction, DataGridActionEvent, DataGridColumn, DataGridComponent, DataGridRowActionEvent, EmptyGridBehavior, PaginationComponent, PaginationEvent, ProgressService, ViewHeaderComponent } from '@flow-judge-webapp/ui';
+import { DataGridAction, DataGridActionEvent, DataGridColumn, DataGridComponent, DataGridRowAction, DataGridRowActionEvent, EmptyGridBehavior, PaginationComponent, PaginationEvent, ProgressService, ViewHeaderComponent } from '@flow-judge-webapp/ui';
 import { IntegrationsGridState } from '../../store/integrations-grid/integrations-grid.state';
 import { LoadIntegrationsGridItems } from '../../store/integrations-grid/integrations-grid.actions';
 import { IntegrationGridItem } from '../../models/integration-grid-item.model';
 import { formatDateTime } from '@flow-judge-webapp/common';
 import { GitHubIntegrationsService } from '../../github-integrations.service';
+import { WorkspaceContextState, WorkspaceNavigationService } from '@flow-judge-webapp/workspaces';
+import { Navigate } from '@ngxs/router-plugin';
 
 @Component({
   selector: 'lib-integration-grid',
@@ -20,7 +22,7 @@ export class IntegrationGridComponent {
   #store = inject(Store);
   #translateService = inject(TranslateService);
   #progressService = inject(ProgressService);
-
+  #workspaceNavigationService = inject(WorkspaceNavigationService);
   #gitHubIntegrationService = inject(GitHubIntegrationsService);
 
   pageNumber = this.#store.selectSignal(IntegrationsGridState.pageNumber);
@@ -28,6 +30,8 @@ export class IntegrationGridComponent {
   totalCount = this.#store.selectSignal(IntegrationsGridState.totalCount);
   items = this.#store.selectSignal(IntegrationsGridState.items);
   isLoading = this.#store.selectSignal(IntegrationsGridState.isLoading);
+
+  workspaceContext = this.#store.selectSignal(WorkspaceContextState.workspaceContext);
 
 
   readonly #loadInitialData = effect(() => {
@@ -74,9 +78,24 @@ export class IntegrationGridComponent {
       name: 'addGitHub',
       nameTranslationKey: 'INTEGRATIONS.GRID.ACTIONS.ADD_GITHUB',
       icon: 'add',
-      canExecute: () => true,
+      canExecute: () => this.workspaceContext()?.role === 'Owner' || this.workspaceContext()?.role === 'Administrator',
     }
   ];
+
+  readonly rowActions: Array<DataGridRowAction<IntegrationGridItem>> = [
+    {
+      name: 'viewIntegration',
+      nameTranslationKey: 'UI.VIEW_MODE.PREVIEW',
+      icon: 'preview',
+      canExecute: _ => this.workspaceContext()?.role === 'Member',
+    },
+    {
+      name: 'editIntegration',
+      nameTranslationKey: 'UI.VIEW_MODE.EDIT',
+      icon: 'edit',
+      canExecute: _ => this.workspaceContext()?.role === 'Owner' || this.workspaceContext()?.role === 'Administrator'
+    }
+  ]
 
   readonly emptyGridBehavior: EmptyGridBehavior = {
     messageTranslationKey: 'INTEGRATIONS.GRID.ON_EMPTY',
@@ -88,7 +107,16 @@ export class IntegrationGridComponent {
   }
 
   handleRowAction(event: DataGridRowActionEvent) {
-    console.log(event);
+    switch (event.name) {
+      case 'viewIntegration':
+      case 'editIntegration':
+        this.#openIntegration(event.id)
+        break;
+    }
+  }
+
+  #openIntegration(id: string) {
+    this.#workspaceNavigationService.navigate(['integrations', id]);
   }
 
   handleGridEvent(event: DataGridActionEvent) {
