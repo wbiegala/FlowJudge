@@ -83,7 +83,8 @@ fetch(environment.configUrl, { cache: 'no-store' })
       { prefix: '/assets/i18n/user/', suffix: '.json'},
       { prefix: '/assets/i18n/ui/', suffix: '.json'},
       { prefix: '/assets/i18n/workspaces/', suffix: '.json' },
-      { prefix: '/assets/i18n/integrations/', suffix: '.json' }
+      { prefix: '/assets/i18n/integrations/', suffix: '.json' },
+      { prefix: '/assets/i18n/repositories/', suffix: '.json' }
     ]);
   }
 

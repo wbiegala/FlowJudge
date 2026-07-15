@@ -25,7 +25,8 @@
           { "glob": "**/*.json",                  "input": "libs/user/assets/i18n", "output": "assets/i18n/user" },
           { "glob": "**/*.json",                  "input": "libs/ui/assets/i18n",   "output": "assets/i18n/ui"},
           { "glob": "**/*.json",                  "input": "libs/workspaces/assets/i18n",   "output": "assets/i18n/workspaces"},
-          { "glob": "**/*.json",                  "input": "libs/integrations/assets/i18n", "output": "assets/i18n/integrations" }
+          { "glob": "**/*.json",                  "input": "libs/integrations/assets/i18n", "output": "assets/i18n/integrations" },
+          { "glob": "**/*.json",                  "input": "ibs/repositories/assets/i18n", "output": "assets/i18n/repositories" }
         ],
         "styles": [
           "apps/FlowJudge/src/styles.scss",
