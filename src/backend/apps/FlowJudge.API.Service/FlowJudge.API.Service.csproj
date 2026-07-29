@@ -37,6 +37,7 @@
     <ProjectReference Include="..\..\libs\modules\FlowJudge.Users.Infrastructure\FlowJudge.Users.Infrastructure.csproj" />
     <ProjectReference Include="..\..\libs\modules\FlowJudge.Workspaces.Application.Abstractions\FlowJudge.Workspaces.Application.Abstractions.csproj" />
     <ProjectReference Include="..\..\libs\modules\FlowJudge.Workspaces.Application\FlowJudge.Workspaces.Application.csproj" />
+    <ProjectReference Include="..\..\libs\modules\FlowJudge.Workspaces.Domain.Events\FlowJudge.Workspaces.Domain.Events.csproj" />
     <ProjectReference Include="..\..\libs\modules\FlowJudge.Workspaces.Infrastructure\FlowJudge.Workspaces.Infrastructure.csproj" />
   </ItemGroup>
 

@@ -23,7 +23,8 @@ CREATE TABLE {OutboxConfiguration.SchemaName}.{OutboxConfiguration.OutboxMessage
     type TEXT NOT NULL,
     system_id UUID NOT NULL,
     payload BYTEA NOT NULL,
-    publication_timestamp TIMESTAMPTZ NOT NULL
+    publication_timestamp TIMESTAMPTZ NOT NULL,
+    processing_timestamp TIMESTAMPTZ
 );";
 
         private const string CreateOutboxMessageLogTableSql = $@"
@@ -31,6 +32,8 @@ CREATE TABLE {OutboxConfiguration.SchemaName}.{OutboxConfiguration.OutboxMessage
     id UUID PRIMARY KEY,
     outbox_message_id UUID NOT NULL,
     occured_timestamp TIMESTAMPTZ NOT NULL,
+    result INTEGER NOT NULL,
+    error_details TEXT,
     CONSTRAINT fk_outbox_message
         FOREIGN KEY(outbox_message_id) 
         REFERENCES {OutboxConfiguration.SchemaName}.{OutboxConfiguration.OutboxMessageTableName}(id)

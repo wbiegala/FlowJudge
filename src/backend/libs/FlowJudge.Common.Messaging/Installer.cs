@@ -3,16 +3,33 @@ using FlowJudge.Common.Messaging.Abstractions;
 using FlowJudge.Common.Messaging.Consumption;
 using FlowJudge.Common.Messaging.Outbox;
 using FlowJudge.Common.Messaging.Outbox.Impl;
+using FlowJudge.Common.Messaging.Outbox.Processing;
 using FlowJudge.Common.Messaging.Publishing;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace FlowJudge.Common.Messaging
 {
     public static class Installer
     {
-        public static IServiceCollection AddOutbox(this IServiceCollection services)
+        public static IServiceCollection AddOutbox(
+            this IServiceCollection services,
+            Action<OutboxConfigurationWizard> configure)
         {
+            if (!services.Any(s => s.ImplementationType == typeof(MessagingConfiguration)))
+                throw new InvalidOperationException($"No message publishing configuration or execution context found. Use {nameof(AddAzureServiceBus)} or similar method to configure message publishing.");
+
+            if (!services.Any(s => s.ImplementationType == typeof(MessagePublisher)))
+                throw new InvalidOperationException($"No message publishing configuration or execution context found. Use {nameof(AddAzureServiceBus)} or similar method to configure message publishing.");
+
+            var wizard = new OutboxConfigurationWizard();
+            configure(wizard);
+
+            services.AddSingleton(_ => wizard.GetConfiguration());
             services.AddScoped<IOutbox, PostgresOutbox>();
+            services.AddHostedService<OutboxProcessor>();
+            services.AddScoped<IOutboxProcessingService, PostgresOutboxProcessingService>();
+            services.AddSingleton<IOutboxMessagePublisher>(ctx => ctx.GetRequiredService<MessagePublisher>());
 
             return services;
         }
@@ -27,7 +44,8 @@ namespace FlowJudge.Common.Messaging
             var configuration = cfgBuilder.GetConfiguration();
             services.AddSingleton(_ => configuration);
             services.AddSingleton(_ => new ServiceBusClient(configuration.ConnectionString));
-            services.AddSingleton<IPublisher, MessagePublisher>();
+            services.AddSingleton<MessagePublisher>();
+            services.AddSingleton<IPublisher>(ctx => ctx.GetRequiredService<MessagePublisher>());
 
             var consumersOptions = cfgBuilder.ConsumersOptions;
 

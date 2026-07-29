@@ -4,25 +4,24 @@ namespace FlowJudge.Common.Messaging.Publishing
 {
     public sealed class PublishMessageException : Exception
     {
-        private readonly IMessage _message;
-
-        public Guid MessageId => _message.MessageId;
-        public Type MessageType => _message.GetType();
+        public Guid MessageId { get; }
+        public string MessageType { get; }
         public string PublishSubject { get; }
         public string? Reason { get; }
 
-        public PublishMessageException(IMessage message, string publishSubject, string? reason = null)
-            : base(ExceptionMessage(message, publishSubject, reason))
+        public PublishMessageException(Guid messageId, string messageType, string publishSubject, string? reason = null)
+            : base(ExceptionMessage(messageId, messageType, publishSubject, reason))
         {
-            _message = message;
+            MessageId = messageId;
+            MessageType = messageType;
             PublishSubject = publishSubject;
             Reason = reason;
         }
 
-        private static string ExceptionMessage(IMessage message, string publishSubject, string? reason = null)
+        private static string ExceptionMessage(Guid messageId, string messageType, string publishSubject, string? reason = null)
         {
             var builder = new StringBuilder();
-            builder.AppendLine($"Error occurred while publishing message of type '{message.GetType().Name}' with Id '{message.MessageId}' on topic/queue '{publishSubject}'.");
+            builder.AppendLine($"Error occurred while publishing message of type '{messageType}' with Id '{messageId}' on topic/queue '{publishSubject}'.");
 
             if (!string.IsNullOrWhiteSpace(reason))
             {

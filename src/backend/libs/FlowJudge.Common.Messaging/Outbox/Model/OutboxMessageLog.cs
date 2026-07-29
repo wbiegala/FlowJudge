@@ -6,5 +6,6 @@
         public Guid OutboxMessageId { get; init; }
         public DateTimeOffset Timestamp { get; init; }
         public OutboxMessageProcessingResult ProcessingResult { get; init; }
+        public string? ErrorDetails { get; init; }
     }
 }

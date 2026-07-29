@@ -30,10 +30,15 @@ builder.Services.AddPostgresDatabase(cfg =>
     cfg.WithDatabaseMigrationsFromAssembly(typeof(IMessage).Assembly);
 
     //TODO: delete this after development
+    cfg.WithDatabaseMigrationsFromAssembly(typeof(FlowJudge.Common.Messaging.Installer).Assembly);
     cfg.WithDatabaseMigrationsFromAssembly(typeof(FlowJudge.Users.Infrastructure.Installer).Assembly);
     cfg.WithDatabaseMigrationsFromAssembly(typeof(FlowJudge.Workspaces.Infrastructure.Installer).Assembly);
 });
 
+builder.Services.AddOutbox(cfg =>
+{
+    cfg.AddSubjectMappingForMessagesFromAssembly(typeof(FlowJudge.Workspaces.Domain.Events.AssemblyRef).Assembly);
+});
 
 builder.Services.AddCors(options =>
 {
