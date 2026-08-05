@@ -1,4 +1,5 @@
 ﻿using FlowJudge.Common.Domain;
+using FlowJudge.Workspaces.Domain.Events.Workspace;
 using FlowJudge.Workspaces.Domain.Workspace.Model.Exceptions;
 
 namespace FlowJudge.Workspaces.Domain.Workspace.Model
@@ -114,6 +115,13 @@ namespace FlowJudge.Workspaces.Domain.Workspace.Model
 
             var ownership = WorkspaceMember.CreateOwnership(workspace.Id, creatorId, timestamp);
             workspace._members.Add(ownership);
+
+            workspace.AddDomainEvent(new WorkspaceCreatedEvent
+            {
+                EventId = Guid.NewGuid(),
+                WorkspaceId = workspace.AggregateId,
+                Status = (int)workspace.Status
+            });
 
             return workspace;
         }

@@ -11,7 +11,11 @@ namespace FlowJudge.Common.Messaging.Outbox
 
         public static byte[] Serialize<T>(T obj)
         {
-            return JsonSerializer.SerializeToUtf8Bytes(obj, Options);
+            if (obj is null)
+                throw new ArgumentNullException(nameof(obj));
+
+            var messageConcreteType = obj.GetType();
+            return JsonSerializer.SerializeToUtf8Bytes(obj, messageConcreteType, Options);
         }
 
         public static T? Deserialize<T>(byte[] data)

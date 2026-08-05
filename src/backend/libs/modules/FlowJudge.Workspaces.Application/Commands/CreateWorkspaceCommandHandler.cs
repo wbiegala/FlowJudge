@@ -1,6 +1,8 @@
 ﻿using FlowJudge.Common.Application;
 using FlowJudge.Common.Application.Transactional;
 using FlowJudge.Common.Domain;
+using FlowJudge.Common.Messaging.Extensions;
+using FlowJudge.Common.Messaging.Outbox;
 using FlowJudge.Common.Sql.UnitOfWork;
 using FlowJudge.Common.Utils.Time;
 using FlowJudge.Workspaces.Application.Abstractions.Commands;
@@ -13,15 +15,18 @@ namespace FlowJudge.Workspaces.Application.Commands
     {
         private readonly IWorkspaceRepository _workspaceRepository;
         private readonly ITimeService _timeService;
+        private readonly IOutbox _outbox;
 
         public CreateWorkspaceCommandHandler(
             IWorkspaceRepository workspaceRepository,
             ITimeService timeService,
+            IOutbox outbox,
             IUnitOfWork unitOfWork)
             : base(unitOfWork)
         {
             _workspaceRepository = workspaceRepository;
             _timeService = timeService;
+            _outbox = outbox;
         }
 
         protected override async Task<IResult<Guid>> ExecuteInTransactionAsync(CreateWorkspaceCommand command,
@@ -30,9 +35,9 @@ namespace FlowJudge.Workspaces.Application.Commands
             var workspace = WorkspaceRoot.Create(command.Name, command.CreatorId, _timeService.UtcNow);
 
             await _workspaceRepository.AddWorkspaceAsync(workspace, cancellationToken);
+            await _outbox.PublishDomainEventsAsync(workspace, cancellationToken);
 
             return ApplicationResultFactory.Success(workspace.Id);
-
         }
     }
 }

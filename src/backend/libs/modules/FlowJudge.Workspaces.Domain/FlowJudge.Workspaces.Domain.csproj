@@ -10,6 +10,7 @@
     <ProjectReference Include="..\..\FlowJudge.Common.Domain\FlowJudge.Common.Domain.csproj" />
     <ProjectReference Include="..\..\FlowJudge.Common.Utils\FlowJudge.Common.Utils.csproj" />
     <ProjectReference Include="..\..\FlowJudge.Shared.Domain\FlowJudge.Shared.Domain.csproj" />
+    <ProjectReference Include="..\FlowJudge.Workspaces.Domain.Events\FlowJudge.Workspaces.Domain.Events.csproj" />
   </ItemGroup>
 	
   <ItemGroup>

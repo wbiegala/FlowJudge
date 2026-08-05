@@ -16,10 +16,10 @@ namespace FlowJudge.Common.Messaging
             this IServiceCollection services,
             Action<OutboxConfigurationWizard> configure)
         {
-            if (!services.Any(s => s.ImplementationType == typeof(MessagingConfiguration)))
+            if (!services.Any(s => s.ServiceType == typeof(MessagingConfiguration)))
                 throw new InvalidOperationException($"No message publishing configuration or execution context found. Use {nameof(AddAzureServiceBus)} or similar method to configure message publishing.");
 
-            if (!services.Any(s => s.ImplementationType == typeof(MessagePublisher)))
+            if (!services.Any(s => s.ServiceType == typeof(MessagePublisher)))
                 throw new InvalidOperationException($"No message publishing configuration or execution context found. Use {nameof(AddAzureServiceBus)} or similar method to configure message publishing.");
 
             var wizard = new OutboxConfigurationWizard();

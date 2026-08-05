@@ -48,7 +48,7 @@ namespace FlowJudge.Common.Messaging.Publishing
                 throw new PublishMessageException(message.MessageId, message.GetType().Name, string.Empty,
                     "Publish subject cannot be null or whitespace.");
 
-            var body = SerializeMessage(message);
+            var body = BinaryData.FromBytes(SerializationHelper.Serialize(message));
 
             await PublishAsync(message.MessageId, SerializationHelper.GetType(message), body, publishSubject, cancellationToken);
         }
@@ -87,14 +87,6 @@ namespace FlowJudge.Common.Messaging.Publishing
                 _logger.LogError(ex, ex.Message);
                 throw new PublishMessageException(messageId, messageType, publishSubject, ex.Message);
             }
-        }
-
-        private BinaryData SerializeMessage(IMessage message)
-        {
-            var messageType = message.GetType();
-            var serializedMessage = JsonSerializer.Serialize(message, messageType, _jsonSerializerOptions);
-
-            return BinaryData.FromString(serializedMessage);
         }
 
         public async ValueTask DisposeAsync()
