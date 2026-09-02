@@ -1,4 +1,6 @@
-﻿using FlowJudge.Common.Messaging.Consumption;
+﻿using System;
+using System.Reflection;
+using FlowJudge.Common.Messaging.Consumption;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FlowJudge.Common.Messaging
@@ -31,7 +33,36 @@ namespace FlowJudge.Common.Messaging
             internal IReadOnlyCollection<(ConsumerOptions Options, Action<IServiceCollection> Registration)> ConsumersOptions 
                 => _consumerOptions;
 
-            public void AddConsumer<TConsumer, TMessage>(
+            public void AddConsumerForQueue<TConsumer, TMessage>(
+                int maxConcurrentCalls = 4,
+                bool autoCompleteMessages = false,
+                int maxAutoLockRenewalDurationSeconds = 300)
+                    where TConsumer : class, IConsumer<TMessage>
+                    where TMessage : class, IMessage
+            {
+                var attr = (OutboxSubjectAttribute?)Attribute.GetCustomAttribute(typeof(TMessage), typeof(OutboxSubjectAttribute));
+                if (attr == null)
+                    throw new InvalidOperationException($"Message type {typeof(TMessage).FullName} does not have OutboxSubjectAttribute.");
+
+                AddConsumerForQueue<TConsumer, TMessage>(attr.Subject, maxConcurrentCalls, autoCompleteMessages, maxAutoLockRenewalDurationSeconds);
+            }
+
+            public void AddConsumerForTopic<TConsumer, TMessage>(
+                string subscriptionName,
+                int maxConcurrentCalls = 4,
+                bool autoCompleteMessages = false,
+                int maxAutoLockRenewalDurationSeconds = 300)
+                    where TConsumer : class, IConsumer<TMessage>
+                    where TMessage : class, IMessage
+            {
+                var attr = (OutboxSubjectAttribute?)Attribute.GetCustomAttribute(typeof(TMessage), typeof(OutboxSubjectAttribute));
+                if (attr == null)
+                    throw new InvalidOperationException($"Message type {typeof(TMessage).FullName} does not have OutboxSubjectAttribute.");
+
+                AddConsumerForTopic<TConsumer, TMessage>(attr.Subject, subscriptionName, maxConcurrentCalls, autoCompleteMessages, maxAutoLockRenewalDurationSeconds);
+            }
+
+            public void AddConsumerForQueue<TConsumer, TMessage>(
                 string queueName,
                 int maxConcurrentCalls = 4,
                 bool autoCompleteMessages = false,
@@ -56,7 +87,7 @@ namespace FlowJudge.Common.Messaging
                 }));
             }
 
-            public void AddConsumer<TConsumer, TMessage>(
+            public void AddConsumerForTopic<TConsumer, TMessage>(
                 string topicName,
                 string subscriptionName,
                 int maxConcurrentCalls = 4,

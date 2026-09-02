@@ -18,7 +18,7 @@ namespace FlowJudge.API.Service.Installers
                 cfg.WithConnectionString(connectionString);
                 cfg.WithConsumers(c =>
                 {
-                    c.AddConsumer<IntegrationChangedEventConsumer, IntegrationChangedEvent>(
+                    c.AddConsumerForTopic<IntegrationChangedEventConsumer, IntegrationChangedEvent>(
                         Topics.IntegrationEventTopic,
                         "flow-judge.api.integration-changed-event");
                 });

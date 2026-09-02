@@ -28,6 +28,10 @@
     <Project Path="backend/libs/FlowJudge.GitHub.Webhooks/FlowJudge.GitHub.Webhooks.csproj" Id="e7365969-cb65-4e42-a217-4ad58c78e711" />
   </Folder>
   <Folder Name="/libs/modules/">
+    <Project Path="backend/libs/modules/FlowJudge.Reviews.Application.Abstractions/FlowJudge.Reviews.Application.Abstractions.csproj" Id="87297f30-c6d5-41f0-a784-a5ea72fafacf" />
+    <Project Path="backend/libs/modules/FlowJudge.Reviews.Application/FlowJudge.Reviews.Application.csproj" Id="16bf2c32-8d3b-4f4e-b276-0b822710d1a1" />
+    <Project Path="backend/libs/modules/FlowJudge.Reviews.Domain/FlowJudge.Reviews.Domain.csproj" Id="98da94b5-3d46-48a3-9708-65e8168519e6" />
+    <Project Path="backend/libs/modules/FlowJudge.Reviews.Infrastructure/FlowJudge.Reviews.Infrastructure.csproj" Id="268ebc5f-82d8-45e1-9af9-9e356827e95f" />
     <Project Path="backend/libs/modules/FlowJudge.Users.Application.Abstractions/FlowJudge.Users.Application.Abstractions.csproj" Id="28b230f1-e0a2-4b0e-afa9-20b4f8f30168" />
     <Project Path="backend/libs/modules/FlowJudge.Users.Application/FlowJudge.Users.Application.csproj" Id="6314cded-df82-4af9-a4fc-0b0683a6d6a5" />
     <Project Path="backend/libs/modules/FlowJudge.Users.Domain/FlowJudge.Users.Domain.csproj" Id="d9a44606-8f4a-44e8-ab71-79f2f303b096" />
